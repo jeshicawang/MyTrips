@@ -1,0 +1,46 @@
+body, p, h3 {
+  margin: 0;
+}
+
+h1 {
+  text-align: center;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+#trips {
+  width: 70%;
+  margin: auto;
+  box-sizing: border-box;
+  padding: 20px;
+  border: 1px solid #000;
+}
+
+#trips .navigation {
+  text-align: center;
+}
+
+#trips .navigation .link {
+  text-decoration: none;
+  text-transform: uppercase;
+  margin: 10px;
+}
+
+#trips .navigation .focus {
+  border-bottom: 2px solid #000;
+}
+
+#trips .trip {
+  margin-top: 20px;
+  padding: 10px;
+  height: 150px;
+  background-position: center;
+  background-size: cover;
+  background-color: #eee;
+}
