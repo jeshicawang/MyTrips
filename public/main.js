@@ -2,7 +2,7 @@ const currentUser = 2;
 
 const tripsContainer = document.getElementById('trips');
 
-fetch('/trips/' + currentUser)
+fetch('/trips/' + currentUser + '/upcoming')
   .then(convertToObject)
   .then(displayTrips)
   .catch(logError);
