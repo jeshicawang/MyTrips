@@ -82,20 +82,41 @@ function createElement(tag, attributes, children) {
 }
 
 let autocomplete;
+const autocompletes = [];
+const destinations = [];
 
 function initAutocomplete() {
   autocomplete = new google.maps.places.Autocomplete(
     /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
             {types: ['(cities)']}
   );
-  autocomplete.addListener('place_changed', createNewTrip)
+  autocomplete.addListener('place_changed', createNewTrip);
+  autocompletes.push(newAutocomplete(autocompletes.length));
+}
+
+function newAutocomplete(index) {
+  const autocomplete = new google.maps.places.Autocomplete(
+    /** @type {!HTMLInputElement} */(document.getElementById('autocomplete' + index)),
+            {types: ['(cities)']}
+  );
+  autocomplete.index = index;
+  autocomplete.addListener('place_changed', function () { addDestination(this) });
+  return autocomplete;
 }
 
 function createNewTrip() {
   switchView();
   document.getElementById('autocomplete').value = '';
   const place = autocomplete.getPlace();
-  console.log(place);
+  document.getElementById('autocomplete0').value = place.formatted_address;
+  destinations.push(place);
+  console.log(destinations);
+}
+
+function addDestination(autocomplete) {
+  const place = autocomplete.getPlace();
+  destinations[autocomplete.index] = place;
+  console.log(destinations);
 }
 
 function switchView() {

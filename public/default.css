@@ -1,6 +1,7 @@
 body {
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
+  color: #444;
 }
 
 body, p, h2, h3, h4 {
@@ -35,6 +36,21 @@ h1 {
 
 .shadow { box-shadow: 0 0 4px #ccc; }
 
+a,
+input {
+  text-decoration: none;
+  color: #777;
+}
+
+a:hover {
+  color: #222;
+}
+
+a:focus,
+input:focus {
+  outline-color: #ddd;
+}
+
 #trips,
 #create-trip {
   width: 70%;
@@ -56,7 +72,6 @@ h2 {
   color: #ffaaae;
   font-size: 1.1em;
   font-weight: 300;
-  text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-left: 10px;
@@ -98,23 +113,19 @@ h2 {
 
 .trip,
 #trips #autocomplete,
-input.destination,
-input.date {
+input[type=text].destination,
+input[type=text].date {
   padding: 10px;
 }
 
 #trips #autocomplete,
-input.destination,
-input.date {
+input[type=text].destination,
+input[type=text].date {
   display: block;
   box-sizing: border-box;
   width: calc(100% - 40px);
   font-size: 1em;
   font-weight: 300;
-}
-
-#trips #autocomplete:focus {
-  outline-color: #ddd;
 }
 
 .pac-container {
@@ -154,48 +165,67 @@ input.date {
   background: linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,0));
 }
 
-#trips .description,
-#trips .date {
-  margin-top: 5px;
-}
-
 #trip-form {
   font-size: 0;
 }
 
 #trip-form h4 {
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 400;
 }
 
-#trip-form input.destination {
+#trip-form input[type=text] {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  border: 0;
+  border-bottom: 2px solid #ddd;
+}
+
+#trip-form input[type=text]:focus {
+  outline: none;
+  border-color: #aaa;
+}
+
+#trip-form input[type=text].destination {
   width: 100%;
 }
 
 #trip-form .dates {
   position: relative;
-  height: 62px;
+  height: 82px;
 }
 
-#trip-form input.date {
+#trip-form input[type=text].date {
   position: absolute;
   display: inline-block;
-  width: calc(50% -  10px);
+  width: calc(50% -  15px);
 }
 
-#trip-form input.start {
+#trip-form input[type=text].start {
   left: 0;
 }
 
-#trip-form input.end {
+#trip-form input[type=text].end {
   right: 0;
 }
 
-#trip-form input {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  font-size: 16px;
+#trip-form #add-destination {
+  font-size: 14px;
 }
 
-input#done {
+input[type=submit] {
+  display: block;
+  margin: auto;
+  margin-top: 20px;
+  padding: 5px 30px;
+  font-size: 16px;
+  color: #ccc;
+  border: 1px solid #ddd;
+  background-color: #fff;
+}
 
+input[type=submit]:hover {
+  color: #777;
+  border-color: #888;
 }

@@ -23,11 +23,12 @@
       </div>
       <form id="trip-form" action="/new-trip" method="post">
         <h4>Destination</h4>
-        <input class="destination" placeholder="Where do you want to go?" type="text">
+        <input id="autocomplete0" class="destination" placeholder="Destination" onfocus="geolocate()" type="text">
         <div class="dates">
           <input class="start date" placeholder="Start Date" type="text">
           <input class="end date" placeholder="End Date" type="text">
         </div>
+        <a id="add-destination" href="#">+ add another destination</a>
         <input id="done" type="submit" value="Done">
       </form>
     </div>
