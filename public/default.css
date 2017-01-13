@@ -1,0 +1,87 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}
+
+body, p, h2 {
+  margin: 0;
+}
+
+h1 {
+  text-align: center;
+}
+
+.layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: inherit;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+#trips {
+  width: 70%;
+  margin: auto;
+  box-sizing: border-box;
+  padding: 20px;
+  border: 1px solid #000;
+}
+
+#trips .navigation {
+  text-align: center;
+}
+
+#trips .navigation .link {
+  color: #777;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 10px;
+}
+
+#trips .navigation .link:hover {
+  color: #222;
+}
+
+#trips .navigation .focus {
+  border-bottom: 2px solid #ccc;
+}
+
+#trips .navigation .focus:hover {
+  border-color: #999;
+}
+
+.trip {
+  opacity: .9;
+  position: relative;
+  margin-top: 20px;
+  padding: 10px;
+  height: 200px;
+  color: #fff;
+  background-position: center;
+  background-size: cover;
+}
+
+.trip:hover {
+  opacity: .7;
+}
+
+.trip .layer {
+  height: 60%;
+  background: linear-gradient(rgba(0,0,0,.3),rgba(0,0,0,0));
+}
+
+#trips .description,
+#trips .date {
+  margin-top: 5px;
+}
