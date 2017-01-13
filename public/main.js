@@ -60,13 +60,11 @@ function logError(error) {
 }
 
 // Returns a new element w/ the given tag, attrubutes, children, & eventListener
-function createElement(tag, attributes, children, eventListener) {
+function createElement(tag, attributes, children) {
   const newElement = document.createElement(tag);
   for (const key in attributes) {
     newElement.setAttribute(key, attributes[key]);
   }
-  if (eventListener)
-    newElement.addEventListener(eventListener[0], eventListener[1]);
   if (!children && children !== 0) return newElement;
   if (!(children instanceof Array))
     children = [children];
@@ -76,7 +74,7 @@ function createElement(tag, attributes, children, eventListener) {
     if (!(child instanceof Element))
       child = document.createTextNode(child);
     return child;
-  }).reduce( (element, child) => {
+  }).reduce((element, child) => {
     element.appendChild(child);
     return element;
   }, newElement);
