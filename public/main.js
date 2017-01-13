@@ -7,6 +7,7 @@ fetchTrips(currentlyViewing);
 
 document.getElementById('upcoming').onclick = toggleTrips;
 document.getElementById('past').onclick = toggleTrips;
+document.getElementById('back').onclick = switchView;
 
 function fetchTrips(type) {
   fetch('/trips/' + currentUser + '/' + type)
@@ -39,7 +40,7 @@ function displayTrips(results) {
   results.map(({id, title, description, start_date, end_date, notes}) =>
     createElement('div', { id: id, class: 'trip' },
       createElement('div', { class: 'layer' }, [
-        createElement('h2', { class: 'title' }, title),
+        createElement('h3', { class: 'title' }, title),
         createElement('p', { class: 'description' }, description ? description : 'no description provided'),
         createElement('p', { class: 'date' }, start_date + ' - ' + end_date)]))
   ).forEach(tripElement => {
@@ -91,8 +92,17 @@ function initAutocomplete() {
 }
 
 function createNewTrip() {
+  switchView();
+  document.getElementById('autocomplete').value = '';
   const place = autocomplete.getPlace();
   console.log(place);
+}
+
+function switchView() {
+  document.getElementById('trips').classList.toggle('visible');
+  document.getElementById('trips').classList.toggle('hidden');
+  document.getElementById('create-trip').classList.toggle('visible');
+  document.getElementById('create-trip').classList.toggle('hidden');
 }
 
 function geolocate() {
