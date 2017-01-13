@@ -1,3 +1,8 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}
+
 body, p, h2 {
   margin: 0;
 }
@@ -11,10 +16,9 @@ h1 {
   top: 0;
   left: 0;
   width: 100%;
-  height: 60%;
+  height: 100%;
   box-sizing: border-box;
   padding: inherit;
-  background: linear-gradient(rgba(0,0,0,.3),rgba(0,0,0,0));
 }
 
 .visible {
@@ -38,17 +42,27 @@ h1 {
 }
 
 #trips .navigation .link {
+  color: #777;
   text-decoration: none;
   text-transform: uppercase;
+  letter-spacing: 1px;
   margin: 10px;
 }
 
+#trips .navigation .link:hover {
+  color: #222;
+}
+
 #trips .navigation .focus {
-  border-bottom: 2px solid #000;
+  border-bottom: 2px solid #ccc;
+}
+
+#trips .navigation .focus:hover {
+  border-color: #999;
 }
 
 .trip {
-  opacity: .8;
+  opacity: .9;
   position: relative;
   margin-top: 20px;
   padding: 10px;
@@ -59,19 +73,12 @@ h1 {
 }
 
 .trip:hover {
-  opacity: .6;
+  opacity: .7;
 }
 
-#puerto-rico {
-  background-image: url(images/puerto-rico.jpg);
-}
-
-#portland {
-  background-image: url(images/portland.jpg);
-}
-
-#los-angeles {
-  background-image: url(images/los-angeles.jpg);
+.trip .layer {
+  height: 60%;
+  background: linear-gradient(rgba(0,0,0,.3),rgba(0,0,0,0));
 }
 
 #trips .description,
