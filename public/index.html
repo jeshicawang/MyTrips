@@ -4,19 +4,19 @@
 	  <meta charset="UTF-8">
     <title>MyTrips</title>
 	  <link rel="stylesheet" href="default.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,500" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
   </head>
   <body>
     <h1>MyTrips</h1>
-    <div id="trips" class="visible">
+    <div id="trips" class="visible shadow">
       <div class="navigation">
         <a href="#" id="upcoming" class="link focus">upcoming</a>
         <a href="#" id="past" class="link">past</a>
       </div>
+      <input id="autocomplete" placeholder="Where do you want to go?" onfocus="geolocate()" type="text">
       <div id="trip-list"></div>
     </div>
-    <div id="map"></div>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdRineV_I6ibxurvPguJaPar5fr8OlNW4&libraries=places"></script>
 	  <script src="main.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdRineV_I6ibxurvPguJaPar5fr8OlNW4&libraries=places&callback=initAutocomplete"></script>
   </body>
 </html>

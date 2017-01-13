@@ -1,6 +1,5 @@
 body {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 300;
+  font-family: 'Open Sans', sans-serif;
 }
 
 body, p, h2 {
@@ -8,7 +7,11 @@ body, p, h2 {
 }
 
 h1 {
+  margin: 10px;
   text-align: center;
+  color: #993337;
+  font-weight: 300;
+  font-size: 2.5em;
 }
 
 .layer {
@@ -29,20 +32,24 @@ h1 {
   visibility: hidden;
 }
 
+.shadow { box-shadow: 0 0 4px #ccc; }
+
 #trips {
   width: 70%;
   margin: auto;
   box-sizing: border-box;
-  padding: 20px;
-  border: 1px solid #000;
+  border: 0px solid #993337;
 }
 
 #trips .navigation {
   text-align: center;
+  padding: 20px;
+  background-color: #993337;
 }
 
 #trips .navigation .link {
-  color: #777;
+  color: #ffaaae;
+  font-weight: 300;
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -50,22 +57,62 @@ h1 {
 }
 
 #trips .navigation .link:hover {
-  color: #222;
+  color: #ffeeee;
+  border-bottom: 2px solid #ffeeee !important;
 }
 
 #trips .navigation .focus {
-  border-bottom: 2px solid #ccc;
+  border-bottom: 2px solid #ffaaae;
 }
 
 #trips .navigation .focus:hover {
-  border-color: #999;
+  border-color: #ffaaae;
+}
+
+#trip-list,
+#autocomplete {
+  margin: 20px;
+  padding-bottom: 20px;
+}
+
+.trip,
+#trips #autocomplete {
+  margin-top: 20px;
+  padding: 10px;
+}
+
+#trips #autocomplete {
+  display: block;
+  box-sizing: border-box;
+  width: calc(100% - 40px);
+  font-size: 1em;
+  font-weight: 300;
+}
+
+#trips #autocomplete:focus {
+  outline-color: #ddd;
+}
+
+.pac-container {
+  width: calc(70% - 40px) !important;
+}
+
+.pac-item, .pac-item-query {
+  font-size: 1em;
+}
+
+.pac-item-query {
+  padding-right: 5px;
+}
+
+.pac-item-selected,
+.pac-item:hover {
+  background-color: #ffeeee;
 }
 
 .trip {
-  opacity: .9;
+  opacity: .8;
   position: relative;
-  margin-top: 20px;
-  padding: 10px;
   height: 200px;
   color: #fff;
   background-position: center;
@@ -77,8 +124,8 @@ h1 {
 }
 
 .trip .layer {
-  height: 60%;
-  background: linear-gradient(rgba(0,0,0,.3),rgba(0,0,0,0));
+  height: 70%;
+  background: linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,0));
 }
 
 #trips .description,
