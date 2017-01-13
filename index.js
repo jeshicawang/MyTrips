@@ -10,21 +10,23 @@ const knex = require('knex')({
 });
 
 const now = knex.raw('now()');
-const dateFormat = 'Dy, Month DD';
+const dateFormat = 'Dy, Month DD, YYYY';
 const formattedStartDate = knex.raw('to_char(start_date, \'' + dateFormat + '\') as start_date');
 const formattedEndDate = knex.raw('to_char(end_date, \'' + dateFormat + '\') as end_date')
 const unformattedStartDate = knex.raw('to_date(to_char(start_date, \'' + dateFormat + '\'), \'' + dateFormat + '\')');
+const unformattedEndDate = knex.raw('to_date(to_char(end_date, \'' + dateFormat + '\'), \'' + dateFormat + '\')');
 
 app.use(express.static('public'));
 
 app.get('/trips/:userId/:upcoming', (req, res) => {
-  const { userId, upcoming } = req.params;
-  const conditional = (upcoming === 'upcoming') ? '>=' : '<';
-  const order = (upcoming === 'upcoming') ? 'asc' : 'desc';
+  const upcoming = (req.params.upcoming === 'upcoming');
+  const conditional = upcoming ? '>=' : '<';
+  const dateType = upcoming ? unformattedStartDate : unformattedEndDate;
+  const order = upcoming ? 'asc' : 'desc';
   const query = knex('trips')
-    .where('user_id', userId)
+    .where('user_id', req.params.userId)
     .andWhere('end_date', conditional, now)
-    .orderBy(unformattedStartDate, order)
+    .orderBy(dateType, order)
     .select('id', 'title', 'description', formattedStartDate, formattedEndDate, 'notes');
   query.then(trips => res.json(trips));
 });

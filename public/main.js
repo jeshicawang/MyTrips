@@ -1,11 +1,35 @@
 const currentUser = 2;
 
-const tripsContainer = document.getElementById('trips');
+const tripsContainer = document.getElementById('trip-list');
 
-fetch('/trips/' + currentUser + '/upcoming')
-  .then(convertToObject)
-  .then(displayTrips)
-  .catch(logError);
+let currentlyViewing = 'upcoming';
+fetchTrips(currentlyViewing);
+
+document.getElementById('upcoming').onclick = toggleTrips;
+document.getElementById('past').onclick = toggleTrips;
+
+function fetchTrips(type) {
+  fetch('/trips/' + currentUser + '/' + type)
+    .then(convertToObject)
+    .then(displayTrips)
+    .catch(logError);
+}
+
+function toggleTrips() {
+  if (currentlyViewing === this.id) return;
+  const hidden = (this.id === 'upcoming') ? 'past' : 'upcoming';
+  currentlyViewing = this.id;
+  this.classList.toggle('focus');
+  document.getElementById(hidden).classList.toggle('focus');
+  empty('trip-list');
+  fetchTrips(this.id);
+}
+
+function empty(id) {
+  const element = document.getElementById(id);
+  while (element.firstChild)
+    element.removeChild(element.firstChild);
+}
 
 function convertToObject(results) {
   return results.json();
