@@ -8,7 +8,7 @@
   </head>
   <body>
     <h1>MyTrips</h1>
-    <div id="trips" class="visible shadow">
+    <div id="trips" class="hidden shadow">
       <div class="navigation">
         <a href="#" id="upcoming" class="link focus">upcoming</a>
         <a href="#" id="past" class="link">past</a>
@@ -16,12 +16,20 @@
       <input id="autocomplete" placeholder="Where do you want to go?" onfocus="geolocate()" type="text">
       <div id="trip-list"></div>
     </div>
-    <div id="create-trip" class="hidden shadow">
+    <div id="create-trip" class="visible shadow">
       <div class="navigation">
         <a href="#" id="back" class="link">&#60;&#60;&#60;</a>
         <h2 id="title">Create Trip</h2>
       </div>
-      <p class="destination">New York!!</p>
+      <form id="trip-form" action="/new-trip" method="post">
+        <h4>Destination</h4>
+        <input class="destination" placeholder="Where do you want to go?" type="text">
+        <div class="dates">
+          <input class="start date" placeholder="Start Date" type="text">
+          <input class="end date" placeholder="End Date" type="text">
+        </div>
+        <input id="done" type="submit" value="Done">
+      </form>
     </div>
 	  <script src="main.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdRineV_I6ibxurvPguJaPar5fr8OlNW4&libraries=places&callback=initAutocomplete"></script>
