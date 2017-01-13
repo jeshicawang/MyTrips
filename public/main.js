@@ -8,6 +8,8 @@ fetchTrips(currentlyViewing);
 document.getElementById('upcoming').onclick = toggleTrips;
 document.getElementById('past').onclick = toggleTrips;
 document.getElementById('back').onclick = switchView;
+document.getElementById('trip-form').getElementsByClassName('destination')[0].addEventListener('mouseenter', function () { enableRemove(this) });
+document.getElementById('trip-form').getElementsByClassName('destination')[0].addEventListener('mouseleave', function () { disableRemove(this) });
 
 function fetchTrips(type) {
   fetch('/trips/' + currentUser + '/' + type)
@@ -60,7 +62,6 @@ function logError(error) {
   return console.error(error);
 }
 
-// Returns a new element w/ the given tag, attrubutes, children, & eventListener
 function createElement(tag, attributes, children) {
   const newElement = document.createElement(tag);
   for (const key in attributes) {
@@ -96,7 +97,7 @@ function initAutocomplete() {
 
 function newAutocomplete(index) {
   const autocomplete = new google.maps.places.Autocomplete(
-    /** @type {!HTMLInputElement} */(document.getElementById('autocomplete' + index)),
+    /** @type {!HTMLInputElement} */(document.getElementById('destination' + index).getElementsByClassName('autocomplete')[0]),
             {types: ['(cities)']}
   );
   autocomplete.index = index;
@@ -106,9 +107,8 @@ function newAutocomplete(index) {
 
 function createNewTrip() {
   switchView();
-  document.getElementById('autocomplete').value = '';
   const place = autocomplete.getPlace();
-  document.getElementById('autocomplete0').value = place.formatted_address;
+  document.getElementById('destination0').getElementsByClassName('autocomplete')[0].value = place.formatted_address;
   destinations.push(place);
   console.log(destinations);
 }
@@ -120,10 +120,14 @@ function addDestination(autocomplete) {
 }
 
 function switchView() {
-  document.getElementById('trips').classList.toggle('visible');
+  document.getElementById('trip-form').reset();
+  document.getElementById('autocomplete').value = '';
   document.getElementById('trips').classList.toggle('hidden');
-  document.getElementById('create-trip').classList.toggle('visible');
   document.getElementById('create-trip').classList.toggle('hidden');
+  while(autocompletes.length > 1)
+    autocompletes.pop();
+  while(destinations.length > 0)
+    destinations.pop();
 }
 
 function geolocate() {
@@ -140,4 +144,12 @@ function geolocate() {
       autocomplete.setBounds(circle.getBounds());
     });
   }
+}
+
+function enableRemove(element) {
+  element.getElementsByClassName('remove')[0].classList.toggle('hidden');
+}
+
+function disableRemove(element) {
+  element.getElementsByClassName('remove')[0].classList.toggle('hidden');
 }

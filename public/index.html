@@ -16,17 +16,20 @@
       <input id="autocomplete" placeholder="Where do you want to go?" onfocus="geolocate()" type="text">
       <div id="trip-list"></div>
     </div>
-    <div id="create-trip" class="visible shadow">
+    <div id="create-trip" class="shadow">
       <div class="navigation">
         <a href="#" id="back" class="link">&#60;&#60;&#60;</a>
         <h2 id="title">Create Trip</h2>
       </div>
       <form id="trip-form" action="/new-trip" method="post">
-        <h4>Destination</h4>
-        <input id="autocomplete0" class="destination" placeholder="Destination" onfocus="geolocate()" type="text">
-        <div class="dates">
-          <input class="start date" placeholder="Start Date" type="text">
-          <input class="end date" placeholder="End Date" type="text">
+        <div id="destination0" class="destination">
+          <a class="remove hidden" href="#">X</a>
+          <h4>Destination</h4>
+          <input class="autocomplete" placeholder="Destination" onfocus="geolocate()" type="text">
+          <div class="dates">
+            <input class="start" type="date">
+            <input class="end" type="date">
+          </div>
         </div>
         <a id="add-destination" href="#">+ add another destination</a>
         <input id="done" type="submit" value="Done">
