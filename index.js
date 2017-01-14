@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 
+const bodyParser = require('body-parser')
+
 const knex = require('knex')({
   client: 'postgresql',
   connection: {
@@ -16,6 +18,7 @@ const formattedEndDate = knex.raw('to_char(end_date, \'' + dateFormat + '\') as 
 const unformattedStartDate = knex.raw('to_date(to_char(start_date, \'' + dateFormat + '\'), \'' + dateFormat + '\')');
 const unformattedEndDate = knex.raw('to_date(to_char(end_date, \'' + dateFormat + '\'), \'' + dateFormat + '\')');
 
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
 
 app.get('/trips/:userId/:upcoming', (req, res) => {
@@ -38,5 +41,10 @@ app.get('/destinations/:tripId', (req, res) => {
     .select('id', 'trip_id', 'location', 'place_id', 'start_date', 'end_date', 'photo_url');
   query.then(destinations => res.json(destinations));
 });
+
+app.post('/new-trip', (req, res) => {
+  console.log(req.body);
+  res.json('data sent');
+})
 
 app.listen(3000, () => console.log('listening on port 3000'));

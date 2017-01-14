@@ -25,10 +25,13 @@
         <div id="destination0" class="destination">
           <a class="remove hidden" href="#">X</a>
           <h4>Destination</h4>
-          <input class="autocomplete" placeholder="Destination" onfocus="geolocate()" type="text">
+          <input name="0[formatted_address]" class="autocomplete" placeholder="Destination" onfocus="geolocate()" type="text">
+          <input name="0[location]" class="location" type="hidden">
+          <input name="0[place_id]" class="place_id" type="hidden">
+          <input name="0[photo_url]" class="photo_url" type="hidden">
           <div class="dates">
-            <input class="start" type="date">
-            <input class="end" type="date">
+            <input name="0[start_date]" class="start" type="date">
+            <input name="0[end_date]" class="end" type="date">
           </div>
         </div>
         <a id="add-destination" href="#">+ add another destination</a>

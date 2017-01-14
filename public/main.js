@@ -115,7 +115,11 @@ function createNewTrip() {
 
 function addDestination(autocomplete) {
   const place = autocomplete.getPlace();
+  const destinationElement = document.getElementById('destination' + autocomplete.index);
   destinations[autocomplete.index] = place;
+  destinationElement.getElementsByClassName("location")[0].value = place.name;
+  destinationElement.getElementsByClassName("place_id")[0].value = place.place_id;
+  destinationElement.getElementsByClassName("photo_url")[0].value = place.photos[0].getUrl({'maxWidth': 1600});
   console.log(destinations);
 }
 
