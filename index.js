@@ -44,7 +44,7 @@ app.get('/destinations/:tripId', (req, res) => {
 
 app.post('/new-trip', (req, res) => {
   console.log(req.body);
-  res.json('data sent');
+  res.sendStatus(200);
 })
 
 app.listen(3000, () => console.log('listening on port 3000'));

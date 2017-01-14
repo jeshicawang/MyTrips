@@ -1,7 +1,6 @@
 body {
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
-  color: #444;
 }
 
 body, p, h2, h3, h4 {
@@ -35,6 +34,9 @@ h1 {
 a,
 input {
   text-decoration: none;
+}
+
+a {
   color: #999;
 }
 
@@ -49,7 +51,8 @@ input:focus {
 
 #trips,
 #create-trip {
-  width: 70%;
+  width: 80%;
+  max-width: 800px;
   margin: auto;
 }
 
@@ -63,7 +66,7 @@ input:focus {
   text-align: center;
 }
 
-.navigation .link,
+.navigation a,
 h2 {
   color: #ffaaae;
   font-size: 1.1em;
@@ -74,11 +77,11 @@ h2 {
   margin-right: 10px;
 }
 
-.navigation .link:hover {
+.navigation a:hover {
   color: #ffeeee;
 }
 
-#trips .navigation .link:hover {
+#trips .navigation .a:hover {
   border-bottom: 2px solid #ffeeee !important;
 }
 
@@ -125,7 +128,8 @@ input[type=date] {
 }
 
 .pac-container {
-  width: calc(70% - 40px) !important;
+  width: calc(80% - 40px) !important;
+  max-width: 800px !important;
 }
 
 .pac-item, .pac-item-query {
@@ -166,6 +170,10 @@ input[type=date] {
   font-size: 0;
 }
 
+#trip-form .destination {
+  margin-top: 40px;
+}
+
 #trip-form .remove {
   right: 0;
   color: #f3dcdd;
@@ -186,8 +194,6 @@ input[type=date] {
 
 #trip-form input[type=text],
 #trip-form input[type=date] {
-  margin-top: 10px;
-  margin-bottom: 10px;
   font-size: 16px;
   font-weight: 300;
   border: 0;
@@ -201,17 +207,20 @@ input[type=date] {
 }
 
 #trip-form input[type=text] {
+  margin-top: 10px;
+  margin-bottom: 10px;
   width: 100%;
 }
 
 #trip-form .dates {
   position: relative;
-  height: 82px;
+  height: 46px;
 }
 
 #trip-form input[type=date] {
   position: absolute;
   display: inline-block;
+  margin: 0;
   width: calc(50% -  15px);
   font-family: 'Open Sans', sans-serif;
 }
@@ -225,13 +234,15 @@ input[type=date] {
 }
 
 #trip-form #add-destination {
+  display: inline-block;
+  margin-top: 40px;
   font-size: 14px;
 }
 
 input[type=submit] {
   display: block;
   margin: auto;
-  margin-top: 20px;
+  margin-top: 40px;
   padding: 5px 30px;
   font-size: 16px;
   color: #ccc;
