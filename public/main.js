@@ -8,6 +8,7 @@ const $tripList = document.getElementById('trip-list');
 const $createTrip = document.getElementById('create-trip')
 const $tripForm = document.getElementById('trip-form');
 const $tripTitle = document.getElementById('trip-title');
+const $destinations = document.getElementsByClassName('destination');
 const $firstDestination = document.getElementById('0');
 const $firstAutocomplete = $firstDestination.getElementsByClassName('autocomplete')[0];
 const $addDestination = document.getElementById('add-destination');
@@ -44,19 +45,19 @@ function switchTripsView() {
 function viewTrips() {
   document.getElementById(currentlyViewing).className = 'focus';
   fetchTrips(currentlyViewing);
-  $tripForm.reset();
   $trips.classList.toggle('hidden');
   $createTrip.classList.toggle('hidden');
   while(autocompletes.length > 1)
     autocompletes.pop();
-  while(destinations.length > 0)
-    destinations.pop();
 }
 
 function viewCreateTrip() {
   empty('trip-list');
   document.getElementById(currentlyViewing).className = '';
   $autocompleteMain.value = '';
+  $tripForm.reset();
+  Array.prototype.filter.call($destinations, destination => (destination.id !== '0'))
+  .forEach(destination => $tripForm.removeChild(destination));
   $trips.classList.toggle('hidden');
   $createTrip.classList.toggle('hidden');
   $tripTitle.value = autocompleteMain.getPlace().name + ' Trip';
@@ -70,7 +71,6 @@ function removeDestination() {
   const index = $destination.id;
   autocompletes.splice(index, 1);
   $tripForm.removeChild($destination);
-  const $destinations = document.getElementsByClassName('destination');
   Array.prototype.filter.call($destinations, destination => (destination.id > index))
   .forEach(destination => {
     destination.id--;
