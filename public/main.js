@@ -32,12 +32,9 @@ function postTrip(event) {
   const formData = new FormData($tripForm);
   const body = {};
   const destinations = [];
-  formData.getAll('address').forEach(address => destinations.push({ address: address }));
-  formData.getAll('location').forEach((location, index) => destinations[index].location = location);
-  formData.getAll('place_id').forEach((placeId, index) => destinations[index].place_id = placeId);
-  formData.getAll('photo_url').forEach((photoUrl, index) => destinations[index].photo_url = photoUrl);
-  formData.getAll('start_date').forEach((startDate, index) => destinations[index].start_date = startDate);
-  formData.getAll('end_date').forEach((endDate, index) => destinations[index].end_date = endDate);
+  Array.prototype.forEach.call($destinations, () => destinations.push({}));
+  ['address', 'location', 'place_id', 'photo_url', 'start_date', 'end_date']
+    .forEach(key => formData.getAll(key).forEach((item, index) => destinations[index][key] = item));
   body.user_id = formData.get('user_id');
   body.title = formData.get('title');
   body.description = formData.get('description');
