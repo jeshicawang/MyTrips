@@ -18,7 +18,9 @@ const formattedEndDate = knex.raw('to_char(end_date, \'' + dateFormat + '\') as 
 const unformattedStartDate = knex.raw('to_date(to_char(start_date, \'' + dateFormat + '\'), \'' + dateFormat + '\')');
 const unformattedEndDate = knex.raw('to_date(to_char(end_date, \'' + dateFormat + '\'), \'' + dateFormat + '\')');
 
-app.use(bodyParser.urlencoded({extended: true}));
+//app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+
 app.use(express.static('public'));
 
 app.get('/trips/:userId/:upcoming', (req, res) => {
@@ -43,8 +45,37 @@ app.get('/destinations/:tripId', (req, res) => {
 });
 
 app.post('/new-trip', (req, res) => {
-  console.log(req.body);
-  res.sendStatus(200);
+  const {user_id, title, description, destinations} = req.body;
+
+  let dates = [];
+  destinations.forEach(destination => {
+    dates.push(destination.start_date);
+    dates.push(destination.end_date);
+  });
+  dates.sort();
+
+  const trip = {
+    user_id: user_id,
+    title: title,
+    description: description,
+    start_date: dates[0],
+    end_date: dates[dates.length-1]
+  };
+
+  knex('trips')
+  .insert(trip)
+  .returning('id')
+  .then(([id]) => {
+    destinations.forEach(destination => destination.trip_id = id);
+    console.log(destinations);
+    knex('destinations')
+    .insert(destinations)
+    .returning('id')
+    .then(([id]) => {
+      console.log(id);
+      res.sendStatus(200);
+    });
+  });
 })
 
 app.listen(3000, () => console.log('listening on port 3000'));

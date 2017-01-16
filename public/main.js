@@ -7,6 +7,7 @@ const $autocompleteMain = document.getElementById('autocomplete');
 const $tripList = document.getElementById('trip-list');
 const $createTrip = document.getElementById('create-trip')
 const $tripForm = document.getElementById('trip-form');
+const $userId = document.getElementById('user-id');
 const $tripTitle = document.getElementById('trip-title');
 const $destinations = document.getElementsByClassName('destination');
 const $firstDestination = document.getElementById('0');
@@ -24,6 +25,27 @@ document.getElementsByClassName('remove')[0].onclick = removeDestination;
 $firstDestination.addEventListener('mouseenter', function () { enableRemove(this) });
 $firstDestination.addEventListener('mouseleave', function () { disableRemove(this) });
 $addDestination.addEventListener('click', addDestinationToForm);
+$tripForm.addEventListener('submit', postTrip);
+
+function postTrip(event) {
+  event.preventDefault();
+  const formData = new FormData($tripForm);
+  const body = {};
+  const destinations = [];
+  formData.getAll('address').forEach(address => destinations.push({ address: address }));
+  formData.getAll('location').forEach((location, index) => destinations[index].location = location);
+  formData.getAll('place_id').forEach((placeId, index) => destinations[index].place_id = placeId);
+  formData.getAll('photo_url').forEach((photoUrl, index) => destinations[index].photo_url = photoUrl);
+  formData.getAll('start_date').forEach((startDate, index) => destinations[index].start_date = startDate);
+  formData.getAll('end_date').forEach((endDate, index) => destinations[index].end_date = endDate);
+  body.user_id = formData.get('user_id');
+  body.title = formData.get('title');
+  body.description = formData.get('description');
+  body.destinations = destinations;
+  const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+  fetch('/new-trip', options)
+    .then(res => viewTrips());
+}
 
 function fetchTrips(type) {
   fetch('/trips/' + currentUser + '/' + type)
@@ -56,6 +78,7 @@ function viewCreateTrip() {
   document.getElementById(currentlyViewing).className = '';
   $autocompleteMain.value = '';
   $tripForm.reset();
+  $userId.value = currentUser;
   Array.prototype.filter.call($destinations, destination => (destination.id !== '0'))
   .forEach(destination => $tripForm.removeChild(destination));
   $trips.classList.toggle('hidden');
@@ -138,13 +161,13 @@ function addDestinationToForm() {
   const $additionalDestination = createElement('div', { id: index, class: 'destination' }, [
                                    createElement('a', { class: 'remove hidden', href: '#' }, 'X', ['click', removeDestination]),
                                    createElement('h4', {}, 'Destination'),
-                                   createElement('input', { name: 'destinations[' + index + '][address]', class: 'autocomplete', placeholder: 'Destination', onfocus: 'geolocate()', type: 'text', required: '' }),
-                                   createElement('input', { name: 'destinations[' + index + '][location]', class: 'location', type: 'hidden', required: '' }),
-                                   createElement('input', { name: 'destinations[' + index + '][place_id]', class: 'place_id', type: 'hidden', required: '' }),
-                                   createElement('input', { name: 'destinations[' + index + '][photo_url]', class: 'photo_url', type: 'hidden', required: '' }),
+                                   createElement('input', { name: 'address', class: 'autocomplete', placeholder: 'Destination', onfocus: 'geolocate()', type: 'text', required: '' }),
+                                   createElement('input', { name: 'location', class: 'location', type: 'hidden', required: '' }),
+                                   createElement('input', { name: 'place_id', class: 'place_id', type: 'hidden', required: '' }),
+                                   createElement('input', { name: 'photo_url', class: 'photo_url', type: 'hidden', required: '' }),
                                    createElement('div', { class: 'dates' }, [
-                                     createElement('input', { name: 'destinations[' + index + '][start_date]', class: 'start', type: 'date', required: '' }),
-                                     createElement('input', { name: 'destinations[' + index + '][end_date]', class: 'end', type: 'date', required: '' })])]);
+                                     createElement('input', { name: 'start_date', class: 'start', type: 'date', required: '' }),
+                                     createElement('input', { name: 'end_date', class: 'end', type: 'date', required: '' })])]);
   $additionalDestination.addEventListener('mouseenter', function () { enableRemove(this) });
   $additionalDestination.addEventListener('mouseleave', function () { disableRemove(this) });
   $tripForm.insertBefore($additionalDestination, $addDestination);

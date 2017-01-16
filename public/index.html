@@ -21,20 +21,20 @@
         <a href="#" id="back">&#60;&#60;&#60;</a>
         <h2 id="title">Create Trip</h2>
       </div>
-      <iframe name="iframe" class="hidden"></iframe>
-      <form id="trip-form" onsubmit="viewTrips()" action="/new-trip" method="post" target="iframe">
+      <form id="trip-form">
+        <input name="user_id" id="user-id" type="hidden" required>
         <input name="title" id="trip-title" placeholder="Title" type="text" required>
         <input name="description" placeholder="Description" type="text">
         <div id="0" class="destination">
           <a class="remove hidden" href="#">X</a>
           <h4>Destination</h4>
-          <input name="destinations[0][address]" class="autocomplete" placeholder="Destination" onfocus="geolocate()" type="text" required>
-          <input name="destinations[0][location]" class="location" type="hidden" required>
-          <input name="destinations[0][place_id]" class="place_id" type="hidden" required>
-          <input name="destinations[0][photo_url]" class="photo_url" type="hidden" required>
+          <input name="address" class="autocomplete" placeholder="Destination" onfocus="geolocate()" type="text" required>
+          <input name="location" class="location" type="hidden" required>
+          <input name="place_id" class="place_id" type="hidden" required>
+          <input name="photo_url" class="photo_url" type="hidden" required>
           <div class="dates">
-            <input name="destinations[0][start_date]" class="start" type="date" required>
-            <input name="destinations[0][end_date]" class="end" type="date" required>
+            <input name="start_date" class="start" type="date" required>
+            <input name="end_date" class="end" type="date" required>
           </div>
         </div>
         <a id="add-destination" href="#">+ add another destination</a>
