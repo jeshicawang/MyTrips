@@ -55,7 +55,7 @@ function postTrip(event) {
   body.destinations = destinations;
   body.notes = formData.get('notes');
   const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
-  fetch('/new-trip', options).then(() => viewTrips('upcoming'));
+  fetch('/new-trip', options).then(() => location.hash = 'trips-upcoming');
 }
 
 function fetchTrips(type) {
@@ -143,7 +143,7 @@ function deleteTrip(event) {
   const tripId = event.target.parentElement.parentElement.parentElement.id;
   console.log(tripId);
   const options = { method: 'DELETE' };
-  fetch('/delete-trip/' + tripId, options).then(() => viewTrips('upcoming'));
+  fetch('/delete-trip/' + tripId, options).then(() => location.reload());
 }
 
 let autocompleteMain;
