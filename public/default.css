@@ -1,14 +1,18 @@
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-weight: 300;
 }
 
-body, p, h2 {
+body, p, h2, h3, h4 {
   margin: 0;
 }
 
 h1 {
+  margin: 10px;
   text-align: center;
+  color: #993337;
+  font-weight: 300;
+  font-size: 2.5em;
 }
 
 .layer {
@@ -21,53 +25,133 @@ h1 {
   padding: inherit;
 }
 
-.visible {
-  visibility: visible;
-}
-
 .hidden {
-  visibility: hidden;
+  display: none;
 }
 
-#trips {
-  width: 70%;
+.shadow { box-shadow: 0 0 4px #ccc; }
+
+a,
+input {
+  text-decoration: none;
+}
+
+a {
+  color: #999;
+}
+
+a:hover {
+  color: #222;
+}
+
+a:focus,
+input:focus {
+  outline-color: #ddd;
+}
+
+#trips,
+#create-trip {
+  width: 80%;
+  max-width: 800px;
   margin: auto;
-  box-sizing: border-box;
+}
+
+.navigation {
+  position: relative;
   padding: 20px;
-  border: 1px solid #000;
+  background-color: #993337;
 }
 
 #trips .navigation {
   text-align: center;
 }
 
-#trips .navigation .link {
-  color: #777;
-  text-decoration: none;
+.navigation a,
+h2 {
+  color: #ffaaae;
+  font-size: 1.1em;
+  font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
-#trips .navigation .link:hover {
-  color: #222;
+.navigation a:hover {
+  color: #ffeeee;
+}
+
+#trips .navigation .a:hover {
+  border-bottom: 2px solid #ffeeee !important;
 }
 
 #trips .navigation .focus {
-  border-bottom: 2px solid #ccc;
+  border-bottom: 2px solid #ffaaae;
 }
 
 #trips .navigation .focus:hover {
-  border-color: #999;
+  border-color: #ffaaae;
+}
+
+#back {
+  position: absolute;
+  float: left;
+  font-weight: 400;
+}
+
+#title {
+  text-align: center;
+}
+
+#trip-list,
+#autocomplete,
+#trip-form {
+  margin: 20px;
+  padding-bottom: 20px;
+}
+
+.trip,
+#trips #autocomplete,
+input[type=text],
+input[type=date] {
+  padding: 10px;
+}
+
+#trips #autocomplete,
+input[type=text],
+input[type=date] {
+  display: block;
+  box-sizing: border-box;
+  width: calc(100% - 40px);
+  font-size: 1em;
+  font-weight: 300;
+}
+
+.pac-container {
+  width: calc(80% - 40px) !important;
+  max-width: 760px !important;
+}
+
+.pac-item, .pac-item-query {
+  font-size: 1em;
+}
+
+.pac-item-query {
+  padding-right: 5px;
+}
+
+.pac-item-selected,
+.pac-item:hover {
+  background-color: #ffeeee;
 }
 
 .trip {
-  opacity: .9;
-  position: relative;
   margin-top: 20px;
-  padding: 10px;
+  opacity: .8;
+  position: relative;
   height: 200px;
   color: #fff;
+  font-weight: 400;
   background-position: center;
   background-size: cover;
 }
@@ -77,11 +161,97 @@ h1 {
 }
 
 .trip .layer {
-  height: 60%;
-  background: linear-gradient(rgba(0,0,0,.3),rgba(0,0,0,0));
+  height: 70%;
+  background: linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,0));
 }
 
-#trips .description,
-#trips .date {
-  margin-top: 5px;
+#trip-form {
+  position: relative;
+  font-size: 0;
+}
+
+#trip-form .destination {
+  margin-top: 40px;
+}
+
+#trip-form .remove {
+  right: 0;
+  color: #f3dcdd;
+  position: absolute;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+#trip-form .remove:hover {
+  color: #e2a9ab;
+}
+
+#trip-form h4 {
+  color: #e2a9ab;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+#trip-form input[type=text],
+#trip-form input[type=date] {
+  font-size: 16px;
+  font-weight: 300;
+  border: 0;
+  border-bottom: 2px solid #ddd;
+}
+
+#trip-form input[type=text]:focus,
+#trip-form input[type=date]:focus {
+  outline: none;
+  border-color: #aaa;
+}
+
+#trip-form input[type=text] {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+#trip-form .dates {
+  position: relative;
+  height: 46px;
+}
+
+#trip-form input[type=date] {
+  position: absolute;
+  display: inline-block;
+  margin: 0;
+  width: calc(50% -  15px);
+  font-family: 'Open Sans', sans-serif;
+}
+
+#trip-form input[type=date].start {
+  left: 0;
+}
+
+#trip-form input[type=date].end {
+  right: 0;
+}
+
+#trip-form #add-destination {
+  display: inline-block;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+input[type=submit] {
+  display: block;
+  margin: auto;
+  margin-top: 40px;
+  padding: 5px 30px;
+  font-size: 16px;
+  color: #ccc;
+  border: 1px solid #ddd;
+  background-color: #fff;
+}
+
+input[type=submit]:hover {
+  color: #777;
+  border-color: #888;
 }

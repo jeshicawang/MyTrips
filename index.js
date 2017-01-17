@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 
+const bodyParser = require('body-parser')
+
 const knex = require('knex')({
   client: 'postgresql',
   connection: {
@@ -11,23 +13,23 @@ const knex = require('knex')({
 
 const now = knex.raw('now()');
 const dateFormat = 'Dy, Month DD, YYYY';
-const formattedStartDate = knex.raw('to_char(start_date, \'' + dateFormat + '\') as start_date');
-const formattedEndDate = knex.raw('to_char(end_date, \'' + dateFormat + '\') as end_date')
-const unformattedStartDate = knex.raw('to_date(to_char(start_date, \'' + dateFormat + '\'), \'' + dateFormat + '\')');
-const unformattedEndDate = knex.raw('to_date(to_char(end_date, \'' + dateFormat + '\'), \'' + dateFormat + '\')');
+
+app.use(bodyParser.json());
 
 app.use(express.static('public'));
 
 app.get('/trips/:userId/:upcoming', (req, res) => {
   const upcoming = (req.params.upcoming === 'upcoming');
   const conditional = upcoming ? '>=' : '<';
-  const dateType = upcoming ? unformattedStartDate : unformattedEndDate;
+  const dateType = upcoming ? 'trips.start_date' : 'trips.end_date';
   const order = upcoming ? 'asc' : 'desc';
   const query = knex('trips')
+    .join('destinations', 'trips.id', '=', 'destinations.trip_id')
+    .distinct(knex.raw('on (' + dateType + ') trips.id, title, description, to_char(trips.start_date, \'' + dateFormat + '\') as start_date, to_char(trips.end_date, \'' + dateFormat + '\') as end_date, notes, photo_url'))
     .where('user_id', req.params.userId)
-    .andWhere('end_date', conditional, now)
-    .orderBy(dateType, order)
-    .select('id', 'title', 'description', formattedStartDate, formattedEndDate, 'notes');
+    .andWhere('trips.end_date', conditional, now)
+    .orderByRaw(dateType + ' ' + order + ', destinations.start_date asc')
+    .select();
   query.then(trips => res.json(trips));
 });
 
@@ -38,5 +40,30 @@ app.get('/destinations/:tripId', (req, res) => {
     .select('id', 'trip_id', 'location', 'place_id', 'start_date', 'end_date', 'photo_url');
   query.then(destinations => res.json(destinations));
 });
+
+app.post('/new-trip', (req, res) => {
+  const {user_id, title, description, destinations, notes} = req.body;
+  let dates = [];
+  destinations.forEach(destination => {
+    dates.push(destination.start_date);
+    dates.push(destination.end_date);
+  });
+  dates.sort();
+  const trip = {
+    user_id: user_id,
+    title: title,
+    description: description,
+    start_date: dates[0],
+    end_date: dates[dates.length-1],
+    notes: notes
+  };
+  knex('trips')
+    .insert(trip)
+    .returning('id')
+    .then(([id]) => {
+      destinations.forEach(destination => destination.trip_id = id);
+      return knex('destinations').insert(destinations);})
+    .then(() => res.sendStatus(200));
+})
 
 app.listen(3000, () => console.log('listening on port 3000'));
