@@ -31,8 +31,7 @@ function postTrip(event) {
   event.preventDefault();
   const formData = new FormData($tripForm);
   const body = {};
-  const destinations = [];
-  Array.prototype.forEach.call($destinations, () => destinations.push({}));
+  const destinations = Array($destinations.length).fill({});
   ['address', 'location', 'place_id', 'photo_url', 'start_date', 'end_date']
     .forEach(key => formData.getAll(key).forEach((item, index) => destinations[index][key] = item));
   body.user_id = formData.get('user_id');
@@ -40,8 +39,7 @@ function postTrip(event) {
   body.description = formData.get('description');
   body.destinations = destinations;
   const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
-  fetch('/new-trip', options)
-    .then(res => viewTrips());
+  fetch('/new-trip', options).then(() => viewTrips());
 }
 
 function fetchTrips(type) {
@@ -77,7 +75,7 @@ function viewCreateTrip() {
   $tripForm.reset();
   $userId.value = currentUser;
   Array.prototype.filter.call($destinations, destination => (destination.id !== '0'))
-  .forEach(destination => $tripForm.removeChild(destination));
+    .forEach(destination => $tripForm.removeChild(destination));
   $trips.classList.toggle('hidden');
   $createTrip.classList.toggle('hidden');
   $tripTitle.value = autocompleteMain.getPlace().name + ' Trip';
@@ -92,35 +90,19 @@ function removeDestination() {
   autocompletes.splice(index, 1);
   $tripForm.removeChild($destination);
   Array.prototype.filter.call($destinations, destination => (destination.id > index))
-  .forEach(destination => {
-    destination.id--;
-    ['autocomplete', 'location', 'place_id', 'photo_url', 'start', 'end']
-    .map(className => destination.getElementsByClassName(className)[0])
-    .forEach(element => {
-      const name = element.getAttribute('name');
-      element.setAttribute('name', name.substring(0, 13) + destination.id + name.substring(14));
-    });
-  });
+    .forEach(destination => destination.id--);
 }
 
 function displayTrips(results) {
-  results.map(({id, title, description, start_date, end_date, notes}) =>
-    createElement('div', { id: id, class: 'trip' },
-      createElement('div', { class: 'layer' }, [
-        createElement('h3', { class: 'title' }, title),
-        createElement('p', { class: 'description' }, description ? description : 'no description provided'),
-        createElement('p', { class: 'date' }, start_date + ' - ' + end_date)]))
-  ).forEach(tripElement => {
-    $tripList.appendChild(tripElement);
-    fetch('/destinations/' + tripElement.id)
-      .then(convertToObject)
-      .then(setDestinationPhoto)
-      .catch(logError);
-  });
-}
-
-function setDestinationPhoto([{trip_id, photo_url}]) {
-  document.getElementById(trip_id).style.backgroundImage = 'url(' + photo_url + ')';
+  results.map(({id, title, description, start_date, end_date, notes, photo_url}) => {
+    const tripElement = createElement('div', { id: id, class: 'trip' },
+                          createElement('div', { class: 'layer' }, [
+                            createElement('h3', { class: 'title' }, title),
+                            createElement('p', { class: 'description' }, description ? description : 'no description provided'),
+                            createElement('p', { class: 'date' }, start_date + ' - ' + end_date)]));
+    tripElement.style.backgroundImage = 'url(' + photo_url + ')';
+    return tripElement;
+  }).forEach(tripElement => $tripList.appendChild(tripElement));
 }
 
 let autocompleteMain;
