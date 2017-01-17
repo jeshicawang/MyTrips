@@ -66,4 +66,12 @@ app.post('/new-trip', (req, res) => {
     .then(() => res.sendStatus(200));
 })
 
+app.delete('/delete-trip/:id', (req,res) => {
+  const id = req.params.id;
+  knex('trips')
+    .where('id', id)
+    .del()
+    .then(() => res.sendStatus(204));
+})
+
 app.listen(process.env.PORT, () => console.log('listening on port 3000'));

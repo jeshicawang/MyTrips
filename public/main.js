@@ -54,8 +54,8 @@ function postTrip(event) {
   body.description = formData.get('description');
   body.destinations = destinations;
   body.notes = formData.get('notes');
-  const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
-  fetch('/new-trip', options).then(() => viewTrips());
+  const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
+  fetch('/new-trip', options).then(() => viewTrips('upcoming'));
 }
 
 function fetchTrips(type) {
@@ -112,7 +112,7 @@ function displayTrips(results) {
                             createElement('span', { class: 'options lnr lnr-chevron-down' }, null, ['click', displayOptions]),
                             createElement('div', { class: 'hidden options shadow' }, [
                               createElement('a', { class: 'options' }, 'edit trip'),
-                              createElement('a', { class: 'options' }, 'delete trip')]),
+                              createElement('a', { class: 'options' }, 'delete trip', ['click', deleteTrip])]),
                             createElement('h3', { class: 'title' }, title),
                             createElement('p', { class: 'description' }, description ? description : 'no description provided'),
                             createElement('p', { class: 'date' }, start_date + ' - ' + end_date)]));
@@ -121,9 +121,29 @@ function displayTrips(results) {
   }).forEach(tripElement => $tripList.appendChild(tripElement));
 }
 
+let $options = null;
+
 function displayOptions(event) {
+  if ($options) return;
+  event.stopPropagation();
   const $trip = event.target.parentElement.parentElement;
-  $trip.getElementsByClassName('options')[1].classList.toggle('hidden');
+  $options = $trip.getElementsByClassName('options')[1];
+  $options.classList.toggle('hidden');
+}
+
+window.onclick = hideOptions;
+
+function hideOptions() {
+  if (!$options) return;
+  $options.classList.toggle('hidden');
+  $options = null;
+}
+
+function deleteTrip(event) {
+  const tripId = event.target.parentElement.parentElement.parentElement.id;
+  console.log(tripId);
+  const options = { method: 'DELETE' };
+  fetch('/delete-trip/' + tripId, options).then(() => viewTrips('upcoming'));
 }
 
 let autocompleteMain;
