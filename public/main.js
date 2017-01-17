@@ -11,7 +11,7 @@ const $destinations = document.getElementsByClassName('destination');
 const $firstDestination = document.getElementById('0');
 const $firstAutocomplete = $firstDestination.getElementsByClassName('autocomplete')[0];
 const $addDestination = document.getElementById('add-destination');
-document.getElementById('back').onclick = viewTrips;
+//document.getElementById('back').onclick = viewTrips;
 document.getElementsByClassName('remove')[0].onclick = removeDestination;
 $firstDestination.addEventListener('mouseenter', function () { enableRemove(this) });
 $firstDestination.addEventListener('mouseleave', function () { disableRemove(this) });
@@ -23,21 +23,22 @@ const DEFAULT_HASH = 'trips-upcoming';
 window.onload = loadDefaultHash;
 
 function loadDefaultHash() {
-  location.hash = DEFAULT_HASH;
+  if (!location.hash)
+    location.hash = DEFAULT_HASH;
+  else
+    loadPage();
 }
 
 function loadPage() {
-  switch (this.location.hash) {
-    case '#trips-upcoming':
-      viewTrips('upcoming');
-      break;
-    case '#trips-past':
-      viewTrips('past');
-      break;
-    case '#create-trip':
-      viewCreateTrip();
-      break;
-  }
+  const hash = this.location.hash;
+  if (hash === '#trips-upcoming')
+    viewTrips('upcoming');
+  else if (hash === '#trips-past')
+    viewTrips('past');
+  else if (hash === '#create-trip')
+    viewCreateTrip();
+  else
+    location.hash = DEFAULT_HASH;
 }
 
 function postTrip(event) {
@@ -86,11 +87,13 @@ function viewCreateTrip() {
   $userId.value = currentUser;
   Array.prototype.filter.call($destinations, destination => (destination.id !== '0'))
     .forEach(destination => $tripForm.removeChild(destination));
-  $trips.classList.toggle('hidden');
-  $createTrip.classList.toggle('hidden');
-  $tripTitle.value = autocompleteMain.getPlace().name + ' Trip';
-  $firstAutocomplete.value = autocompleteMain.getPlace().formatted_address;
-  updateDestination(autocompleteMain);
+  $trips.className = 'hidden shadow';
+  $createTrip.className = 'shadow';
+  if (autocompleteMain.getPlace()) {
+    $tripTitle.value = autocompleteMain.getPlace().name + ' Trip';
+    $firstAutocomplete.value = autocompleteMain.getPlace().formatted_address;
+    updateDestination(autocompleteMain);
+  }
 }
 
 function removeDestination() {
