@@ -25,6 +25,19 @@ h1 {
   padding: inherit;
 }
 
+.options {
+  position: absolute;
+  right: 10px;
+  opacity: .7;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.options:hover {
+  opacity: 1;
+}
+
 .hidden {
   display: none;
 }

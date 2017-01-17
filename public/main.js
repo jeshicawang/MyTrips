@@ -109,6 +109,7 @@ function displayTrips(results) {
   results.map(({id, title, description, start_date, end_date, notes, photo_url}) => {
     const tripElement = createElement('div', { id: id, class: 'trip' },
                           createElement('div', { class: 'layer' }, [
+                            createElement('span', { class: 'options lnr lnr-chevron-down' }),
                             createElement('h3', { class: 'title' }, title),
                             createElement('p', { class: 'description' }, description ? description : 'no description provided'),
                             createElement('p', { class: 'date' }, start_date + ' - ' + end_date)]));
