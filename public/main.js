@@ -1,7 +1,5 @@
 const currentUser = 2;
-
 const autocompletes = [];
-
 const $trips = document.getElementById('trips');
 const $autocompleteMain = document.getElementById('autocomplete');
 const $tripList = document.getElementById('trip-list');
@@ -13,19 +11,34 @@ const $destinations = document.getElementsByClassName('destination');
 const $firstDestination = document.getElementById('0');
 const $firstAutocomplete = $firstDestination.getElementsByClassName('autocomplete')[0];
 const $addDestination = document.getElementById('add-destination');
-
-let currentlyViewing = 'upcoming';
-document.getElementById(currentlyViewing).className = 'focus';
-fetchTrips(currentlyViewing);
-
-document.getElementById('upcoming').onclick = switchTripsView;
-document.getElementById('past').onclick = switchTripsView;
 document.getElementById('back').onclick = viewTrips;
 document.getElementsByClassName('remove')[0].onclick = removeDestination;
 $firstDestination.addEventListener('mouseenter', function () { enableRemove(this) });
 $firstDestination.addEventListener('mouseleave', function () { disableRemove(this) });
 $addDestination.addEventListener('click', addDestinationToForm);
 $tripForm.addEventListener('submit', postTrip);
+window.onhashchange = loadPage;
+
+const DEFAULT_HASH = 'trips-upcoming';
+window.onload = loadDefaultHash;
+
+function loadDefaultHash() {
+  location.hash = DEFAULT_HASH;
+}
+
+function loadPage() {
+  switch (this.location.hash) {
+    case '#trips-upcoming':
+      viewTrips('upcoming');
+      break;
+    case '#trips-past':
+      viewTrips('past');
+      break;
+    case '#create-trip':
+      viewCreateTrip();
+      break;
+  }
+}
 
 function postTrip(event) {
   event.preventDefault();
@@ -52,28 +65,22 @@ function fetchTrips(type) {
     .catch(logError);
 }
 
-function switchTripsView() {
-  if (currentlyViewing === this.id) return;
-  const hidden = (this.id === 'upcoming') ? 'past' : 'upcoming';
-  currentlyViewing = this.id;
-  this.classList.toggle('focus');
-  document.getElementById(hidden).classList.toggle('focus');
-  empty('trip-list');
-  fetchTrips(this.id);
-}
-
-function viewTrips() {
-  document.getElementById(currentlyViewing).className = 'focus';
-  fetchTrips(currentlyViewing);
-  $trips.classList.toggle('hidden');
-  $createTrip.classList.toggle('hidden');
+function viewTrips(type) {
+  const toHide = (type === 'upcoming') ? 'past' : 'upcoming';
+  document.getElementById(type).className = 'focus';
+  document.getElementById(toHide).className = '';
+  empty('trip-list')
+  fetchTrips(type);
+  $trips.classList.remove('hidden');
+  $createTrip.className = 'hidden shadow';
   while(autocompletes.length > 1)
     autocompletes.pop();
 }
 
 function viewCreateTrip() {
   empty('trip-list');
-  document.getElementById(currentlyViewing).className = '';
+  document.getElementById('upcoming').className = '';
+  document.getElementById('past').className = '';
   $autocompleteMain.value = '';
   $tripForm.reset();
   $userId.value = currentUser;
@@ -116,7 +123,7 @@ function initAutocomplete() {
             {types: ['(cities)']}
   );
   autocompleteMain.index = 0;
-  autocompleteMain.addListener('place_changed', viewCreateTrip);
+  autocompleteMain.addListener('place_changed', () => location.hash = 'create-trip');
   autocompletes.push(newAutocomplete(autocompletes.length));
 }
 
@@ -141,7 +148,7 @@ function updateDestination(autocomplete) {
 function addDestinationToForm() {
   const index = autocompletes.length;
   const $additionalDestination = createElement('div', { id: index, class: 'destination' }, [
-                                   createElement('a', { class: 'remove hidden', href: '#' }, 'X', ['click', removeDestination]),
+                                   createElement('a', { class: 'remove hidden', href: '#create-trip' }, 'X', ['click', removeDestination]),
                                    createElement('h4', {}, 'Destination'),
                                    createElement('input', { name: 'address', class: 'autocomplete', placeholder: 'Destination', onfocus: 'geolocate()', type: 'text', required: '' }),
                                    createElement('input', { name: 'location', class: 'location', type: 'hidden', required: '' }),
