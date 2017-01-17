@@ -236,6 +236,7 @@ input[type=date] {
 #trip-form #add-destination {
   display: inline-block;
   margin-top: 40px;
+  margin-bottom: 20px;
   font-size: 14px;
 }
 

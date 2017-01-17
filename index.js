@@ -42,7 +42,7 @@ app.get('/destinations/:tripId', (req, res) => {
 });
 
 app.post('/new-trip', (req, res) => {
-  const {user_id, title, description, destinations} = req.body;
+  const {user_id, title, description, destinations, notes} = req.body;
   let dates = [];
   destinations.forEach(destination => {
     dates.push(destination.start_date);
@@ -54,7 +54,8 @@ app.post('/new-trip', (req, res) => {
     title: title,
     description: description,
     start_date: dates[0],
-    end_date: dates[dates.length-1]
+    end_date: dates[dates.length-1],
+    notes: notes
   };
   knex('trips')
     .insert(trip)

@@ -31,13 +31,16 @@ function postTrip(event) {
   event.preventDefault();
   const formData = new FormData($tripForm);
   const body = {};
-  const destinations = Array($destinations.length).fill({});
+  const destinations = [];
+  for (let i = 0; i < $destinations.length; i++)
+    destinations.push({});
   ['address', 'location', 'place_id', 'photo_url', 'start_date', 'end_date']
     .forEach(key => formData.getAll(key).forEach((item, index) => destinations[index][key] = item));
   body.user_id = formData.get('user_id');
   body.title = formData.get('title');
   body.description = formData.get('description');
   body.destinations = destinations;
+  body.notes = formData.get('notes');
   const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
   fetch('/new-trip', options).then(() => viewTrips());
 }
