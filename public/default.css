@@ -25,19 +25,6 @@ h1 {
   padding: inherit;
 }
 
-.options {
-  position: absolute;
-  right: 10px;
-  opacity: .7;
-  color: #fff;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.options:hover {
-  opacity: 1;
-}
-
 .hidden {
   display: none;
 }
@@ -176,6 +163,43 @@ input[type=date] {
 .trip .layer {
   height: 70%;
   background: linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,0));
+}
+
+.trip span.options {
+  position: absolute;
+  right: 10px;
+  opacity: .7;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.trip span.options:hover {
+  opacity: 1;
+}
+
+.trip div.options {
+  position: absolute;
+  top: 33px;
+  right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: #fff;
+}
+
+.trip a.options {
+  display: block;
+  padding-left: 15px;
+  padding-right: 15px;
+  color: #993337;
+  font-size: 14px;
+  letter-spacing: 1px;
+  font-weight: 300;
+  cursor: pointer;
+}
+
+.trip a.options:hover {
+  background-color: #f4eaeb;
 }
 
 #trip-form {

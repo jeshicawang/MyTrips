@@ -109,13 +109,21 @@ function displayTrips(results) {
   results.map(({id, title, description, start_date, end_date, notes, photo_url}) => {
     const tripElement = createElement('div', { id: id, class: 'trip' },
                           createElement('div', { class: 'layer' }, [
-                            createElement('span', { class: 'options lnr lnr-chevron-down' }),
+                            createElement('span', { class: 'options lnr lnr-chevron-down' }, null, ['click', displayOptions]),
+                            createElement('div', { class: 'hidden options shadow' }, [
+                              createElement('a', { class: 'options' }, 'edit trip'),
+                              createElement('a', { class: 'options' }, 'delete trip')]),
                             createElement('h3', { class: 'title' }, title),
                             createElement('p', { class: 'description' }, description ? description : 'no description provided'),
                             createElement('p', { class: 'date' }, start_date + ' - ' + end_date)]));
     tripElement.style.backgroundImage = 'url(' + photo_url + ')';
     return tripElement;
   }).forEach(tripElement => $tripList.appendChild(tripElement));
+}
+
+function displayOptions(event) {
+  const $trip = event.target.parentElement.parentElement;
+  $trip.getElementsByClassName('options')[1].classList.toggle('hidden');
 }
 
 let autocompleteMain;
