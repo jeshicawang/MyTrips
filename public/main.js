@@ -11,7 +11,6 @@ const $destinations = document.getElementsByClassName('destination');
 const $firstDestination = document.getElementById('0');
 const $firstAutocomplete = $firstDestination.getElementsByClassName('autocomplete')[0];
 const $addDestination = document.getElementById('add-destination');
-//document.getElementById('back').onclick = viewTrips;
 document.getElementsByClassName('remove')[0].onclick = removeDestination;
 $firstDestination.addEventListener('mouseenter', function () { enableRemove(this) });
 $firstDestination.addEventListener('mouseleave', function () { disableRemove(this) });
