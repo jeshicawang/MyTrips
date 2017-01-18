@@ -19,8 +19,8 @@
     </div>
     <div id="create-trip" class="hidden shadow">
       <div class="navigation">
-        <a href="#trips-upcoming" id="back">&#60;&#60;&#60;</a>
-        <h2 id="title">Create Trip</h2>
+        <a href="#trips-upcoming" class="back">&#60;&#60;&#60;</a>
+        <h2 class="header">Create Trip</h2>
       </div>
       <form id="trip-form">
         <input name="user_id" id="user-id" type="hidden" required>
@@ -42,6 +42,12 @@
         <input name="notes" id="notes" placeholder="Notes" type="text">
         <input id="done" type="submit" value="Done">
       </form>
+    </div>
+    <div id="modify-trip" class="hidden shadow">
+      <div class="navigation">
+        <a href="#trips-upcoming" class="back">&#60;&#60;&#60;</a>
+        <h2 class="header">Modify Trip</h2>
+      </div>
     </div>
 	  <script src="main.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdRineV_I6ibxurvPguJaPar5fr8OlNW4&libraries=places&callback=initAutocomplete"></script>

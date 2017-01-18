@@ -33,6 +33,19 @@ app.get('/trips/:userId/:upcoming', (req, res) => {
   query.then(trips => res.json(trips));
 });
 
+const rawStartDate = knex.raw('to_char(destinations.start_date, \'YYYY-MM-DD\') as start_date');
+const rawEndDate = knex.raw('to_char(destinations.end_date, \'YYYY-MM-DD\') as end_date');
+
+app.get('/trip/:tripId', (req, res) => {
+  const tripId = req.params.tripId;
+  knex('trips')
+    .join('destinations', 'trips.id', '=', 'destinations.trip_id')
+    .where('trips.id', tripId)
+    .orderBy('destinations.start_date', 'asc')
+    .select('title', 'description', 'notes', rawStartDate, rawEndDate, 'destinations.id', 'destinations.address', 'location', 'place_id', 'photo_url')
+    .then(trip => res.json(trip));
+})
+
 app.get('/destinations/:tripId', (req, res) => {
   const tripId = req.params.tripId;
   const query = knex('destinations')

@@ -7,10 +7,11 @@ const $createTrip = document.getElementById('create-trip')
 const $tripForm = document.getElementById('trip-form');
 const $userId = document.getElementById('user-id');
 const $tripTitle = document.getElementById('trip-title');
-const $destinations = document.getElementsByClassName('destination');
+const $destinations = $tripForm.getElementsByClassName('destination');
 const $firstDestination = document.getElementById('0');
 const $firstAutocomplete = $firstDestination.getElementsByClassName('autocomplete')[0];
 const $addDestination = document.getElementById('add-destination');
+const $modifyTrip = document.getElementById('modify-trip');
 document.getElementsByClassName('remove')[0].onclick = removeDestination;
 $firstDestination.addEventListener('mouseenter', function () { enableRemove(this) });
 $firstDestination.addEventListener('mouseleave', function () { disableRemove(this) });
@@ -36,6 +37,9 @@ function loadPage() {
     viewTrips('past');
   else if (hash === '#create-trip')
     viewCreateTrip();
+  else if (hash.substring(0, 13) === '#modify-trip-') {
+    viewModifyTrip();
+  }
   else
     location.hash = DEFAULT_HASH;
 }
@@ -73,6 +77,7 @@ function viewTrips(type) {
   fetchTrips(type);
   $trips.classList.remove('hidden');
   $createTrip.className = 'hidden shadow';
+  $modifyTrip.className = 'hidden shadow';
   while(autocompletes.length > 1)
     autocompletes.pop();
 }
@@ -86,6 +91,8 @@ function viewCreateTrip() {
   $userId.value = currentUser;
   Array.prototype.filter.call($destinations, destination => (destination.id !== '0'))
     .forEach(destination => $tripForm.removeChild(destination));
+  if (document.getElementById('modification-form'))
+    $modifyTrip.removeChild(document.getElementById('modification-form'));
   $trips.className = 'hidden shadow';
   $createTrip.className = 'shadow';
   if (autocompleteMain.getPlace()) {
@@ -93,6 +100,40 @@ function viewCreateTrip() {
     $firstAutocomplete.value = autocompleteMain.getPlace().formatted_address;
     updateDestination(autocompleteMain);
   }
+}
+
+function viewModifyTrip() {
+  empty('trip-list');
+  document.getElementById('upcoming').className = '';
+  document.getElementById('past').className = '';
+  $autocompleteMain.value = '';
+  $trips.className = 'hidden shadow';
+  $modifyTrip.className = 'shadow';
+  if (document.getElementById('modification-form'))
+    $modifyTrip.removeChild(document.getElementById('modification-form'));
+
+  fetch('/trip/' + location.hash.substring(13))
+    .then(convertToObject)
+    .then(destinations => $modifyTrip.appendChild(createModificationForm(destinations)))
+    .catch(logError);
+}
+
+function createModificationForm(destinations) {
+  console.log(destinations);
+
+  const [{title, description, notes}] = destinations;
+
+  const formElements = [createElement('input', { name: 'title', id: 'trip-title', placeholder: 'Title', type: 'text', required: '', value: title }),
+                        createElement('input', { name: 'description', id: 'description', placeholder: 'Description', type: 'text', value: description ? description : '' }),
+                        createElement('a', { id: 'add-destination', href: location.hash }, '+ add another destination'),
+                        createElement('input', { name: 'notes', id: 'notes', placeholder: 'Notes', type: 'text', value: notes ? notes : '' }),
+                        createElement('input', { id: 'done', type: 'submit', value: 'Done' })];
+
+  destinations.forEach(({ id, address, location, place_id, photo_url, start_date, end_date }, index) => {
+    formElements.splice(formElements.length-3, 0, createDestinationElement(index, address, location, place_id, photo_url, start_date, end_date));
+  })
+
+  return createElement('form', { id: 'modification-form' }, formElements);
 }
 
 function removeDestination() {
@@ -111,7 +152,7 @@ function displayTrips(results) {
                           createElement('div', { class: 'layer' }, [
                             createElement('span', { class: 'options lnr lnr-chevron-down' }, null, ['click', displayOptions]),
                             createElement('div', { class: 'hidden options shadow' }, [
-                              createElement('a', { class: 'options' }, 'edit trip'),
+                              createElement('a', { class: 'options' }, 'modify trip', ['click', modifyTrip]),
                               createElement('a', { class: 'options' }, 'delete trip', ['click', deleteTrip])]),
                             createElement('h3', { class: 'title' }, title),
                             createElement('p', { class: 'description' }, description ? description : 'no description provided'),
@@ -139,9 +180,13 @@ function hideOptions() {
   $options = null;
 }
 
+function modifyTrip(event) {
+  const tripId = event.target.parentElement.parentElement.parentElement.id;
+  location.hash = 'modify-trip-' + tripId;
+}
+
 function deleteTrip(event) {
   const tripId = event.target.parentElement.parentElement.parentElement.id;
-  console.log(tripId);
   const options = { method: 'DELETE' };
   fetch('/delete-trip/' + tripId, options).then(() => location.reload());
 }
@@ -178,20 +223,27 @@ function updateDestination(autocomplete) {
 
 function addDestinationToForm() {
   const index = autocompletes.length;
-  const $additionalDestination = createElement('div', { id: index, class: 'destination' }, [
-                                   createElement('a', { class: 'remove hidden', href: '#create-trip' }, 'X', ['click', removeDestination]),
-                                   createElement('h4', {}, 'Destination'),
-                                   createElement('input', { name: 'address', class: 'autocomplete', placeholder: 'Destination', onfocus: 'geolocate()', type: 'text', required: '' }),
-                                   createElement('input', { name: 'location', class: 'location', type: 'hidden', required: '' }),
-                                   createElement('input', { name: 'place_id', class: 'place_id', type: 'hidden', required: '' }),
-                                   createElement('input', { name: 'photo_url', class: 'photo_url', type: 'hidden', required: '' }),
-                                   createElement('div', { class: 'dates' }, [
-                                     createElement('input', { name: 'start_date', class: 'start', type: 'date', required: '' }),
-                                     createElement('input', { name: 'end_date', class: 'end', type: 'date', required: '' })])]);
+  const $additionalDestination = createDestinationElement(index);
   $additionalDestination.addEventListener('mouseenter', function () { enableRemove(this) });
   $additionalDestination.addEventListener('mouseleave', function () { disableRemove(this) });
   $tripForm.insertBefore($additionalDestination, $addDestination);
   autocompletes.push(newAutocomplete(index));
+}
+
+function createDestinationElement(index, address, location, place_id, photo_url, start_date, end_date) {
+  const destEl = createElement('div', { id: index, class: 'destination' }, [
+                   createElement('a', { class: 'remove hidden', href: window.location.hash }, 'X', ['click', removeDestination]),
+                   createElement('h4', {}, 'Destination'),
+                   createElement('input', { name: 'address', class: 'autocomplete', placeholder: 'Destination', onfocus: 'geolocate()', type: 'text', required: '', value: address ? address : '' }),
+                   createElement('input', { name: 'location', class: 'location', type: 'hidden', required: '', value: location ? location : '' }),
+                   createElement('input', { name: 'place_id', class: 'place_id', type: 'hidden', required: '', value: place_id ? place_id : '' }),
+                   createElement('input', { name: 'photo_url', class: 'photo_url', type: 'hidden', required: '', value: photo_url ? photo_url : '' }),
+                   createElement('div', { class: 'dates' }, [
+                     createElement('input', { name: 'start_date', class: 'start', type: 'date', required: '', value: start_date ? start_date : '' }),
+                     createElement('input', { name: 'end_date', class: 'end', type: 'date', required: '', value: end_date ? end_date : '' })])]);
+  destEl.addEventListener('mouseenter', function () { enableRemove(this) });
+  destEl.addEventListener('mouseleave', function () { disableRemove(this) });
+  return destEl;
 }
 
 function geolocate() {
@@ -211,11 +263,11 @@ function geolocate() {
 }
 
 function enableRemove(element) {
-  element.getElementsByClassName('remove')[0].classList.toggle('hidden');
+  element.getElementsByClassName('remove')[0].className = 'remove';
 }
 
 function disableRemove(element) {
-  element.getElementsByClassName('remove')[0].classList.toggle('hidden');
+  element.getElementsByClassName('remove')[0].className = 'remove hidden';
 }
 
 function convertToObject(results) {
