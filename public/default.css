@@ -286,8 +286,8 @@ input[type=date] {
   right: 0;
 }
 
-#trip-form #add-destination,
-#modification-form #add-destination {
+#trip-form .add-destination,
+#modification-form .add-destination {
   display: inline-block;
   margin-top: 40px;
   margin-bottom: 20px;

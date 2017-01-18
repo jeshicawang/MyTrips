@@ -7,15 +7,11 @@ const $createTrip = document.getElementById('create-trip')
 const $tripForm = document.getElementById('trip-form');
 const $userId = document.getElementById('user-id');
 const $tripTitle = document.getElementById('trip-title');
-const $destinations = $tripForm.getElementsByClassName('destination');
-const $firstDestination = document.getElementById('0');
-const $firstAutocomplete = $firstDestination.getElementsByClassName('autocomplete')[0];
-const $addDestination = document.getElementById('add-destination');
+const $destinations = document.getElementsByClassName('destination');
+const $addDestinationCreate = $tripForm.getElementsByClassName('add-destination')[0];
+let $modificationForm, $addDestinationModify;
 const $modifyTrip = document.getElementById('modify-trip');
-document.getElementsByClassName('remove')[0].onclick = removeDestination;
-$firstDestination.addEventListener('mouseenter', function () { enableRemove(this) });
-$firstDestination.addEventListener('mouseleave', function () { disableRemove(this) });
-$addDestination.addEventListener('click', addDestinationToForm);
+$addDestinationCreate.addEventListener('click', () => addDestinationToForm('trip-form'));
 $tripForm.addEventListener('submit', postTrip);
 window.onhashchange = loadPage;
 
@@ -78,7 +74,7 @@ function viewTrips(type) {
   $trips.classList.remove('hidden');
   $createTrip.className = 'hidden shadow';
   $modifyTrip.className = 'hidden shadow';
-  while(autocompletes.length > 1)
+  while(autocompletes.length)
     autocompletes.pop();
 }
 
@@ -89,12 +85,15 @@ function viewCreateTrip() {
   $autocompleteMain.value = '';
   $tripForm.reset();
   $userId.value = currentUser;
-  Array.prototype.filter.call($destinations, destination => (destination.id !== '0'))
-    .forEach(destination => $tripForm.removeChild(destination));
+  let destinations = Array.prototype.map.call($destinations, destination => destination);
+  destinations.forEach(destination => destination.parentElement.removeChild(destination))
   if (document.getElementById('modification-form'))
     $modifyTrip.removeChild(document.getElementById('modification-form'));
   $trips.className = 'hidden shadow';
   $createTrip.className = 'shadow';
+  addDestinationToForm('trip-form')
+  const $firstDestination = document.getElementById('0');
+  const $firstAutocomplete = $firstDestination.getElementsByClassName('autocomplete')[0];
   if (autocompleteMain.getPlace()) {
     $tripTitle.value = autocompleteMain.getPlace().name + ' Trip';
     $firstAutocomplete.value = autocompleteMain.getPlace().formatted_address;
@@ -109,23 +108,27 @@ function viewModifyTrip() {
   $autocompleteMain.value = '';
   $trips.className = 'hidden shadow';
   $modifyTrip.className = 'shadow';
+  const destinations = Array.prototype.map.call($destinations, destination => destination);
+  destinations.forEach(destination => destination.parentElement.removeChild(destination))
   if (document.getElementById('modification-form'))
     $modifyTrip.removeChild(document.getElementById('modification-form'));
-
   fetch('/trip/' + location.hash.substring(13))
     .then(convertToObject)
-    .then(destinations => $modifyTrip.appendChild(createModificationForm(destinations)))
+    .then(destinations => {
+      $modifyTrip.appendChild(createModificationForm(destinations));
+      destinations.forEach((destinations, index) => autocompletes.push(newAutocomplete(index)));
+      $modificationForm = document.getElementById('modification-form');
+      $addDestinationModify = $modificationForm.getElementsByClassName('add-destination')[0];
+    })
     .catch(logError);
 }
 
 function createModificationForm(destinations) {
-  console.log(destinations);
-
   const [{title, description, notes}] = destinations;
 
   const formElements = [createElement('input', { name: 'title', id: 'trip-title', placeholder: 'Title', type: 'text', required: '', value: title }),
                         createElement('input', { name: 'description', id: 'description', placeholder: 'Description', type: 'text', value: description ? description : '' }),
-                        createElement('a', { id: 'add-destination', href: location.hash }, '+ add another destination'),
+                        createElement('a', { class: 'add-destination', href: location.hash }, '+ add another destination', ['click', () => addDestinationToForm('modification-form')]),
                         createElement('input', { name: 'notes', id: 'notes', placeholder: 'Notes', type: 'text', value: notes ? notes : '' }),
                         createElement('input', { id: 'done', type: 'submit', value: 'Done' })];
 
@@ -141,7 +144,7 @@ function removeDestination() {
   const $destination = this.parentElement;
   const index = $destination.id;
   autocompletes.splice(index, 1);
-  $tripForm.removeChild($destination);
+  $destination.parentElement.removeChild($destination);
   Array.prototype.filter.call($destinations, destination => (destination.id > index))
     .forEach(destination => destination.id--);
 }
@@ -200,7 +203,6 @@ function initAutocomplete() {
   );
   autocompleteMain.index = 0;
   autocompleteMain.addListener('place_changed', () => location.hash = 'create-trip');
-  autocompletes.push(newAutocomplete(autocompletes.length));
 }
 
 function newAutocomplete(index) {
@@ -221,12 +223,13 @@ function updateDestination(autocomplete) {
   $destination.getElementsByClassName("photo_url")[0].value = place.photos[0].getUrl({'maxWidth': 1600});
 }
 
-function addDestinationToForm() {
+function addDestinationToForm(formName) {
   const index = autocompletes.length;
   const $additionalDestination = createDestinationElement(index);
   $additionalDestination.addEventListener('mouseenter', function () { enableRemove(this) });
   $additionalDestination.addEventListener('mouseleave', function () { disableRemove(this) });
-  $tripForm.insertBefore($additionalDestination, $addDestination);
+  const $form = (formName === 'trip-form') ? $tripForm : $modificationForm
+  $form.insertBefore($additionalDestination, (formName === 'trip-form') ? $addDestinationCreate : $addDestinationModify);
   autocompletes.push(newAutocomplete(index));
 }
 

@@ -26,7 +26,7 @@
         <input name="user_id" id="user-id" type="hidden" required>
         <input name="title" id="trip-title" placeholder="Title" type="text" required>
         <input name="description" placeholder="Description" type="text">
-        <div id="0" class="destination">
+        <div id="test" class="destination">
           <a class="remove hidden" href="#create-trip">X</a>
           <h4>Destination</h4>
           <input name="address" class="autocomplete" placeholder="Destination" onfocus="geolocate()" type="text" required>
@@ -38,7 +38,7 @@
             <input name="end_date" class="end" type="date" required>
           </div>
         </div>
-        <a id="add-destination" href="#create-trip">+ add another destination</a>
+        <a class="add-destination" href="#create-trip">+ add another destination</a>
         <input name="notes" id="notes" placeholder="Notes" type="text">
         <input id="done" type="submit" value="Done">
       </form>
