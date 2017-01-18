@@ -13,6 +13,7 @@ let $modificationForm, $addDestinationModify;
 const $modifyTrip = document.getElementById('modify-trip');
 $addDestinationCreate.addEventListener('click', () => addDestinationToForm('trip-form'));
 $tripForm.addEventListener('submit', postTrip);
+
 window.onhashchange = loadPage;
 
 const DEFAULT_HASH = 'trips-upcoming';
@@ -56,6 +57,24 @@ function postTrip(event) {
   body.notes = formData.get('notes');
   const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
   fetch('/new-trip', options).then(() => location.hash = 'trips-upcoming');
+}
+
+function putTrip(event) {
+  event.preventDefault();
+  const formData = new FormData($modificationForm);
+  const body = {};
+  const destinations = [];
+  for (let i = 0; i < $destinations.length; i++)
+    destinations.push({});
+  ['address', 'location', 'place_id', 'photo_url', 'start_date', 'end_date']
+    .forEach(key => formData.getAll(key).forEach((item, index) => destinations[index][key] = item));
+  body.title = formData.get('title');
+  body.description = formData.get('description');
+  body.destinations = destinations;
+  body.notes = formData.get('notes');
+  const options = { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
+  const tripId = location.hash.substring(13);
+  fetch('/modify-trip/' + tripId, options).then(() => location.hash = 'trips-upcoming');
 }
 
 function fetchTrips(type) {
@@ -130,13 +149,13 @@ function createModificationForm(destinations) {
                         createElement('input', { name: 'description', id: 'description', placeholder: 'Description', type: 'text', value: description ? description : '' }),
                         createElement('a', { class: 'add-destination', href: location.hash }, '+ add another destination', ['click', () => addDestinationToForm('modification-form')]),
                         createElement('input', { name: 'notes', id: 'notes', placeholder: 'Notes', type: 'text', value: notes ? notes : '' }),
-                        createElement('input', { id: 'done', type: 'submit', value: 'Done' })];
+                        createElement('input', { class: 'submit', type: 'submit', value: 'Done' })];
 
   destinations.forEach(({ id, address, location, place_id, photo_url, start_date, end_date }, index) => {
     formElements.splice(formElements.length-3, 0, createDestinationElement(index, address, location, place_id, photo_url, start_date, end_date));
   })
 
-  return createElement('form', { id: 'modification-form' }, formElements);
+  return createElement('form', { id: 'modification-form' }, formElements, ['submit', putTrip]);
 }
 
 function removeDestination() {
