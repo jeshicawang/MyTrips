@@ -50,7 +50,8 @@ input:focus {
 }
 
 #trips,
-#create-trip {
+#create-trip,
+#modify-trip {
   width: 80%;
   max-width: 800px;
   margin: auto;
@@ -93,19 +94,20 @@ h2 {
   border-color: #ffaaae;
 }
 
-#back {
+.back {
   position: absolute;
   float: left;
   font-weight: 400;
 }
 
-#title {
+.header {
   text-align: center;
 }
 
 #trip-list,
 #autocomplete,
-#trip-form {
+#trip-form,
+#modification-form {
   margin: 20px;
   padding-bottom: 20px;
 }
@@ -165,16 +167,56 @@ input[type=date] {
   background: linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,0));
 }
 
-#trip-form {
+.trip span.options {
+  position: absolute;
+  right: 10px;
+  opacity: .7;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.trip span.options:hover {
+  opacity: 1;
+}
+
+.trip div.options {
+  position: absolute;
+  top: 33px;
+  right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: #fff;
+}
+
+.trip a.options {
+  display: block;
+  padding-left: 15px;
+  padding-right: 15px;
+  color: #993337;
+  font-size: 14px;
+  letter-spacing: 1px;
+  font-weight: 300;
+  cursor: pointer;
+}
+
+.trip a.options:hover {
+  background-color: #f4eaeb;
+}
+
+#trip-form,
+#modification-form {
   position: relative;
   font-size: 0;
 }
 
-#trip-form .destination {
+#trip-form .destination,
+#modification-form .destination {
   margin-top: 40px;
 }
 
-#trip-form .remove {
+#trip-form .remove,
+#modification-form .remove {
   right: 0;
   color: #f3dcdd;
   position: absolute;
@@ -182,18 +224,22 @@ input[type=date] {
   font-weight: 600;
 }
 
-#trip-form .remove:hover {
+#trip-form .remove:hover,
+#modification-form .remove:hover {
   color: #e2a9ab;
 }
 
-#trip-form h4 {
+#trip-form h4,
+#modification-form h4 {
   color: #e2a9ab;
   font-size: 18px;
   font-weight: 400;
 }
 
 #trip-form input[type=text],
-#trip-form input[type=date] {
+#trip-form input[type=date],
+#modification-form input[type=text],
+#modification-form input[type=date] {
   font-size: 16px;
   font-weight: 300;
   border: 0;
@@ -201,23 +247,28 @@ input[type=date] {
 }
 
 #trip-form input[type=text]:focus,
-#trip-form input[type=date]:focus {
+#trip-form input[type=date]:focus,
+#modification-form input[type=text]:focus,
+#modification-form input[type=date]:focus  {
   outline: none;
   border-color: #aaa;
 }
 
-#trip-form input[type=text] {
+#trip-form input[type=text],
+#modification-form input[type=text] {
   margin-top: 10px;
   margin-bottom: 10px;
   width: 100%;
 }
 
-#trip-form .dates {
+#trip-form .dates,
+#modification-form .dates {
   position: relative;
   height: 46px;
 }
 
-#trip-form input[type=date] {
+#trip-form input[type=date],
+#modification-form input[type=date] {
   position: absolute;
   display: inline-block;
   margin: 0;
@@ -225,15 +276,18 @@ input[type=date] {
   font-family: 'Open Sans', sans-serif;
 }
 
-#trip-form input[type=date].start {
+#trip-form input[type=date].start,
+#modification-form input[type=date].start {
   left: 0;
 }
 
-#trip-form input[type=date].end {
+#trip-form input[type=date].end,
+#modification-form input[type=date].end {
   right: 0;
 }
 
-#trip-form #add-destination {
+#trip-form .add-destination,
+#modification-form .add-destination {
   display: inline-block;
   margin-top: 40px;
   margin-bottom: 20px;
