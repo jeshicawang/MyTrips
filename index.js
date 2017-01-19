@@ -15,11 +15,19 @@ app.use(bodyParser.json());
 
 app.use(express.static('public'));
 
+app.get('/users/:username', (req, res) => {
+  const username = req.params.username;
+  knex('users')
+    .select('id')
+    .where('username', username)
+    .then(([userId]) => res.json(userId));
+})
+
 app.get('/trips/:userId/:upcoming', (req, res) => {
   const upcoming = (req.params.upcoming === 'upcoming');
   const conditional = upcoming ? '>=' : '<';
   const dateType = upcoming ? 'trips.start_date' : 'trips.end_date';
-  const order = upcoming ? 'asc' : 'desc'; 
+  const order = upcoming ? 'asc' : 'desc';
   const now = knex.raw('now()');
   const dateFormat = 'Dy, Month DD, YYYY';
   knex('trips')

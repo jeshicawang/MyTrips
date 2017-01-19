@@ -1,31 +1,34 @@
-const currentUser = 2;
+let currentUser = null;
 
 const autocompletes = [];
+const $homepage = document.getElementById('homepage');
+const $usernameForm = document.getElementById('username-form');
+$usernameForm.addEventListener('submit', login);
 const $trips = document.getElementById('trips');
 const $autocompleteMain = document.getElementById('autocomplete');
 const $tripList = document.getElementById('trip-list');
 const $createTrip = document.getElementById('create-trip')
 const $tripForm = document.getElementById('trip-form');
+$tripForm.addEventListener('submit', postTrip);
 const $userId = document.getElementById('user-id');
 const $tripTitle = document.getElementById('trip-title');
 const $destinations = document.getElementsByClassName('destination');
 const $addDestinationCreate = $tripForm.getElementsByClassName('add-destination')[0];
+$addDestinationCreate.addEventListener('click', () => addDestinationToForm('trip-form'));
 let $modificationForm, $addDestinationModify;
 const $modifyTrip = document.getElementById('modify-trip');
 
-$addDestinationCreate.addEventListener('click', () => addDestinationToForm('trip-form'));
-$tripForm.addEventListener('submit', postTrip);
 window.onhashchange = loadPage;
 
-const DEFAULT_HASH = 'trips-upcoming';
-window.onload = loadDefaultHash;
+//const DEFAULT_HASH = 'trips-upcoming';
+window.onload = loadPage;
 
-function loadDefaultHash() {
+/* function loadDefaultHash() {
   if (!location.hash)
     location.hash = DEFAULT_HASH;
   else
     loadPage();
-}
+} */
 
 function loadPage() {
   resetEverything();
@@ -38,8 +41,6 @@ function loadPage() {
     viewCreateTrip();
   else if (hash.substring(0, 13) === '#modify-trip-')
     viewModifyTrip();
-  else
-    loadDefaultHash();
 }
 
 function resetEverything() {
@@ -57,6 +58,17 @@ function resetEverything() {
   $modifyTrip.className = 'hidden shadow';
   while(autocompletes.length)
     autocompletes.pop();
+}
+
+function login(event) {
+  event.preventDefault();
+  const username = document.getElementById('username').value;
+  fetch('/users/' + username)
+    .then(convertToObject)
+    .then(({id}) => currentUser = id)
+    .then(() => $homepage.classList.add('hidden'))
+    .then(() => location.hash = 'trips-upcoming')
+    .catch(() => document.getElementById('error').style.visibility = 'visible');
 }
 
 function viewTrips(type) {
