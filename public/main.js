@@ -1,4 +1,5 @@
 let currentUser = null;
+let loggedIn = false;
 
 const autocompletes = [];
 const $homepage = document.getElementById('homepage');
@@ -18,17 +19,20 @@ $addDestinationCreate.addEventListener('click', () => addDestinationToForm('trip
 let $modificationForm, $addDestinationModify;
 const $modifyTrip = document.getElementById('modify-trip');
 
-window.onhashchange = loadPage;
+window.onload = checkForLogin;
 
-//const DEFAULT_HASH = 'trips-upcoming';
-window.onload = loadPage;
-
-/* function loadDefaultHash() {
-  if (!location.hash)
-    location.hash = DEFAULT_HASH;
-  else
+function checkForLogin() {
+  if (localStorage.getItem('loggedIn') === 'true') {
+    loggedIn = true;
+    currentUser = localStorage.getItem('userId');
     loadPage();
-} */
+    return;
+  }
+  $homepage.classList.remove('hidden');
+  location.hash = '';
+}
+
+window.onhashchange = loadPage;
 
 function loadPage() {
   resetEverything();
@@ -41,6 +45,8 @@ function loadPage() {
     viewCreateTrip();
   else if (hash.substring(0, 13) === '#modify-trip-')
     viewModifyTrip();
+  else if (loggedIn)
+    location.hash = 'trips-upcoming';
 }
 
 function resetEverything() {
@@ -65,9 +71,14 @@ function login(event) {
   const username = document.getElementById('username').value;
   fetch('/users/' + username)
     .then(convertToObject)
-    .then(({id}) => currentUser = id)
-    .then(() => $homepage.classList.add('hidden'))
-    .then(() => location.hash = 'trips-upcoming')
+    .then(({id}) => {
+      localStorage.setItem('loggedIn', 'true');
+      localStorage.setItem('userId', id);
+      currentUser = id;
+      loggedIn = true;
+      $homepage.classList.add('hidden');
+      location.hash = 'trips-upcoming';
+    })
     .catch(() => document.getElementById('error').style.visibility = 'visible');
 }
 
