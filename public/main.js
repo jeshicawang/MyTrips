@@ -118,7 +118,7 @@ function deleteTrip(event) {
 }
 
 function viewCreateTrip() {
-  $createTrip.className = 'shadow';
+  $createTrip.classList.remove('hidden');
   addDestinationToForm('trip-form')
   const $firstDestination = document.getElementById('0');
   const $firstAutocomplete = $firstDestination.getElementsByClassName('autocomplete')[0];
@@ -137,7 +137,7 @@ function postTrip(event) {
 }
 
 function viewModifyTrip() {
-  $modifyTrip.className = 'shadow';
+  $modifyTrip.classList.remove('hidden');
   fetch('/trip/' + location.hash.substring(13))
     .then(convertToObject)
     .then(destinations => {
