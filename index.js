@@ -30,8 +30,9 @@ app.post('/users', (req, res) => {
     .catch(error => res.json(0));
 })
 
-app.get('/trips/:userId/:upcoming', (req, res) => {
-  const upcoming = (req.params.upcoming === 'upcoming');
+app.get('/trips', (req, res) => {
+  const upcoming = (req.query.upcoming === 'true');
+  const userId = req.query.userId;
   const conditional = upcoming ? '>=' : '<';
   const dateType = upcoming ? 'trips.start_date' : 'trips.end_date';
   const order = upcoming ? 'asc' : 'desc';
@@ -40,14 +41,14 @@ app.get('/trips/:userId/:upcoming', (req, res) => {
   knex('trips')
     .join('destinations', 'trips.id', '=', 'destinations.trip_id')
     .distinct(knex.raw('on (' + dateType + ') trips.id, title, description, to_char(trips.start_date, \'' + dateFormat + '\') as start_date, to_char(trips.end_date, \'' + dateFormat + '\') as end_date, notes, photo_url'))
-    .where('user_id', req.params.userId)
+    .where('user_id', userId)
     .andWhere('trips.end_date', conditional, now)
     .orderByRaw(dateType + ' ' + order + ', destinations.start_date asc')
     .select()
     .then(trips => res.json(trips));
 });
 
-app.get('/trip/:tripId', (req, res) => {
+app.get('/trips/:tripId', (req, res) => {
   const tripId = req.params.tripId;
   const rawStartDate = knex.raw('to_char(destinations.start_date, \'YYYY-MM-DD\') as start_date');
   const rawEndDate = knex.raw('to_char(destinations.end_date, \'YYYY-MM-DD\') as end_date');
@@ -59,16 +60,8 @@ app.get('/trip/:tripId', (req, res) => {
     .then(trip => res.json(trip));
 });
 
-app.get('/destinations/:tripId', (req, res) => {
-  const tripId = req.params.tripId;
-  knex('destinations')
-    .where('trip_id', tripId)
-    .select('id', 'trip_id', 'location', 'place_id', 'start_date', 'end_date', 'photo_url')
-    .then(destinations => res.json(destinations));
-});
-
-app.post('/new-trip/:userId', (req, res) => {
-  const userId = req.params.userId;
+app.post('/trips', (req, res) => {
+  const userId = req.query.userId;
   const {title, description, start_date, end_date, destinations, notes} = req.body;
   const trip = {
     user_id: userId,
@@ -85,7 +78,7 @@ app.post('/new-trip/:userId', (req, res) => {
     .then(() => res.sendStatus(200));
 });
 
-app.put('/modify-trip/:tripId', (req, res) => {
+app.put('/trips/:tripId', (req, res) => {
   const tripId = req.params.tripId;
   const {title, description, start_date, end_date, destinations, notes} = req.body;
   destinations.forEach(destination => destination.trip_id = tripId);
@@ -102,7 +95,7 @@ app.put('/modify-trip/:tripId', (req, res) => {
     .then(() => res.sendStatus(200));
 });
 
-app.delete('/delete-trip/:tripId', (req,res) => {
+app.delete('/trips/:tripId', (req,res) => {
   const tripId = req.params.tripId;
   knex('trips').where('id', tripId).del()
     .then(() => res.sendStatus(204));
