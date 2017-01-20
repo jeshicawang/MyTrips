@@ -23,6 +23,13 @@ app.get('/users/:username', (req, res) => {
     .then(([userId]) => res.json(userId));
 })
 
+app.post('/users', (req, res) => {
+  const newUser = req.body;
+  knex('users').insert(newUser).returning('id')
+    .then(([userId]) => res.json(userId))
+    .catch(error => res.json(0));
+})
+
 app.get('/trips/:userId/:upcoming', (req, res) => {
   const upcoming = (req.params.upcoming === 'upcoming');
   const conditional = upcoming ? '>=' : '<';

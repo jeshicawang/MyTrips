@@ -11,19 +11,27 @@
     <div id="homepage" class="hidden"><div id="content">
       <h1>MyTrips</h1>
       <h2>Trip organization for the travel junkie.</h2>
-      <a class="focus" href="#">existing user</a>
-      <a href="#">new user</a>
-      <form id="username-form">
-        <input name="username" id="username" placeholder="username" type="text" required>
-        <p id="error">*invalid username*</p>
+      <a id="existing" class="focus" href="#existing-user">existing user</a>
+      <a id="new" href="#new-user">new user</a>
+      <form id="existing-user-form">
+        <input name="username" class="username" placeholder="username" type="text" required>
+        <p class="error">*invalid username*</p>
+        <input type="submit" value="log in">
+      </form>
+      <form id="new-user-form" class="hidden">
+        <input name="username" class="username" placeholder="pick a username" type="text" required>
+        <p class="error">*username taken*</p>
         <input type="submit" value="log in">
       </form>
     </div></div>
     <h1>MyTrips</h1>
     <div id="trips" class="hidden shadow">
       <div class="navigation">
-        <a href="#trips-upcoming" id="upcoming">upcoming</a>
-        <a href="#trips-past" id="past">past</a>
+        <a href="#" class="back">&#60;&#60;&#60;</a>
+        <h2 class="header">
+          <a href="#trips-upcoming" id="upcoming">upcoming</a>
+          <a href="#trips-past" id="past">past</a>
+        </h2>
       </div>
       <input id="autocomplete" placeholder="Where do you want to go?" onfocus="geolocate()" type="text">
       <div id="trip-list"></div>

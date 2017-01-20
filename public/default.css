@@ -87,7 +87,7 @@ input:focus {
   border-bottom: 2px solid #fff;
 }
 
-#homepage #error {
+#homepage .error {
   visibility: hidden;
   color: #6b2326;
   font-size: 14px;
@@ -135,7 +135,7 @@ input:focus {
   background-color: #993337;
 }
 
-#trips .navigation {
+#trips .header {
   text-align: center;
 }
 
