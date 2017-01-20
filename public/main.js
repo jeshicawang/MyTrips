@@ -2,6 +2,7 @@ let currentUser = null;
 let loggedIn = false;
 
 const autocompletes = [];
+
 const $homepage = document.getElementById('homepage');
 const $existingUser = document.getElementById('existing');
 const $newUser = document.getElementById('new');
@@ -11,12 +12,14 @@ const $newUserForm = document.getElementById('new-user-form');
 $newUserForm.addEventListener('submit', newUser);
 const $existingUsername = $existingUserForm.getElementsByClassName('username')[0];
 const $newUsername = $newUserForm.getElementsByClassName('username')[0];
+
 const $trips = document.getElementById('trips');
 $trips.getElementsByClassName('back')[0].onclick = logout;
 const $upcoming = document.getElementById('upcoming');
 const $past = document.getElementById('past');
 const $autocompleteMain = document.getElementById('autocomplete');
 const $tripList = document.getElementById('trip-list');
+
 const $createTrip = document.getElementById('create-trip')
 const $tripForm = document.getElementById('trip-form');
 $tripForm.addEventListener('submit', postTrip);
@@ -25,6 +28,7 @@ const $tripTitle = document.getElementById('trip-title');
 const $destinations = document.getElementsByClassName('destination');
 const $addDestinationCreate = $tripForm.getElementsByClassName('add-destination')[0];
 $addDestinationCreate.addEventListener('click', () => addDestinationToForm('trip-form'));
+
 let $modificationForm, $addDestinationModify;
 const $modifyTrip = document.getElementById('modify-trip');
 
