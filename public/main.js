@@ -135,7 +135,7 @@ function logout() {
 
 function viewTrips(type) {
   document.getElementById(type).className = 'focus';
-  fetch('/trips/' + currentUser + '/' + type)
+  fetch('/trips?userId=' + currentUser + '&upcoming=' + (type === 'upcoming'))
     .then(convertToObject)
     .then(displayTrips)
     .catch(logError);
@@ -192,7 +192,7 @@ function modifyTrip(event) {
 function deleteTrip(event) {
   const tripId = event.target.parentElement.parentElement.parentElement.id;
   const options = { method: 'DELETE' };
-  fetch('/delete-trip/' + tripId, options).then(() => location.reload());
+  fetch('/trips/' + tripId, options).then(() => location.reload());
 }
 
 function viewCreateTrip() {
@@ -211,12 +211,12 @@ function postTrip(event) {
   event.preventDefault();
   const body = toObject($tripForm);
   const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
-  fetch('/new-trip/' + currentUser, options).then(() => location.hash = 'trips-upcoming');
+  fetch('/trips?userId=' + currentUser, options).then(() => location.hash = 'trips-upcoming');
 }
 
 function viewModifyTrip() {
   $modifyTrip.classList.remove('hidden');
-  fetch('/trip/' + location.hash.substring(13))
+  fetch('/trips/' + location.hash.substring(13))
     .then(convertToObject)
     .then(destinations => {
       $modifyTrip.appendChild(createModificationForm(destinations));
@@ -245,7 +245,7 @@ function putTrip(event) {
   const body = toObject($modificationForm);
   const options = { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
   const tripId = location.hash.substring(13);
-  fetch('/modify-trip/' + tripId, options).then(() => location.hash = 'trips-upcoming');
+  fetch('/trips/' + tripId, options).then(() => location.hash = 'trips-upcoming');
 }
 
 function toObject(formElement) {
