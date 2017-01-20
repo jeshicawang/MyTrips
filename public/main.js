@@ -77,8 +77,8 @@ function resetEverything() {
   document.getElementById('past').className = '';
   $autocompleteMain.value = '';
   $tripForm.reset();
-  let destinations = Array.prototype.map.call($destinations, destination => destination);
-  destinations.forEach(destination => destination.parentElement.removeChild(destination))
+  Array.from($destinations)
+    .forEach(destination => destination.parentElement.removeChild(destination))
   if (document.getElementById('modification-form'))
     $modifyTrip.removeChild(document.getElementById('modification-form'));
   $trips.className = 'hidden shadow';
@@ -302,7 +302,8 @@ function removeDestination() {
   const index = $destination.id;
   autocompletes.splice(index, 1);
   $destination.parentElement.removeChild($destination);
-  Array.prototype.filter.call($destinations, destination => (destination.id > index))
+  Array.from($destinations)
+    .filter(destination => (destination.id > index))
     .forEach(destination => destination.id--);
 }
 
