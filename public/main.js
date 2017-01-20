@@ -256,12 +256,11 @@ function toObject(formElement) {
     destinations.push({});
   ['address', 'location', 'place_id', 'photo_url', 'start_date', 'end_date']
     .forEach(key => formData.getAll(key).forEach((item, index) => destinations[index][key] = item));
-  let dates = [];
-  destinations.forEach(destination => {
+  const dates = destinations.reduce((dates, destination) => {
     dates.push(destination.start_date);
     dates.push(destination.end_date);
-  });
-  dates.sort();
+    return dates;
+  }, []).sort();
   body.title = formData.get('title');
   body.description = formData.get('description');
   body.start_date = dates[0];
