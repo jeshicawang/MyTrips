@@ -216,7 +216,7 @@ function deleteTrip(event) {
 // loads Create Trip page with information obtained from the main autocomplete object.
 function viewCreateTrip() {
   $createTrip.classList.remove('hidden');
-  addDestinationToForm('trip-form')
+  addDestinationToForm('trip-form');
   const $firstDestination = document.getElementById('0');
   const $firstAutocomplete = $firstDestination.getElementsByClassName('autocomplete')[0];
   if (autocompleteMain.getPlace()) {
