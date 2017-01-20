@@ -29,8 +29,8 @@ const $modifyTrip = document.getElementById('modify-trip');
 window.onload = checkForLogin;
 
 function checkForLogin() {
-  if (localStorage.getItem('loggedIn') === 'true') {
-    loggedIn = true;
+  loggedIn = (localStorage.getItem('loggedIn') === 'true');
+  if (loggedIn) {
     currentUser = localStorage.getItem('userId');
     loadPage();
     return;
@@ -143,6 +143,10 @@ function viewTrips(type) {
 }
 
 function displayTrips(trips) {
+  if (!trips.length) {
+    $tripList.appendChild(createElement('div', {  }, 'No trips to display.'));
+    return;
+  }
   trips.map(trip => createTripElement(trip))
     .forEach(tripElement => $tripList.appendChild(tripElement));
 }

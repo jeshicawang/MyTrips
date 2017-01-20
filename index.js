@@ -35,7 +35,7 @@ app.get('/trips/:userId/:upcoming', (req, res) => {
   const conditional = upcoming ? '>=' : '<';
   const dateType = upcoming ? 'trips.start_date' : 'trips.end_date';
   const order = upcoming ? 'asc' : 'desc';
-  const now = knex.raw('now()');
+  const now = knex.raw('current_date');
   const dateFormat = 'Dy, Month DD, YYYY';
   knex('trips')
     .join('destinations', 'trips.id', '=', 'destinations.trip_id')
