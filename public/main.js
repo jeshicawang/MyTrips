@@ -13,6 +13,8 @@ const $existingUsername = $existingUserForm.getElementsByClassName('username')[0
 const $newUsername = $newUserForm.getElementsByClassName('username')[0];
 const $trips = document.getElementById('trips');
 $trips.getElementsByClassName('back')[0].onclick = logout;
+const $upcoming = document.getElementById('upcoming');
+const $past = document.getElementById('past');
 const $autocompleteMain = document.getElementById('autocomplete');
 const $tripList = document.getElementById('trip-list');
 const $createTrip = document.getElementById('create-trip')
@@ -73,8 +75,8 @@ function loadPage() {
 
 function resetEverything() {
   empty('trip-list');
-  document.getElementById('upcoming').className = '';
-  document.getElementById('past').className = '';
+  $upcoming.className = '';
+  $past.className = '';
   $autocompleteMain.value = '';
   $tripForm.reset();
   Array.from($destinations)
