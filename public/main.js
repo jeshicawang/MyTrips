@@ -1,35 +1,64 @@
-const currentUser = 2;
+let currentUser = null;
+let loggedIn = false;
 
 const autocompletes = [];
+const $homepage = document.getElementById('homepage');
+const $existingUser = document.getElementById('existing');
+const $newUser = document.getElementById('new');
+const $existingUserForm = document.getElementById('existing-user-form');
+$existingUserForm.addEventListener('submit', login);
+const $newUserForm = document.getElementById('new-user-form');
+$newUserForm.addEventListener('submit', newUser);
+const $existingUsername = $existingUserForm.getElementsByClassName('username')[0];
+const $newUsername = $newUserForm.getElementsByClassName('username')[0];
 const $trips = document.getElementById('trips');
+$trips.getElementsByClassName('back')[0].onclick = logout;
 const $autocompleteMain = document.getElementById('autocomplete');
 const $tripList = document.getElementById('trip-list');
 const $createTrip = document.getElementById('create-trip')
 const $tripForm = document.getElementById('trip-form');
+$tripForm.addEventListener('submit', postTrip);
 const $userId = document.getElementById('user-id');
 const $tripTitle = document.getElementById('trip-title');
 const $destinations = document.getElementsByClassName('destination');
 const $addDestinationCreate = $tripForm.getElementsByClassName('add-destination')[0];
+$addDestinationCreate.addEventListener('click', () => addDestinationToForm('trip-form'));
 let $modificationForm, $addDestinationModify;
 const $modifyTrip = document.getElementById('modify-trip');
 
-$addDestinationCreate.addEventListener('click', () => addDestinationToForm('trip-form'));
-$tripForm.addEventListener('submit', postTrip);
-window.onhashchange = loadPage;
+window.onload = checkForLogin;
 
-const DEFAULT_HASH = 'trips-upcoming';
-window.onload = loadDefaultHash;
-
-function loadDefaultHash() {
-  if (!location.hash)
-    location.hash = DEFAULT_HASH;
-  else
+function checkForLogin() {
+  loggedIn = (localStorage.getItem('loggedIn') === 'true');
+  if (loggedIn) {
+    currentUser = localStorage.getItem('userId');
     loadPage();
+    return;
+  }
+  $homepage.classList.remove('hidden');
+  location.hash = 'existing-user';
 }
 
+window.onhashchange = loadPage;
+
 function loadPage() {
-  resetEverything();
   const hash = this.location.hash;
+  if (!loggedIn) {
+    if (hash === '#existing-user') {
+      $existingUser.classList.add('focus');
+      $newUser.classList.remove('focus');
+      $existingUserForm.classList.remove('hidden');
+      $newUserForm.classList.add('hidden');
+    } else if (hash === '#new-user') {
+      $newUser.classList.add('focus');
+      $existingUser.classList.remove('focus');
+      $newUserForm.classList.remove('hidden');
+      $existingUserForm.classList.add('hidden');
+    } else
+      location.hash = 'existing-user';
+    return;
+  }
+  resetEverything();
   if (hash === '#trips-upcoming')
     viewTrips('upcoming');
   else if (hash === '#trips-past')
@@ -38,8 +67,8 @@ function loadPage() {
     viewCreateTrip();
   else if (hash.substring(0, 13) === '#modify-trip-')
     viewModifyTrip();
-  else
-    loadDefaultHash();
+  else if (loggedIn)
+    location.hash = 'trips-upcoming';
 }
 
 function resetEverything() {
@@ -59,6 +88,51 @@ function resetEverything() {
     autocompletes.pop();
 }
 
+function login(event) {
+  event.preventDefault();
+  const username = $existingUsername.value;
+  $existingUsername.value = '';
+  fetch('/users/' + username)
+    .then(convertToObject)
+    .then(setCurrentUser)
+    .catch(() => $existingUserForm.getElementsByClassName('error')[0].style.visibility = 'visible');
+}
+
+function newUser() {
+  event.preventDefault()
+  const username = $newUsername.value;
+  $newUsername.value = '';
+  const body = { username: username };
+  const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
+  fetch('/users', options)
+    .then(convertToObject)
+    .then(id => {
+      if (!id) throw new Error('Username is taken.');
+      return { id: id };
+    })
+    .then(setCurrentUser)
+    .catch(() => $newUserForm.getElementsByClassName('error')[0].style.visibility = 'visible');
+}
+
+function setCurrentUser({id}) {
+  localStorage.setItem('loggedIn', 'true');
+  localStorage.setItem('userId', id);
+  currentUser = id;
+  loggedIn = true;
+  $homepage.classList.add('hidden');
+  location.hash = 'trips-upcoming';
+  $existingUserForm.getElementsByClassName('error')[0].style.visibility = 'hidden'
+  $newUserForm.getElementsByClassName('error')[0].style.visibility = 'hidden'
+}
+
+function logout() {
+  localStorage.setItem('loggedIn', 'false');
+  loggedIn = false;
+  currentUser = null;
+  resetEverything();
+  $homepage.classList.remove('hidden');
+}
+
 function viewTrips(type) {
   document.getElementById(type).className = 'focus';
   fetch('/trips/' + currentUser + '/' + type)
@@ -69,6 +143,10 @@ function viewTrips(type) {
 }
 
 function displayTrips(trips) {
+  if (!trips.length) {
+    $tripList.appendChild(createElement('div', {  }, 'No trips to display.'));
+    return;
+  }
   trips.map(trip => createTripElement(trip))
     .forEach(tripElement => $tripList.appendChild(tripElement));
 }

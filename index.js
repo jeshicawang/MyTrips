@@ -15,12 +15,27 @@ app.use(bodyParser.json());
 
 app.use(express.static('public'));
 
+app.get('/users/:username', (req, res) => {
+  const username = req.params.username;
+  knex('users')
+    .select('id')
+    .where('username', username)
+    .then(([userId]) => res.json(userId));
+})
+
+app.post('/users', (req, res) => {
+  const newUser = req.body;
+  knex('users').insert(newUser).returning('id')
+    .then(([userId]) => res.json(userId))
+    .catch(error => res.json(0));
+})
+
 app.get('/trips/:userId/:upcoming', (req, res) => {
   const upcoming = (req.params.upcoming === 'upcoming');
   const conditional = upcoming ? '>=' : '<';
   const dateType = upcoming ? 'trips.start_date' : 'trips.end_date';
-  const order = upcoming ? 'asc' : 'desc'; 
-  const now = knex.raw('now()');
+  const order = upcoming ? 'asc' : 'desc';
+  const now = knex.raw('current_date');
   const dateFormat = 'Dy, Month DD, YYYY';
   knex('trips')
     .join('destinations', 'trips.id', '=', 'destinations.trip_id')
