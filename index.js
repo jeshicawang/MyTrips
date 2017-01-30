@@ -13,7 +13,7 @@ const knex = require('knex')({
 
 app.use(bodyParser.json());
 
-app.use(express.static('public'));
+app.use(express.static('refactor'));
 
 app.get('/users/:username', (req, res) => {
   const username = req.params.username;
@@ -27,7 +27,7 @@ app.post('/users', (req, res) => {
   const newUser = req.body;
   knex('users').insert(newUser).returning('id')
     .then(([userId]) => res.json(userId))
-    .catch(error => res.json(0));
+    .catch(() => res.json(0));
 })
 
 app.get('/trips', (req, res) => {
