@@ -1,6 +1,8 @@
-const Redux = require('redux');
+const { createStore, combineReducers, applyMiddleware } = require('redux');
+const thunk = require('redux-thunk').default;
 
 const initialState = {
+  currentUser: 2,
   currentView: 'CALENDAR',
   calendar: {
     filter: 'UPCOMING',
@@ -21,6 +23,15 @@ const initialState = {
     notes: null
   }
 };
+
+const currentUser = (state = 2, action) => {
+  switch (action.type) {
+    case 'SWITCH_USER':
+      return action.userId;
+    default:
+      return state;
+  }
+}
 
 const currentView = (state = 'CALENDAR', action) => {
   switch (action.type) {
@@ -45,6 +56,10 @@ const calendar = (state = initialState.calendar, action) => {
       return Object.assign({}, state, {
         filter: action.filter
       })
+    case 'LOAD_TRIPS':
+      return Object.assign({}, state, {
+        trips: [...action.trips]
+      })
     default:
       return state;
   }
@@ -64,8 +79,8 @@ const modifyTrip = (state = initialState.modifyTrip, action) => {
   }
 }
 
-const reducer = Redux.combineReducers({ currentView, calendar, createTrip, modifyTrip });
+const reducer = combineReducers({ currentUser, currentView, calendar, createTrip, modifyTrip });
 
-const store = Redux.createStore(reducer, initialState);
+const store = createStore(reducer, initialState, applyMiddleware(thunk));
 
 module.exports = store;

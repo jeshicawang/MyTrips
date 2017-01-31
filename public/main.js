@@ -1,3 +1,5 @@
+/* global google */
+
 let currentUser = null;
 let loggedIn = false;
 
@@ -22,7 +24,6 @@ const $tripList = document.getElementById('trip-list');
 // Create Trip page Elements
 const $createTrip = document.getElementById('create-trip')
 const $tripForm = document.getElementById('trip-form');
-const $userId = document.getElementById('user-id');
 const $tripTitle = document.getElementById('trip-title');
 const $destinations = document.getElementsByClassName('destination');
 const $addDestinationCreate = $tripForm.getElementsByClassName('add-destination')[0];
@@ -168,7 +169,7 @@ function displayTrips(trips) {
 
 // returns an element using info from a given trip object.
 function createTripElement(trip) {
-  const {id, title, description, start_date, end_date, notes, photo_url} = trip;
+  const {id, title, description, start_date, end_date, photo_url} = trip;
   const tripElement = createElement('div', { id: id, class: 'trip' },
                         createElement('div', { class: 'layer' }, [
                           createElement('span', { class: 'options lnr lnr-chevron-down' }, null, ['click', displayOptions]),

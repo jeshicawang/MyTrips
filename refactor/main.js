@@ -1,26 +1,21 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 const store = require('./store');
+const { Provider } = require('react-redux');
+const App = require('./app.js');
 
-const App = ({ state }) => {
-  return (
-    <div>
-      { JSON.stringify(state) }
-    </div>
-  );
+const loadUpcomingTrips = (dispatch, getState) => {
+  const { currentUser, calendar } = getState();
+  fetch('/trips?userId=' + currentUser + '&upcoming=' + (calendar.filter === 'UPCOMING'))
+    .then(results => results.json())
+    .then(trips => dispatch({ type: 'LOAD_TRIPS', trips }))
 }
 
-App.propTypes = {
-  state: React.PropTypes.object.isRequired,
-  dispatch: React.PropTypes.func.isRequired
-}
+store.dispatch(loadUpcomingTrips);
 
-const draw = () => {
-  const state = store.getState();
-  const { dispatch } = store;
-  ReactDOM.render(<App state={state} dispatch={dispatch} />, document.getElementById('app'));
-};
-
-store.subscribe(draw);
-
-draw();
+ReactDOM.render(
+  <Provider store={store}>
+    <App/>
+  </Provider>,
+  document.getElementById('app')
+);
