@@ -44,6 +44,24 @@ input {
   font-weight: 300;
 }
 
+.pac-container {
+  width: calc(80% - 40px) !important;
+  max-width: 610px !important;
+}
+
+.pac-item, .pac-item-query {
+  font-size: 1em;
+}
+
+.pac-item-query {
+  padding-right: 5px;
+}
+
+.pac-item-selected,
+.pac-item:hover {
+  background-color: #ffeeee;
+}
+
 .container {
   width: 80%;
   max-width: 650px;
@@ -52,13 +70,9 @@ input {
 
 .shadow { box-shadow: 0 0 4px #ccc; }
 
-.header,
-.content {
-  padding: 20px;
-}
-
 .header {
   position: relative;
+  padding: 15px 20px;
   background-color: #993337;
   text-align: center;
 }
@@ -66,8 +80,7 @@ input {
 .header a,
 h2 {
   color: #ffaaae;
-  font-size: 1.1em;
-  font-weight: 300;
+  font-size: 1em;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -82,6 +95,10 @@ h2 {
   font-weight: 400;
 }
 
+.content {
+  padding: 20px;
+}
+
 #calendar .filter {
   margin-left: 10px;
   margin-right: 10px;
@@ -93,10 +110,6 @@ h2 {
 
 #calendar .filter.focus {
   border-bottom: 2px solid #ffaaae;
-}
-
-#calendar .filter.focus:hover {
-  border-color: #ffaaae;
 }
 
 #calendar .trip {

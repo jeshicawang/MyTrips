@@ -6,7 +6,8 @@ const initialState = {
   currentView: 'CALENDAR',
   calendar: {
     filter: 'UPCOMING',
-    trips: []
+    trips: [],
+    autocomplete: null
   },
   createTrip: {
     title: null,
@@ -59,6 +60,10 @@ const calendar = (state = initialState.calendar, action) => {
     case 'LOAD_TRIPS':
       return Object.assign({}, state, {
         trips: [...action.trips]
+      })
+    case 'AUTOCOMPLETE_CREATED':
+      return Object.assign({}, state, {
+        autocomplete: action.autocomplete
       })
     default:
       return state;

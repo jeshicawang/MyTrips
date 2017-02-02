@@ -1,12 +1,20 @@
 const React = require('react');
-const CalendarHeader = require('./calendar-header.js');
-const CalendarContent = require('./calendar-content.js');
+const Header = require('./header.js');
+const Content = require('./content.js');
+const Autocomplete = require('./autocomplete.js');
+const TripList = require('./trip-list.js')
 
 const Calendar = () => {
   return (
     <div id='calendar' className='container shadow'>
-      <CalendarHeader/>
-      <CalendarContent/>
+      <Header>
+        <a className='filter focus' href='#'>upcoming</a>
+        <a className='filter' href='#'>past</a>
+      </Header>
+      <Content>
+        <Autocomplete/>
+        <TripList/>
+      </Content>
     </div>
   )
 }
