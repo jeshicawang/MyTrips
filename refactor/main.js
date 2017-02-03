@@ -4,18 +4,20 @@ const store = require('./store');
 const { Provider } = require('react-redux');
 const App = require('./app.js');
 
-const loadUpcomingTrips = (dispatch, getState) => {
-  const { currentUser, calendar } = getState();
-  fetch('/trips?userId=' + currentUser + '&upcoming=' + (calendar.filter === 'UPCOMING'))
-    .then(results => results.json())
-    .then(trips => dispatch({ type: 'LOAD_TRIPS', trips }))
+const renderDOM = () => {
+  ReactDOM.render(
+    <Provider store={store}>
+      <App/>
+    </Provider>,
+    document.getElementById('app')
+  );
 }
 
-store.dispatch(loadUpcomingTrips);
+const viewCalendar = (dispatch) => {
+  fetch('/trips?userId=2&upcoming=true')
+    .then(results => results.json())
+    .then(trips => dispatch({ type: 'VIEW_CALENDAR', filter: 'UPCOMING', trips }))
+    .then(() => renderDOM())
+}
 
-ReactDOM.render(
-  <Provider store={store}>
-    <App/>
-  </Provider>,
-  document.getElementById('app')
-);
+store.dispatch(viewCalendar)

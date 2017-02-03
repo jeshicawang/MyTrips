@@ -3,9 +3,9 @@ const thunk = require('redux-thunk').default;
 
 const initialState = {
   currentUser: 2,
-  currentView: 'CALENDAR',
+  currentView: null,
   calendar: {
-    filter: 'UPCOMING',
+    filter: null,
     trips: [],
     autocomplete: null
   },
@@ -54,11 +54,9 @@ const calendar = (state = initialState.calendar, action) => {
     case 'VIEW_CALENDAR':
     case 'TRIP_ADDED':
     case 'TRIP_MODIFIED':
+    case 'CHANGE_FILTER':
       return Object.assign({}, state, {
-        filter: action.filter
-      })
-    case 'LOAD_TRIPS':
-      return Object.assign({}, state, {
+        filter: action.filter,
         trips: [...action.trips]
       })
     case 'AUTOCOMPLETE_CREATED':

@@ -1,5 +1,6 @@
 const React = require('react');
 const Header = require('./header.js');
+const HeaderLink = require('./header-link.js')
 const Content = require('./content.js');
 const Autocomplete = require('./autocomplete.js');
 const TripList = require('./trip-list.js')
@@ -8,8 +9,8 @@ const Calendar = () => {
   return (
     <div id='calendar' className='container shadow'>
       <Header>
-        <a className='filter focus' href='#'>upcoming</a>
-        <a className='filter' href='#'>past</a>
+        <HeaderLink>UPCOMING</HeaderLink>
+        <HeaderLink>PAST</HeaderLink>
       </Header>
       <Content>
         <Autocomplete/>
@@ -17,6 +18,10 @@ const Calendar = () => {
       </Content>
     </div>
   )
+}
+
+Calendar.propTypes = {
+  trips: React.PropTypes.arrayOf(React.PropTypes.object.isRequired)
 }
 
 module.exports = Calendar;

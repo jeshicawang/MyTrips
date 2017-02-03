@@ -1,5 +1,5 @@
 const React = require('react');
-const { connect } = require('react-redux');
+const { connect } = require('react-redux')
 
 const TripList = ({ trips }) => {
   const tripElements = trips.map(({ id, title, description, start_date, end_date, photo_url }) => (
@@ -38,6 +38,6 @@ Trip.propTypes = {
   photo_url: React.PropTypes.string.isRequired
 }
 
-const mapStateToProps = ({ calendar }) => ({ trips: calendar.trips })
+const mapStateToProps = ({ calendar }) => ({ trips: calendar.trips });
 
 module.exports = connect(mapStateToProps)(TripList);
