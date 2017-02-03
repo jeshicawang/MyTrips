@@ -1,10 +1,10 @@
 const { createStore, combineReducers, applyMiddleware } = require('redux');
 const thunk = require('redux-thunk').default;
-const { DEFAULT_USER, DEFAULT_VIEW, CHANGE_FILTER, AUTOCOMPLETE_CREATED } = require('./actions.js')
+const { DEFAULTS, CHANGE_FILTER, AUTOCOMPLETE_CREATED } = require('./actions.js')
 
 const initialState = {
-  currentUser: DEFAULT_USER,
-  currentView: DEFAULT_VIEW,
+  currentUser: DEFAULTS.USER,
+  currentView: DEFAULTS.VIEW,
   calendar: {
     filter: null,
     trips: [],
