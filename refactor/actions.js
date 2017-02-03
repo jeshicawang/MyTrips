@@ -11,4 +11,6 @@ const fetchTrips = (target) => (dispatch, getState) => {
     .then(trips => dispatch(changeFilter(filter, trips)))
 }
 
-module.exports = { viewCalendar, fetchTrips }
+const autocompleteCreated = (autocomplete) => ({ type: 'AUTOCOMPLETE_CREATED', autocomplete });
+
+module.exports = { viewCalendar, fetchTrips, autocompleteCreated }

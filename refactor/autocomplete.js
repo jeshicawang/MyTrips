@@ -1,8 +1,9 @@
 /* global google */
 const React = require('react');
 const { connect } = require('react-redux');
+const { autocompleteCreated } = require('./actions.js')
 
-const Autocomplete = ({ autocompleteCreated }) => {
+const Autocomplete = ({ saveAutocomplete }) => {
 
   const initAutocomplete = (element) => {
     if (!element) return;
@@ -12,7 +13,7 @@ const Autocomplete = ({ autocompleteCreated }) => {
     );
     newAutocomplete.index = 0;
     newAutocomplete.addListener('place_changed', () => location.hash = 'create-trip');
-    autocompleteCreated(newAutocomplete)
+    saveAutocomplete(newAutocomplete)
   }
 
   return (
@@ -22,11 +23,11 @@ const Autocomplete = ({ autocompleteCreated }) => {
 }
 
 Autocomplete.propTypes = {
-  autocompleteCreated: React.PropTypes.func.isRequired
+  saveAutocomplete: React.PropTypes.func.isRequired
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  autocompleteCreated: (autocomplete) => dispatch({ type: 'AUTOCOMPLETE_CREATED', autocomplete })
+  saveAutocomplete: (autocomplete) => dispatch(autocompleteCreated(autocomplete))
 })
 
 module.exports = connect(null, mapDispatchToProps)(Autocomplete);
