@@ -24,13 +24,13 @@ const fetchTripsIfNeeded = (filter, focus) => (dispatch) => {
 const autocompleteCreated = (autocomplete) => ({ type: AUTOCOMPLETE_CREATED, autocomplete });
 
 module.exports = {
-  viewCalendar,
-  fetchTripsIfNeeded,
-  autocompleteCreated,
   DEFAULTS,
   UPCOMING,
   PAST,
   VIEW_CALENDAR,
   CHANGE_FILTER,
-  AUTOCOMPLETE_CREATED
+  AUTOCOMPLETE_CREATED,
+  viewCalendar,
+  fetchTripsIfNeeded,
+  autocompleteCreated,
 }
