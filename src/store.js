@@ -1,6 +1,15 @@
 const { createStore, combineReducers, applyMiddleware } = require('redux');
 const thunk = require('redux-thunk').default;
-const { DEFAULTS, CHANGE_FILTER, AUTOCOMPLETE_CREATED } = require('./actions.js')
+const {
+  DEFAULTS,
+  VIEW_CALENDAR,
+  CALENDAR,
+  UPDATE_CALENDAR_INPUT,
+  VIEW_CREATE_TRIP,
+  CREATE_TRIP,
+  CHANGE_FILTER,
+  AUTOCOMPLETE_CREATED
+} = require('./actions.js');
 
 const initialState = {
   currentUser: DEFAULTS.USER,
@@ -8,12 +17,13 @@ const initialState = {
   calendar: {
     filter: null,
     trips: [],
+    input: '',
     autocomplete: null
   },
   createTrip: {
     title: null,
     description: null,
-    destinationCount: 1,
+    destinationCount: null,
     destinations: [],
     notes: null
   },
@@ -35,6 +45,10 @@ const currentUser = (state = initialState.currentUser, action) => {
 
 const currentView = (state = initialState.currentView, action) => {
   switch (action.type) {
+    case VIEW_CALENDAR:
+      return CALENDAR;
+    case VIEW_CREATE_TRIP:
+      return CREATE_TRIP;
     default:
       return state;
   }
@@ -47,9 +61,17 @@ const calendar = (state = initialState.calendar, action) => {
         filter: action.filter,
         trips: [...action.trips]
       })
+    case UPDATE_CALENDAR_INPUT:
+      return Object.assign({}, state, {
+        input: action.value
+      })
     case AUTOCOMPLETE_CREATED:
       return Object.assign({}, state, {
         autocomplete: action.autocomplete
+      })
+    case VIEW_CREATE_TRIP:
+      return Object.assign({}, state, {
+        input: ''
       })
     default:
       return state;
@@ -58,6 +80,14 @@ const calendar = (state = initialState.calendar, action) => {
 
 const createTrip = (state = initialState.createTrip, action) => {
   switch (action.type) {
+    case VIEW_CREATE_TRIP:
+      return Object.assign({}, state, {
+        title: action.title,
+        description: action.description,
+        destinationCount: action.destinationCount,
+        destinations: action.destinations,
+        notes: action.notes
+      })
     default:
       return state;
   }

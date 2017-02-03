@@ -1,15 +1,16 @@
 const React = require('react');
 const { connect } = require('react-redux');
+const ViewContainer = require('./view-container.js');
 const Header = require('./header.js');
 const HeaderLink = require('./header-link.js');
 const Content = require('./content.js');
 const Autocomplete = require('./autocomplete.js');
 const TripList = require('./trip-list.js');
-const { UPCOMING, PAST, fetchTripsIfNeeded } = require('./actions.js')
+const { CALENDAR, UPCOMING, PAST, fetchTripsIfNeeded } = require('./actions.js')
 
 const Calendar = ({ tryFetch }) => {
   return (
-    <div id='calendar' className='container shadow' ref={tryFetch}>
+    <ViewContainer view={CALENDAR} ref={tryFetch}>
       <Header>
         <HeaderLink filter={UPCOMING}>upcoming</HeaderLink>
         <HeaderLink filter={PAST}>past</HeaderLink>
@@ -18,7 +19,7 @@ const Calendar = ({ tryFetch }) => {
         <Autocomplete/>
         <TripList/>
       </Content>
-    </div>
+    </ViewContainer>
   )
 }
 

@@ -1,9 +1,9 @@
 /* global google */
 const React = require('react');
 const { connect } = require('react-redux');
-const { autocompleteCreated } = require('./actions.js')
+const { loadCreateTripFormInfo, autocompleteCreated, updateCalendarInput } = require('./actions.js')
 
-const Autocomplete = ({ saveAutocomplete }) => {
+const Autocomplete = ({ handlePlaceChange, saveAutocomplete, handleChange }) => {
 
   const initAutocomplete = (element) => {
     if (!element) return;
@@ -12,22 +12,26 @@ const Autocomplete = ({ saveAutocomplete }) => {
               {types: ['(cities)']}
     );
     newAutocomplete.index = 0;
-    newAutocomplete.addListener('place_changed', () => location.hash = 'create-trip');
+    newAutocomplete.addListener('place_changed', () => handlePlaceChange(newAutocomplete));
     saveAutocomplete(newAutocomplete)
   }
 
   return (
-    <input placeholder='Where do you want to go?' ref={initAutocomplete} type='text'/>
+    <input placeholder='Where do you want to go?' type='text' ref={initAutocomplete} onChange={handleChange}/>
   )
 
 }
 
 Autocomplete.propTypes = {
-  saveAutocomplete: React.PropTypes.func.isRequired
+  handlePlaceChange: React.PropTypes.func.isRequired,
+  saveAutocomplete: React.PropTypes.func.isRequired,
+  handleChange: React.PropTypes.func.isRequired
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  saveAutocomplete: (autocomplete) => dispatch(autocompleteCreated(autocomplete))
+  handlePlaceChange: (autocomplete) => dispatch(loadCreateTripFormInfo(autocomplete)),
+  saveAutocomplete: (autocomplete) => dispatch(autocompleteCreated(autocomplete)),
+  handleChange: (event) => dispatch(updateCalendarInput(event.target.value))
 })
 
 module.exports = connect(null, mapDispatchToProps)(Autocomplete);
