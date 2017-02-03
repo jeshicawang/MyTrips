@@ -1,9 +1,9 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { fetchTrips } = require('./actions');
+const { fetchTripsIfNeeded } = require('./actions');
 
-const HeaderLink = ({ children, filter, handleClick }) => {
-  const className = (children === filter) ? 'filter focus' : 'filter';
+const HeaderLink = ({ children, focus, handleClick }) => {
+  const className = focus ? 'filter focus' : 'filter';
   return (
     <a className={className} onClick={handleClick} href='#'>
       { children }
@@ -13,14 +13,16 @@ const HeaderLink = ({ children, filter, handleClick }) => {
 
 HeaderLink.propTypes = {
   children: React.PropTypes.string.isRequired,
-  filter: React.PropTypes.string,
+  focus: React.PropTypes.bool.isRequired,
   handleClick: React.PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ calendar }) => ({ filter: calendar.filter });
+const mapStateToProps = ({ calendar }, { filter }) => ({
+  focus: calendar.filter === filter
+});
 
-const mapDispatchToProps = (dispatch) => ({
-  handleClick: ({target}) => dispatch(fetchTrips(target))
+const mapDispatchToProps = (dispatch, { filter, focus }) => ({
+  handleClick: () => dispatch(fetchTripsIfNeeded(filter, focus))
 })
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(HeaderLink);
