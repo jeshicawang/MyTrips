@@ -3,7 +3,7 @@ const thunk = require('redux-thunk').default;
 
 const initialState = {
   currentUser: 2,
-  currentView: null,
+  currentView: 'CALENDAR',
   calendar: {
     filter: null,
     trips: [],
@@ -51,7 +51,6 @@ const currentView = (state = 'CALENDAR', action) => {
 
 const calendar = (state = initialState.calendar, action) => {
   switch (action.type) {
-    case 'VIEW_CALENDAR':
     case 'TRIP_ADDED':
     case 'TRIP_MODIFIED':
     case 'CHANGE_FILTER':

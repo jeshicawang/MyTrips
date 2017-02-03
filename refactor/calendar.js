@@ -1,9 +1,9 @@
 const React = require('react');
 const Header = require('./header.js');
-const HeaderLink = require('./header-link.js')
+const HeaderLink = require('./header-link.js');
 const Content = require('./content.js');
 const Autocomplete = require('./autocomplete.js');
-const TripList = require('./trip-list.js')
+const TripList = require('./trip-list.js');
 
 const Calendar = () => {
   return (
@@ -18,10 +18,6 @@ const Calendar = () => {
       </Content>
     </div>
   )
-}
-
-Calendar.propTypes = {
-  trips: React.PropTypes.arrayOf(React.PropTypes.object.isRequired)
 }
 
 module.exports = Calendar;

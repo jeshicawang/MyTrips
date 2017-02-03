@@ -1,5 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
+const { fetchTrips } = require('./actions');
 
 const HeaderLink = ({ children, filter, handleClick }) => {
   const className = (children === filter) ? 'filter focus' : 'filter';
@@ -12,25 +13,14 @@ const HeaderLink = ({ children, filter, handleClick }) => {
 
 HeaderLink.propTypes = {
   children: React.PropTypes.string.isRequired,
-  filter: React.PropTypes.string.isRequired,
+  filter: React.PropTypes.string,
   handleClick: React.PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ calendar }) => ({ filter: calendar.filter });
 
 const mapDispatchToProps = (dispatch) => ({
-  handleClick: (event) => {
-    if (event.target.classList.contains('focus')) return;
-    dispatch(changeFilter)
-  }
+  handleClick: ({target}) => dispatch(fetchTrips(target))
 })
-
-const changeFilter = (dispatch, getState) => {
-  const { currentUser, calendar } = getState();
-  const filter = (calendar.filter === 'UPCOMING') ? 'PAST' : 'UPCOMING';
-  fetch('/trips?userId=' + currentUser + '&upcoming=' + (filter === 'UPCOMING'))
-    .then(results => results.json())
-    .then(trips => dispatch({ type: 'CHANGE_FILTER', filter, trips }))
-}
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(HeaderLink);
