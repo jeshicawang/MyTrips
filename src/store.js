@@ -1,9 +1,10 @@
 const { createStore, combineReducers, applyMiddleware } = require('redux');
 const thunk = require('redux-thunk').default;
+const { DEFAULT_USER, DEFAULT_VIEW, CHANGE_FILTER, AUTOCOMPLETE_CREATED } = require('./actions.js')
 
 const initialState = {
-  currentUser: 2,
-  currentView: 'CALENDAR',
+  currentUser: DEFAULT_USER,
+  currentView: DEFAULT_VIEW,
   calendar: {
     filter: null,
     trips: [],
@@ -25,25 +26,15 @@ const initialState = {
   }
 };
 
-const currentUser = (state = 2, action) => {
+const currentUser = (state = initialState.currentUser, action) => {
   switch (action.type) {
-    case 'SWITCH_USER':
-      return action.userId;
     default:
       return state;
   }
 }
 
-const currentView = (state = 'CALENDAR', action) => {
+const currentView = (state = initialState.currentView, action) => {
   switch (action.type) {
-    case 'VIEW_CALENDAR':
-    case 'TRIP_ADDED':
-    case 'TRIP_MODIFIED':
-      return 'CALENDAR';
-    case 'VIEW_CREATE_TRIP':
-      return 'CREATE_TRIP'
-    case 'VIEW_MODIFY_TRIP':
-      return 'MODIFY_TRIP'
     default:
       return state;
   }
@@ -51,14 +42,12 @@ const currentView = (state = 'CALENDAR', action) => {
 
 const calendar = (state = initialState.calendar, action) => {
   switch (action.type) {
-    case 'TRIP_ADDED':
-    case 'TRIP_MODIFIED':
-    case 'CHANGE_FILTER':
+    case CHANGE_FILTER:
       return Object.assign({}, state, {
         filter: action.filter,
         trips: [...action.trips]
       })
-    case 'AUTOCOMPLETE_CREATED':
+    case AUTOCOMPLETE_CREATED:
       return Object.assign({}, state, {
         autocomplete: action.autocomplete
       })

@@ -13,7 +13,7 @@ const knex = require('knex')({
 
 app.use(bodyParser.json());
 
-app.use(express.static('refactor'));
+app.use(express.static('public'));
 
 app.get('/users/:username', (req, res) => {
   const username = req.params.username;

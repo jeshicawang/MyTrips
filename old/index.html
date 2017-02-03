@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+	  <meta charset="UTF-8">
+    <title>MyTrips</title>
+	  <link rel="stylesheet" href="default.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+  </head>
+  <body>
+    <div id="homepage" class="hidden"><div id="content">
+      <h1>MyTrips</h1>
+      <h2>Trip organization for the travel junkie.</h2>
+      <a id="existing" class="focus" href="#existing-user">existing user</a>
+      <a id="new" href="#new-user">new user</a>
+      <form id="existing-user-form">
+        <input name="username" class="username" placeholder="username" type="text" required>
+        <p class="error">*invalid username*</p>
+        <input type="submit" value="log in">
+      </form>
+      <form id="new-user-form" class="hidden">
+        <input name="username" class="username" placeholder="pick a username" type="text" required>
+        <p class="error">*username taken*</p>
+        <input type="submit" value="log in">
+      </form>
+    </div></div>
+    <h1>MyTrips</h1>
+    <div id="trips" class="hidden shadow">
+      <div class="navigation">
+        <a href="#" class="back">&#60;&#60;&#60;</a>
+        <h2 class="header">
+          <a href="#trips-upcoming" id="upcoming">upcoming</a>
+          <a href="#trips-past" id="past">past</a>
+        </h2>
+      </div>
+      <input id="autocomplete" placeholder="Where do you want to go?" onfocus="geolocate()" type="text">
+      <div id="trip-list"></div>
+    </div>
+    <div id="create-trip" class="hidden shadow">
+      <div class="navigation">
+        <a href="#trips-upcoming" class="back">&#60;&#60;&#60;</a>
+        <h2 class="header">Create Trip</h2>
+      </div>
+      <form id="trip-form">
+        <input name="title" id="trip-title" placeholder="Title" type="text" required>
+        <input name="description" placeholder="Description" type="text">
+        <a class="add-destination" href="#create-trip">+ add another destination</a>
+        <input name="notes" id="notes" placeholder="Notes" type="text">
+        <input class="submit" type="submit" value="Done">
+      </form>
+    </div>
+    <div id="modify-trip" class="hidden shadow">
+      <div class="navigation">
+        <a href="#trips-upcoming" class="back">&#60;&#60;&#60;</a>
+        <h2 class="header">Modify Trip</h2>
+      </div>
+    </div>
+	  <script src="main.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdRineV_I6ibxurvPguJaPar5fr8OlNW4&libraries=places&callback=initAutocomplete"></script>
+  </body>
+</html>

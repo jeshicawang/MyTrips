@@ -10,8 +10,8 @@
     "migrate:make": "knex migrate:make",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
-    "bundle": "browserify -t babelify refactor/main.js -o refactor/bundle.js",
-    "bundle:watch": "watchify -t babelify refactor/main.js -o refactor/bundle.js"
+    "bundle": "browserify -t babelify src/ -o public/bundle.js",
+    "bundle:watch": "watchify -t babelify src/ -o public/bundle.js"
   },
   "repository": {
     "type": "git",
