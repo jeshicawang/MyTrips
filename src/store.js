@@ -4,11 +4,14 @@ const {
   DEFAULTS,
   VIEW_CALENDAR,
   CALENDAR,
+  MAIN_AUTOCOMPLETE_CREATED,
+  FORM_AUTOCOMPLETE_CREATED,
   UPDATE_CALENDAR_INPUT,
   VIEW_CREATE_TRIP,
   CREATE_TRIP,
-  CHANGE_FILTER,
-  AUTOCOMPLETE_CREATED
+  CREATE_TRIP_DESTINATION_INPUT,
+  UPDATE_CREATE_TRIP_INPUT,
+  CHANGE_FILTER
 } = require('./actions.js');
 
 const initialState = {
@@ -23,9 +26,10 @@ const initialState = {
   createTrip: {
     title: null,
     description: null,
-    destinationCount: null,
+    destinationCount: 0,
     destinations: [],
-    notes: null
+    notes: null,
+    autocompletes: []
   },
   modifyTrip: {
     title: null,
@@ -56,6 +60,10 @@ const currentView = (state = initialState.currentView, action) => {
 
 const calendar = (state = initialState.calendar, action) => {
   switch (action.type) {
+    case MAIN_AUTOCOMPLETE_CREATED:
+      return Object.assign({}, state, {
+        autocomplete: action.autocomplete
+      })
     case CHANGE_FILTER:
       return Object.assign({}, state, {
         filter: action.filter,
@@ -64,10 +72,6 @@ const calendar = (state = initialState.calendar, action) => {
     case UPDATE_CALENDAR_INPUT:
       return Object.assign({}, state, {
         input: action.value
-      })
-    case AUTOCOMPLETE_CREATED:
-      return Object.assign({}, state, {
-        autocomplete: action.autocomplete
       })
     case VIEW_CREATE_TRIP:
       return Object.assign({}, state, {
@@ -83,10 +87,31 @@ const createTrip = (state = initialState.createTrip, action) => {
     case VIEW_CREATE_TRIP:
       return Object.assign({}, state, {
         title: action.title,
-        description: action.description,
-        destinationCount: action.destinationCount,
-        destinations: action.destinations,
-        notes: action.notes
+        description: null,
+        destinationCount: 1,
+        destinations: [action.destination],
+        notes: null,
+        autocompletes: []
+      })
+    case FORM_AUTOCOMPLETE_CREATED:
+      return Object.assign({}, state,{
+        autocompletes: [
+          ...state.autocompletes.slice().splice(0, action.index),
+          action.autocomplete,
+          ...state.autocompletes.slice().splice(action.index+1)
+        ]
+      })
+    case UPDATE_CREATE_TRIP_INPUT:
+      return Object.assign({}, state, {
+        [action.key]: action.value
+      })
+    case CREATE_TRIP_DESTINATION_INPUT:
+      return Object.assign({}, state, {
+        destinations: [
+          ...state.destinations.slice().splice(0, action.index),
+          Object.assign({}, state.destinations[action.index], action.value),
+          ...state.destinations.slice().splice(action.index+1)
+        ]
       })
     default:
       return state;

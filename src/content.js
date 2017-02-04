@@ -9,7 +9,10 @@ const Content = ({ children }) => {
 }
 
 Content.propTypes = {
-  children: React.PropTypes.arrayOf(React.PropTypes.object.isRequired)
+  children: React.PropTypes.oneOfType([
+    React.PropTypes.arrayOf(React.PropTypes.object),
+    React.PropTypes.object
+  ]).isRequired
 }
 
 module.exports = Content;

@@ -4,7 +4,7 @@ const ViewContainer = require('./view-container.js');
 const Header = require('./header.js');
 const HeaderLink = require('./header-link.js');
 const Content = require('./content.js');
-const Autocomplete = require('./autocomplete.js');
+const AutocompleteMain = require('./autocomplete-main.js');
 const TripList = require('./trip-list.js');
 const { CALENDAR, UPCOMING, PAST, fetchTripsIfNeeded } = require('./actions.js')
 
@@ -16,7 +16,7 @@ const Calendar = ({ tryFetch }) => {
         <HeaderLink filter={PAST}>past</HeaderLink>
       </Header>
       <Content>
-        <Autocomplete/>
+        <AutocompleteMain/>
         <TripList/>
       </Content>
     </ViewContainer>
