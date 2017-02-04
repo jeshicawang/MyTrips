@@ -12,7 +12,7 @@ const {
   CREATE_TRIP_DESTINATION_INPUT,
   UPDATE_CREATE_TRIP_INPUT,
   CHANGE_FILTER
-} = require('./actions.js');
+} = require('./variables.js');
 
 const initialState = {
   currentUser: DEFAULTS.USER,

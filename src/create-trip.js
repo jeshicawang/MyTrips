@@ -4,7 +4,7 @@ const ViewContainer = require('./view-container.js')
 const Header = require('./header.js');
 const Content = require('./content.js');
 const TripForm = require('./trip-form.js');
-const { CREATE_TRIP } = require('./actions.js');
+const { CREATE_TRIP } = require('./variables.js');
 
 const CreateTrip = ({ existingInfo }) => {
   return (
