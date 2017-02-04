@@ -10,6 +10,7 @@ const {
   CREATE_TRIP_DESTINATION_INPUT,
   UPDATE_CREATE_TRIP_INPUT,
   UPDATE_MODIFY_TRIP_INPUT,
+  ADD_DESTINATION,
   CHANGE_FILTER
 } = require('../variables.js');
 
@@ -26,6 +27,8 @@ const updateCreateTripInput = (key, value) => ({ type: UPDATE_CREATE_TRIP_INPUT,
 const createTripDestinationInput = (index, value) => ({ type: CREATE_TRIP_DESTINATION_INPUT, index, value });
 
 const updateModifyTripInput = (key, value) => ({ type: UPDATE_MODIFY_TRIP_INPUT, key, value });
+
+const addDestination = () => ({ type: ADD_DESTINATION });
 
 const viewCreateTrip = ({ title, destination }) => ({ type: VIEW_CREATE_TRIP, title, destination });
 
@@ -89,6 +92,7 @@ module.exports = {
   updateCalendarInput,
   loadCreateTripFormInfo,
   updateFormInput,
+  addDestination,
   updateDestinationInfo,
   fetchTripsIfNeeded
 }

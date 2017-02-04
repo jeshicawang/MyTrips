@@ -8,4 +8,8 @@ const updateItemInArray = (array, indexToMatch, updateItemCallback) => (
   })
 )
 
-module.exports = { updateObject, updateItemInArray };
+const newEmptyDestination = () => ({
+  
+})
+
+module.exports = { updateObject, updateItemInArray, newEmptyDestination };
