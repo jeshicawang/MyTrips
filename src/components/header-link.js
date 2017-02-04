@@ -1,6 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { fetchTripsIfNeeded } = require('./actions');
+const { fetchTripsIfNeeded } = require('../actions/');
 
 const HeaderLink = ({ children, focus, handleClick }) => {
   const className = focus ? 'filter focus' : 'filter';

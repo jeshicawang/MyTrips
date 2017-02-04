@@ -1,6 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux')
-const { updateFormInput } = require('./actions.js')
+const { updateFormInput } = require('../actions/')
 
 const TextInput = ({ value, placeholder, handleChange }) => {
   return (

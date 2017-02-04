@@ -1,8 +1,12 @@
 const React = require('react');
+const { createStore, applyMiddleware } = require('redux');
+const thunk = require('redux-thunk').default;
 const ReactDOM = require('react-dom');
-const store = require('./store');
+const rootReducer = require('./reducers/');
 const { Provider } = require('react-redux');
-const App = require('./app.js');
+const App = require('./components/app.js');
+
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 ReactDOM.render(
   <Provider store={store}>

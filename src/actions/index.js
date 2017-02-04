@@ -11,7 +11,7 @@ const {
   UPDATE_CREATE_TRIP_INPUT,
   UPDATE_MODIFY_TRIP_INPUT,
   CHANGE_FILTER
-} = require('./variables.js');
+} = require('../variables.js');
 
 const viewCalendar = () => ({ type: VIEW_CALENDAR });
 

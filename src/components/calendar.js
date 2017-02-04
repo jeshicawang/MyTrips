@@ -6,8 +6,8 @@ const HeaderLink = require('./header-link.js');
 const Content = require('./content.js');
 const AutocompleteMain = require('./autocomplete-main.js');
 const TripList = require('./trip-list.js');
-const { fetchTripsIfNeeded } = require('./actions.js')
-const { CALENDAR, UPCOMING, PAST } = require('./variables.js');
+const { fetchTripsIfNeeded } = require('../actions/')
+const { CALENDAR, UPCOMING, PAST } = require('../variables.js');
 
 const Calendar = ({ tryFetch }) => {
   return (

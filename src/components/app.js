@@ -1,6 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { CALENDAR, CREATE_TRIP } = require('./variables.js');
+const { CALENDAR, CREATE_TRIP } = require('../variables.js');
 const Calendar = require('./calendar.js');
 const CreateTrip = require('./create-trip.js');
 
