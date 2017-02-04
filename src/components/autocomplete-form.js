@@ -27,11 +27,7 @@ AutocompleteForm.propTypes = {
 const mapDispatchToProps = (dispatch, { index }) => ({
   handlePlaceChange: (autocomplete) => dispatch(updateDestinationInfo(index, autocomplete)),
   saveAutocomplete: (autocomplete) => dispatch(formAutocompleteCreated(autocomplete, index)),
-  handleChange: (event) => {
-    const key = 'address';
-    const value = event.target.value;
-    dispatch(updateFormInput('destinations', { index, key, value }));
-  }
+  handleChange: (event) => dispatch(updateFormInput('destinations', { index, key: 'address', value: event.target.value }))
 })
 
 const mapStateToProps = ({ createTrip }, { index }) => ({ autocomplete: createTrip.autocompletes[index] })

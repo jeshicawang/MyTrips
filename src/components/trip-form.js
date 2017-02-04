@@ -3,7 +3,7 @@ const TextInput = require('./text-input.js');
 const DestinationInput = require('./destination-input.js');
 
 const TripForm = ({ info }) => {
-  const { title, description, destinationCount, destinations, notes } = info;
+  const { title, description, destinations, notes } = info;
   return (
     <form>
       <TextInput value={title} placeholder='Title' stateKey='title'/>
