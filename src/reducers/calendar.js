@@ -14,7 +14,8 @@ const calendar = (state = initialState, action) => {
   switch (action.type) {
     case VIEW_CHANGED:
       return assign(state, {
-        input: ''
+        input: '',
+        autocomplete: null
       })
     case AUTOCOMPLETE_CREATED:
       return assign(state, {

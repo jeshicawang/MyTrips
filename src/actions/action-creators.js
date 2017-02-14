@@ -62,6 +62,7 @@ const updateFormInput = (key, val) => (dispatch, getState) => {
 }
 
 const filterChanged = (filter) => ({ type: FILTER_CHANGED, filter });
+
 const tripsFetched = (trips) => ({ type: TRIPS_FETCHED, trips });
 
 const fetchTrips = (filter) => (dispatch, getState) => {
@@ -72,9 +73,9 @@ const fetchTrips = (filter) => (dispatch, getState) => {
     .then(trips => dispatch(tripsFetched(trips)))
 }
 
-const fetchTripsIfNeeded = (filter, focus) => (dispatch) => {
+const fetchTripsIfNeeded = (filter, focus) => (dispatch, getState) => {
   if (focus) return;
-  dispatch(fetchTrips(filter ? filter : DEFAULTS.FILTER));
+  dispatch(fetchTrips(filter ? filter : getState().calendar.filter ? getState().calendar.filter : DEFAULTS.FILTER));
 }
 
 module.exports = {
