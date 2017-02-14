@@ -1,5 +1,6 @@
 const { updateObject } = require('./utilities.js')
-const { MAIN_AUTOCOMPLETE_CREATED, CHANGE_FILTER, UPDATE_CALENDAR_INPUT, VIEW_CREATE_TRIP } = require('../constants/action-types.js');
+const { CALENDAR } = require('../constants/views.js');
+const { VIEW_CHANGED, AUTOCOMPLETE_CREATED, FILTER_CHANGED, TRIPS_FETCHED, UPDATE_CALENDAR_INPUT } = require('../constants/action-types.js');
 
 const initialState = {
   filter: null,
@@ -9,21 +10,25 @@ const initialState = {
 };
 
 const calendar = (state = initialState, action) => {
+  if (action.view && action.view !== CALENDAR) return state;
   switch (action.type) {
-    case MAIN_AUTOCOMPLETE_CREATED:
+    case AUTOCOMPLETE_CREATED:
       return updateObject(state, {
         autocomplete: action.autocomplete
       })
-    case CHANGE_FILTER:
+    case FILTER_CHANGED:
       return updateObject(state, {
-        filter: action.filter,
+        filter: action.filter
+      })
+    case TRIPS_FETCHED:
+      return updateObject(state, {
         trips: [...action.trips]
       })
     case UPDATE_CALENDAR_INPUT:
       return updateObject(state, {
         input: action.value
       })
-    case VIEW_CREATE_TRIP:
+    case VIEW_CHANGED:
       return updateObject(state, {
         input: ''
       })

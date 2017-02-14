@@ -1,5 +1,8 @@
+/* eslint-disable no-case-declarations */
+
 const { updateObject, updateItemInArray, newEmptyDestination } = require('./utilities.js')
-const { VIEW_CREATE_TRIP, FORM_AUTOCOMPLETE_CREATED, UPDATE_CREATE_TRIP_INPUT, CREATE_TRIP_DESTINATION_INPUT, ADD_DESTINATION } = require('../constants/action-types.js');
+const { CREATE_TRIP } = require('../constants/views.js');
+const { TRIP_INFO_UPDATED, AUTOCOMPLETE_CREATED, TRIP_FORM_INPUT_UPDATED, CREATE_TRIP_DESTINATION_INPUT, DESTINATION_ADDED } = require('../constants/action-types.js');
 
 const initialState = {
   title: null,
@@ -10,17 +13,19 @@ const initialState = {
 };
 
 const createTrip = (state = initialState, action) => {
+  if (action.view && action.view !== CREATE_TRIP) return state;
   switch (action.type) {
-    case VIEW_CREATE_TRIP:
+    case TRIP_INFO_UPDATED:
+      const { title, destination } = action.tripInfo;
       return updateObject(state, {
-        title: action.title,
-        destinations: [action.destination]
+        title,
+        destinations: [destination]
       })
-    case FORM_AUTOCOMPLETE_CREATED:
+    case AUTOCOMPLETE_CREATED:
       return updateObject(state, {
         autocompletes: [...state.autocompletes, action.autocomplete]
       })
-    case UPDATE_CREATE_TRIP_INPUT:
+    case TRIP_FORM_INPUT_UPDATED:
       return updateObject(state, {
         [action.key]: action.value
       })
@@ -28,7 +33,7 @@ const createTrip = (state = initialState, action) => {
       return updateObject(state, {
         destinations: updateItemInArray(state.destinations, action.index, (destination) => updateObject(destination, action.value))
       })
-    case ADD_DESTINATION:
+    case DESTINATION_ADDED:
       return updateObject(state, {
         destinations: [...state.destinations, newEmptyDestination()]
       })

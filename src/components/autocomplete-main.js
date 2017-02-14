@@ -1,7 +1,8 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const Autocomplete = require('./autocomplete.js');
-const { loadCreateTripFormInfo, mainAutocompleteCreated, updateCalendarInput } = require('../actions/action-creators.js');
+const { viewChanged, tripInfoUpdated, autocompleteCreated, updateCalendarInput } = require('../actions/action-creators.js');
+const { CALENDAR, CREATE_TRIP } = require('../constants/views.js');
 
 const AutocompleteMain = ({ input, autocomplete, handlePlaceChange, saveAutocomplete, handleChange }) => {
   return (
@@ -31,8 +32,24 @@ const mapStateToProps = ({calendar}) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   handlePlaceChange: (autocomplete) => dispatch(loadCreateTripFormInfo(autocomplete)),
-  saveAutocomplete: (autocomplete) => dispatch(mainAutocompleteCreated(autocomplete)),
+  saveAutocomplete: (autocomplete) => dispatch(autocompleteCreated(CALENDAR, autocomplete)),
   handleChange: (event) => dispatch(updateCalendarInput(event.target.value))
 })
+
+const loadCreateTripFormInfo = (autocomplete) => (dispatch) => {
+  const { name, formatted_address, place_id, photos } = autocomplete.getPlace();
+  const title = name + ' Trip';
+  const destination = {
+    address: formatted_address,
+    location: name,
+    place_id,
+    photo_url: photos[0].getUrl({'maxWidth': 1600}),
+    start_date: null,
+    end_date: null
+  };
+  const tripInfo = { title, destination };
+  dispatch(viewChanged(CREATE_TRIP));
+  dispatch(tripInfoUpdated(CREATE_TRIP, tripInfo));
+}
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(AutocompleteMain);

@@ -1,7 +1,7 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const Autocomplete = require('./autocomplete.js');
-const { updateDestinationInfo, formAutocompleteCreated, updateFormInput } = require('../actions/action-creators.js');
+const { updateDestinationInfo, autocompleteCreated, updateFormInput } = require('../actions/action-creators.js');
 
 const AutocompleteForm = ({ value, autocomplete, handlePlaceChange, saveAutocomplete, handleChange }) => {
   return (
@@ -24,12 +24,15 @@ AutocompleteForm.propTypes = {
   handleChange: React.PropTypes.func.isRequired
 }
 
-const mapDispatchToProps = (dispatch, { index }) => ({
-  handlePlaceChange: (autocomplete) => dispatch(updateDestinationInfo(index, autocomplete)),
-  saveAutocomplete: (autocomplete) => dispatch(formAutocompleteCreated(autocomplete, index)),
-  handleChange: (event) => dispatch(updateFormInput('destinations', { index, key: 'address', value: event.target.value }))
+const mapStateToProps = ({ currentView, createTrip }, { index }) => ({
+  currentView,
+  autocomplete: createTrip.autocompletes[index]
 })
 
-const mapStateToProps = ({ createTrip }, { index }) => ({ autocomplete: createTrip.autocompletes[index] })
+const mapDispatchToProps = (dispatch, { currentView, index }) => ({
+  handlePlaceChange: (autocomplete) => dispatch(updateDestinationInfo(index, autocomplete)),
+  saveAutocomplete: (autocomplete) => dispatch(autocompleteCreated(currentView, autocomplete)),
+  handleChange: (event) => dispatch(updateFormInput('destinations', { index, key: 'address', value: event.target.value }))
+})
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(AutocompleteForm);

@@ -2,9 +2,9 @@ const React = require('react');
 const { connect } = require('react-redux');
 const TextInput = require('./text-input.js');
 const DestinationInput = require('./destination-input.js');
-const { addDestination } = require('../actions/action-creators.js');
+const { destinationAdded } = require('../actions/action-creators.js');
 
-const TripForm = ({ info, handleClick }) => {
+const TripForm = ({info, handleClick }) => {
   const { title, description, destinations, notes } = info;
   return (
     <form>
@@ -23,8 +23,10 @@ TripForm.propTypes = {
   handleClick: React.PropTypes.func.isRequired
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  handleClick: () => dispatch(addDestination())
+const mapStateToProps = ({ currentView }) => ({ currentView });
+
+const mapDispatchToProps = (dispatch, { currentView }) => ({
+  handleClick: () => dispatch(destinationAdded(currentView))
 })
 
-module.exports = connect(null, mapDispatchToProps)(TripForm);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(TripForm);

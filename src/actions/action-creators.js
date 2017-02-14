@@ -1,50 +1,30 @@
 const DEFAULTS = require('../constants/defaults.js');
-const { CREATE_TRIP, MODIFY_TRIP } = require('../constants/views.js')
+const { CREATE_TRIP, UPCOMING } = require('../constants/views.js')
 const {
-  VIEW_CALENDAR,
-  MAIN_AUTOCOMPLETE_CREATED,
-  FORM_AUTOCOMPLETE_CREATED,
+  VIEW_CHANGED,
+  TRIP_INFO_UPDATED,
+  AUTOCOMPLETE_CREATED,
   UPDATE_CALENDAR_INPUT,
-  VIEW_CREATE_TRIP,
   CREATE_TRIP_DESTINATION_INPUT,
-  UPDATE_CREATE_TRIP_INPUT,
-  UPDATE_MODIFY_TRIP_INPUT,
-  ADD_DESTINATION,
-  CHANGE_FILTER
+  TRIP_FORM_INPUT_UPDATED,
+  DESTINATION_ADDED,
+  FILTER_CHANGED,
+  TRIPS_FETCHED
 } = require('../constants/action-types.js');
 
-const viewCalendar = () => ({ type: VIEW_CALENDAR });
+const viewChanged = (view) => ({ type: VIEW_CHANGED, view });
 
-const mainAutocompleteCreated = (autocomplete) => ({ type: MAIN_AUTOCOMPLETE_CREATED, autocomplete });
-
-const formAutocompleteCreated = (autocomplete, index) => ({ type: FORM_AUTOCOMPLETE_CREATED, autocomplete, index });
+const autocompleteCreated = (view, autocomplete) => ({ type: AUTOCOMPLETE_CREATED, view, autocomplete })
 
 const updateCalendarInput = (value) => ({ type: UPDATE_CALENDAR_INPUT, value });
 
-const updateCreateTripInput = (key, value) => ({ type: UPDATE_CREATE_TRIP_INPUT, key, value });
+const tripFormInputUpdated = (view, key, value) => ({ type: TRIP_FORM_INPUT_UPDATED, view, key, value });
 
 const createTripDestinationInput = (index, value) => ({ type: CREATE_TRIP_DESTINATION_INPUT, index, value });
 
-const updateModifyTripInput = (key, value) => ({ type: UPDATE_MODIFY_TRIP_INPUT, key, value });
+const destinationAdded = (view) => ({ type: DESTINATION_ADDED, view });
 
-const addDestination = () => ({ type: ADD_DESTINATION });
-
-const viewCreateTrip = ({ title, destination }) => ({ type: VIEW_CREATE_TRIP, title, destination });
-
-const loadCreateTripFormInfo = (autocomplete) => (dispatch) => {
-  const { name, formatted_address, place_id, photos } = autocomplete.getPlace();
-  const title = name + ' Trip';
-  const destination = {
-    address: formatted_address,
-    location: name,
-    place_id,
-    photo_url: photos[0].getUrl({'maxWidth': 1600}),
-    start_date: null,
-    end_date: null
-  };
-  const tripInfo = { title, destination };
-  dispatch(viewCreateTrip(tripInfo))
-}
+const tripInfoUpdated = (view, tripInfo) => ({ type: TRIP_INFO_UPDATED, view, tripInfo });
 
 const updateDestinationInfo = (index, autocomplete) => (dispatch) => {
   const { name, formatted_address, place_id, photos } = autocomplete.getPlace();
@@ -61,22 +41,20 @@ const updateFormInput = (key, val) => (dispatch, getState) => {
   if (getState().currentView === CREATE_TRIP  && key === 'destinations') {
     const { index, key , value } = val;
     dispatch(createTripDestinationInput(index, { [key]: value }));
-  }
-  else if (getState().currentView === CREATE_TRIP) {
-    dispatch(updateCreateTripInput(key, val));
-  }
-  else if (getState().currentView === MODIFY_TRIP) {
-    dispatch(updateModifyTripInput(key, val));
+  } else {
+    dispatch(tripFormInputUpdated(getState().currentView, key, val))
   }
 }
 
-const changeFilter = (filter, trips) => ({ type: CHANGE_FILTER, filter, trips });
+const filterChanged = (filter) => ({ type: FILTER_CHANGED, filter });
+const tripsFetched = (trips) => ({ type: TRIPS_FETCHED, trips });
 
 const fetchTrips = (filter) => (dispatch, getState) => {
+  dispatch(filterChanged(filter));
   const { currentUser } = getState();
-  fetch('/trips?userId=' + currentUser + '&upcoming=' + (filter === DEFAULTS.FILTER))
+  fetch('/trips?userId=' + currentUser + '&upcoming=' + (filter === UPCOMING))
     .then(results => results.json())
-    .then(trips => dispatch(changeFilter(filter, trips)))
+    .then(trips => dispatch(tripsFetched(trips)))
 }
 
 const fetchTripsIfNeeded = (filter, focus) => (dispatch) => {
@@ -85,13 +63,12 @@ const fetchTripsIfNeeded = (filter, focus) => (dispatch) => {
 }
 
 module.exports = {
-  viewCalendar,
-  formAutocompleteCreated,
-  mainAutocompleteCreated,
+  viewChanged,
+  autocompleteCreated,
   updateCalendarInput,
-  loadCreateTripFormInfo,
+  tripInfoUpdated,
   updateFormInput,
-  addDestination,
+  destinationAdded,
   updateDestinationInfo,
   fetchTripsIfNeeded
 }
