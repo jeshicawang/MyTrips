@@ -1,7 +1,7 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const Autocomplete = require('./autocomplete.js');
-const { loadCreateTripFormInfo, mainAutocompleteCreated, updateCalendarInput } = require('../actions/');
+const { loadCreateTripFormInfo, mainAutocompleteCreated, updateCalendarInput } = require('../actions/action-creators.js');
 
 const AutocompleteMain = ({ input, autocomplete, handlePlaceChange, saveAutocomplete, handleChange }) => {
   return (

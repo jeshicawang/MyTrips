@@ -1,6 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux')
-const { updateFormInput } = require('../actions/')
+const { updateFormInput } = require('../actions/action-creators.js')
 
 const DateInput = ({ value, handleChange }) => {
   return (

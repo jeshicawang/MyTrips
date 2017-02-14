@@ -12,7 +12,7 @@ const {
   UPDATE_MODIFY_TRIP_INPUT,
   ADD_DESTINATION,
   CHANGE_FILTER
-} = require('../variables.js');
+} = require('./action-types.js');
 
 const viewCalendar = () => ({ type: VIEW_CALENDAR });
 

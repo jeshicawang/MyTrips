@@ -1,7 +1,7 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const Autocomplete = require('./autocomplete.js');
-const { updateDestinationInfo, formAutocompleteCreated, updateFormInput } = require('../actions/');
+const { updateDestinationInfo, formAutocompleteCreated, updateFormInput } = require('../actions/action-creators.js');
 
 const AutocompleteForm = ({ value, autocomplete, handlePlaceChange, saveAutocomplete, handleChange }) => {
   return (

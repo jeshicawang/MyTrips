@@ -2,7 +2,7 @@ const React = require('react');
 const { connect } = require('react-redux');
 const TextInput = require('./text-input.js');
 const DestinationInput = require('./destination-input.js');
-const { addDestination } = require('../actions/');
+const { addDestination } = require('../actions/action-creators.js');
 
 const TripForm = ({ info, handleClick }) => {
   const { title, description, destinations, notes } = info;

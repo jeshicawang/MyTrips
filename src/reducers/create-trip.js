@@ -1,5 +1,5 @@
 const { updateObject, updateItemInArray, newEmptyDestination } = require('./utilities.js')
-const { VIEW_CREATE_TRIP, FORM_AUTOCOMPLETE_CREATED, UPDATE_CREATE_TRIP_INPUT, CREATE_TRIP_DESTINATION_INPUT, ADD_DESTINATION } = require('../variables.js');
+const { VIEW_CREATE_TRIP, FORM_AUTOCOMPLETE_CREATED, UPDATE_CREATE_TRIP_INPUT, CREATE_TRIP_DESTINATION_INPUT, ADD_DESTINATION } = require('../actions/action-types.js');
 
 const initialState = {
   title: null,
