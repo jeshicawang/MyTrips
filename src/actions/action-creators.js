@@ -1,18 +1,17 @@
+const DEFAULTS = require('../constants/defaults.js');
+const { CREATE_TRIP, MODIFY_TRIP } = require('../constants/views.js')
 const {
-  DEFAULTS,
   VIEW_CALENDAR,
   MAIN_AUTOCOMPLETE_CREATED,
   FORM_AUTOCOMPLETE_CREATED,
   UPDATE_CALENDAR_INPUT,
   VIEW_CREATE_TRIP,
-  CREATE_TRIP,
-  MODIFY_TRIP,
   CREATE_TRIP_DESTINATION_INPUT,
   UPDATE_CREATE_TRIP_INPUT,
   UPDATE_MODIFY_TRIP_INPUT,
   ADD_DESTINATION,
   CHANGE_FILTER
-} = require('./action-types.js');
+} = require('../constants/action-types.js');
 
 const viewCalendar = () => ({ type: VIEW_CALENDAR });
 

@@ -1,5 +1,5 @@
 const { updateObject } = require('./utilities.js')
-const { MAIN_AUTOCOMPLETE_CREATED, CHANGE_FILTER, UPDATE_CALENDAR_INPUT, VIEW_CREATE_TRIP } = require('../actions/action-types.js');
+const { MAIN_AUTOCOMPLETE_CREATED, CHANGE_FILTER, UPDATE_CALENDAR_INPUT, VIEW_CREATE_TRIP } = require('../constants/action-types.js');
 
 const initialState = {
   filter: null,

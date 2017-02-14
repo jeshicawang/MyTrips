@@ -7,7 +7,7 @@ const Content = require('./content.js');
 const AutocompleteMain = require('./autocomplete-main.js');
 const TripList = require('./trip-list.js');
 const { fetchTripsIfNeeded } = require('../actions/action-creators.js')
-const { CALENDAR, UPCOMING, PAST } = require('../actions/action-types.js');
+const { CALENDAR, UPCOMING, PAST } = require('../constants/views.js');
 
 const Calendar = ({ tryFetch }) => {
   return (

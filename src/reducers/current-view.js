@@ -1,4 +1,6 @@
-const { DEFAULTS, VIEW_CALENDAR, CALENDAR, VIEW_CREATE_TRIP, CREATE_TRIP } = require('../actions/action-types.js');
+const DEFAULTS = require('../constants/defaults.js');
+const { CALENDAR, CREATE_TRIP } = require('../constants/views.js');
+const { VIEW_CALENDAR, VIEW_CREATE_TRIP } = require('../constants/action-types.js')
 
 const initialState = DEFAULTS.VIEW;
 

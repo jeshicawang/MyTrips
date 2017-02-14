@@ -1,5 +1,5 @@
 const React = require('react');
-const { CALENDAR, CREATE_TRIP } = require('../actions/action-types.js');
+const { CALENDAR, CREATE_TRIP } = require('../constants/views.js');
 
 const ViewContainer = ({ children, view }) => {
   const id = (view === CALENDAR) ? 'calendar' : (view === CREATE_TRIP) ? 'create-trip' : '';

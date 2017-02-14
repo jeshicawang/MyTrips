@@ -1,4 +1,4 @@
-const { DEFAULTS } = require('../actions/action-types.js');
+const DEFAULTS = require('../constants/defaults.js');
 
 const initialState = DEFAULTS.USER;
 
