@@ -12,6 +12,10 @@ const initialState = {
 const calendar = (state = initialState, action) => {
   if (action.view && action.view !== CALENDAR) return state;
   switch (action.type) {
+    case VIEW_CHANGED:
+      return assign(state, {
+        input: ''
+      })
     case AUTOCOMPLETE_CREATED:
       return assign(state, {
         autocomplete: action.autocomplete
@@ -27,10 +31,6 @@ const calendar = (state = initialState, action) => {
     case MAIN_AUTOCOMPLETE_UPDATED:
       return assign(state, {
         input: action.value
-      })
-    case VIEW_CHANGED:
-      return assign(state, {
-        input: ''
       })
     default:
       return state;

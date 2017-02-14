@@ -2,9 +2,10 @@ const React = require('react');
 const { connect } = require('react-redux')
 const { updateFormInput } = require('../actions/action-creators.js')
 
-const DateInput = ({ value, handleChange }) => {
+const DateInput = ({ stateKey, value, handleChange }) => {
   return (
     <input
+      className={stateKey}
       type='date'
       value={value || ''}
       onChange={handleChange}
@@ -14,6 +15,7 @@ const DateInput = ({ value, handleChange }) => {
 }
 
 DateInput.propTypes = {
+  stateKey: React.PropTypes.string,
   value: React.PropTypes.string,
   handleChange: React.PropTypes.func.isRequired
 }

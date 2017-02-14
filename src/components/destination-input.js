@@ -8,7 +8,7 @@ const DestinationInput = ({ id, info }) => {
     <div id={id}>
       <h4>Destination</h4>
       <AutocompleteForm value={address} index={id}/>
-      <div>
+      <div className='dates'>
         <DateInput value={start_date} stateKey='start_date' index={id}/>
         <DateInput value={end_date} stateKey='end_date' index={id}/>
       </div>
