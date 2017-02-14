@@ -1,4 +1,4 @@
-const updateObject = (oldObject, newValues) => {
+const assign = (oldObject, newValues) => {
   return Object.assign({}, oldObject, newValues);
 }
 
@@ -8,8 +8,6 @@ const updateItemInArray = (array, indexToMatch, updateItemCallback) => (
   })
 )
 
-const newEmptyDestination = () => ({
-  
-})
+const newEmptyDestination = () => ({ address: '', start_date: '', end_date: '' })
 
-module.exports = { updateObject, updateItemInArray, newEmptyDestination };
+module.exports = { assign, updateItemInArray, newEmptyDestination };

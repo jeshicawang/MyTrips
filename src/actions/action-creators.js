@@ -2,11 +2,11 @@ const DEFAULTS = require('../constants/defaults.js');
 const { CREATE_TRIP, UPCOMING } = require('../constants/views.js')
 const {
   VIEW_CHANGED,
-  TRIP_INFO_UPDATED,
+  TRIP_FORM_LOADED,
   AUTOCOMPLETE_CREATED,
-  UPDATE_CALENDAR_INPUT,
-  CREATE_TRIP_DESTINATION_INPUT,
-  TRIP_FORM_INPUT_UPDATED,
+  MAIN_AUTOCOMPLETE_UPDATED,
+  DESTINATION_INPUT_UPDATED,
+  INPUT_UPDATED,
   DESTINATION_ADDED,
   FILTER_CHANGED,
   TRIPS_FETCHED
@@ -16,17 +16,31 @@ const viewChanged = (view) => ({ type: VIEW_CHANGED, view });
 
 const autocompleteCreated = (view, autocomplete) => ({ type: AUTOCOMPLETE_CREATED, view, autocomplete })
 
-const updateCalendarInput = (value) => ({ type: UPDATE_CALENDAR_INPUT, value });
-
-const tripFormInputUpdated = (view, key, value) => ({ type: TRIP_FORM_INPUT_UPDATED, view, key, value });
-
-const createTripDestinationInput = (index, value) => ({ type: CREATE_TRIP_DESTINATION_INPUT, index, value });
+const mainAutocompleteUpdated = (value) => ({ type: MAIN_AUTOCOMPLETE_UPDATED, value });
 
 const destinationAdded = (view) => ({ type: DESTINATION_ADDED, view });
 
-const tripInfoUpdated = (view, tripInfo) => ({ type: TRIP_INFO_UPDATED, view, tripInfo });
+const tripFormLoaded = (view, tripInfo) => ({ type: TRIP_FORM_LOADED, view, tripInfo });
 
-const updateDestinationInfo = (index, autocomplete) => (dispatch) => {
+const loadCreateTripFormInfo = (autocomplete) => (dispatch) => {
+  const { name, formatted_address, place_id, photos } = autocomplete.getPlace();
+  const title = name + ' Trip';
+  const destination = {
+    address: formatted_address,
+    location: name,
+    place_id,
+    photo_url: photos[0].getUrl({'maxWidth': 1600}),
+    start_date: null,
+    end_date: null
+  };
+  const tripInfo = { title, destination };
+  dispatch(viewChanged(CREATE_TRIP));
+  dispatch(tripFormLoaded(CREATE_TRIP, tripInfo));
+}
+
+const destinationInputUpdated = (view, index, value) => ({ type: DESTINATION_INPUT_UPDATED, view, index, value });
+
+const updateDestinationInfo = (index, autocomplete) => (dispatch, getState) => {
   const { name, formatted_address, place_id, photos } = autocomplete.getPlace();
   const value = {
     address: formatted_address,
@@ -34,16 +48,17 @@ const updateDestinationInfo = (index, autocomplete) => (dispatch) => {
     place_id,
     photo_url: photos[0].getUrl({'maxWidth': 1600})
   };
-  dispatch(createTripDestinationInput(index, value));
+  dispatch(destinationInputUpdated(getState().currentView, index, value));
 }
+
+const inputUpdated = (view, key, value) => ({ type: INPUT_UPDATED, view, key, value });
 
 const updateFormInput = (key, val) => (dispatch, getState) => {
   if (getState().currentView === CREATE_TRIP  && key === 'destinations') {
     const { index, key , value } = val;
-    dispatch(createTripDestinationInput(index, { [key]: value }));
-  } else {
-    dispatch(tripFormInputUpdated(getState().currentView, key, val))
-  }
+    dispatch(destinationInputUpdated(getState().currentView, index, { [key]: value }));
+  } else
+    dispatch(inputUpdated(getState().currentView, key, val))
 }
 
 const filterChanged = (filter) => ({ type: FILTER_CHANGED, filter });
@@ -65,8 +80,9 @@ const fetchTripsIfNeeded = (filter, focus) => (dispatch) => {
 module.exports = {
   viewChanged,
   autocompleteCreated,
-  updateCalendarInput,
-  tripInfoUpdated,
+  mainAutocompleteUpdated,
+  loadCreateTripFormInfo,
+  tripFormLoaded,
   updateFormInput,
   destinationAdded,
   updateDestinationInfo,
