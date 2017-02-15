@@ -97,8 +97,10 @@ const addTrip = () => (dispatch, getState) => {
     destinations,
     notes
   }
+  // use moment to compare current date to end_date to determine filter
   const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
   fetch('/trips?userId=' + currentUser, options).then(() => {
+
     dispatch(tripAdded());
   });
 }

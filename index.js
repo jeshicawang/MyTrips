@@ -65,11 +65,11 @@ app.post('/trips', (req, res) => {
   const {title, description, start_date, end_date, destinations, notes} = req.body;
   const trip = {
     user_id: userId,
-    title: title,
-    description: description,
-    start_date: start_date,
-    end_date: end_date,
-    notes: notes
+    title,
+    description,
+    start_date,
+    end_date,
+    notes
   };
   knex('trips').insert(trip).returning('id')
     .then(([tripId]) => {
