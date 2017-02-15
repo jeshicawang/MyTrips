@@ -10,7 +10,7 @@ const Header = ({ handleClick, children }) => {
 }
 
 Header.propTypes = {
-  handleClick: React.PropTypes.func.isRequired,
+  handleClick: React.PropTypes.func,
   children: React.PropTypes.oneOfType([
     React.PropTypes.arrayOf(React.PropTypes.object),
     React.PropTypes.string

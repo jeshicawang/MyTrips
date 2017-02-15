@@ -4,15 +4,15 @@ const ViewContainer = require('./view-container.js')
 const Header = require('./header.js');
 const Content = require('./content.js');
 const TripForm = require('./trip-form.js');
-const { viewChanged } = require('../actions/action-creators.js');
+const { viewChanged, addTrip } = require('../actions/action-creators.js');
 const { CALENDAR, CREATE_TRIP } = require('../constants/views.js');
 
-const CreateTrip = ({ handleClick, existingInfo }) => {
+const CreateTrip = ({ handleClick, handleSubmit, existingInfo }) => {
   return (
     <ViewContainer view={CREATE_TRIP}>
       <Header handleClick={handleClick}>Create Trip</Header>
       <Content>
-        <TripForm info={existingInfo}/>
+        <TripForm view={CREATE_TRIP} handleSubmit={handleSubmit} info={existingInfo}/>
       </Content>
     </ViewContainer>
   )
@@ -20,6 +20,7 @@ const CreateTrip = ({ handleClick, existingInfo }) => {
 
 CreateTrip.propTypes = {
   handleClick: React.PropTypes.func.isRequired,
+  handleSubmit: React.PropTypes.func.isRequired,
   existingInfo: React.PropTypes.object.isRequired
 }
 
@@ -28,7 +29,11 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  handleClick: () => dispatch(viewChanged(CALENDAR))
+  handleClick: () => dispatch(viewChanged(CALENDAR)),
+  handleSubmit: (event) => {
+    event.preventDefault();
+    dispatch(addTrip())
+  }
 })
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(CreateTrip);

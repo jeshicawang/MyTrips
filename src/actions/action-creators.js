@@ -9,7 +9,8 @@ const {
   INPUT_UPDATED,
   DESTINATION_ADDED,
   FILTER_CHANGED,
-  TRIPS_FETCHED
+  TRIPS_FETCHED,
+  TRIP_ADDED
 } = require('../constants/action-types.js');
 
 const viewChanged = (view) => ({ type: VIEW_CHANGED, view });
@@ -78,6 +79,30 @@ const fetchTripsIfNeeded = (filter, focus) => (dispatch, getState) => {
   dispatch(fetchTrips(filter ? filter : getState().calendar.filter ? getState().calendar.filter : DEFAULTS.FILTER));
 }
 
+const tripAdded = () => ({ type: TRIP_ADDED });
+
+const addTrip = () => (dispatch, getState) => {
+  const { currentUser, createTrip } = getState();
+  const { title, description, destinations, notes } = createTrip;
+  const dates = destinations.reduce((dates, destination) => {
+    dates.push(destination.start_date);
+    dates.push(destination.end_date);
+    return dates;
+  }, []).sort();
+  const body = {
+    title,
+    description,
+    start_date: dates[0],
+    end_date: dates[dates.length-1],
+    destinations,
+    notes
+  }
+  const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
+  fetch('/trips?userId=' + currentUser, options).then(() => {
+    dispatch(tripAdded());
+  });
+}
+
 module.exports = {
   viewChanged,
   autocompleteCreated,
@@ -87,5 +112,6 @@ module.exports = {
   updateFormInput,
   destinationAdded,
   updateDestinationInfo,
-  fetchTripsIfNeeded
+  fetchTripsIfNeeded,
+  addTrip
 }

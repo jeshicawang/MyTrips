@@ -101,4 +101,4 @@ app.delete('/trips/:tripId', (req,res) => {
     .then(() => res.sendStatus(204));
 });
 
-app.listen(process.env.PORT, () => console.log('listening on port 3000'));
+app.listen(process.env.PORT || 3000, () => console.log('listening on port 3000'));
