@@ -225,6 +225,7 @@ h2 {
   padding-right: 15px;
   color: #993337;
   font-size: 14px;
+  text-transform: uppercase;
   letter-spacing: 1px;
   font-weight: 300;
   cursor: pointer;

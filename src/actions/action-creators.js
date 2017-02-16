@@ -10,6 +10,7 @@ const {
   DESTINATION_ADDED,
   FILTER_CHANGED,
   TRIPS_FETCHED,
+  DROPDOWN_TOGGLED,
   TRIP_ADDED
 } = require('../constants/action-types.js');
 const moment = require('moment');
@@ -80,6 +81,20 @@ const fetchTripsIfNeeded = (filter, focus) => (dispatch, getState) => {
   dispatch(fetchTrips(filter ? filter : getState().calendar.filter ? getState().calendar.filter : DEFAULTS.FILTER));
 }
 
+const dropdownToggled = (index) => ({ type: DROPDOWN_TOGGLED, index })
+
+const toggleDropdown = (index) => (dispatch, getState) => {
+  const otherIndex = getState().calendar.dropdowns.findIndex(d => d);
+  if (otherIndex !== index && otherIndex !== -1) dispatch(dropdownToggled(otherIndex));
+  dispatch(dropdownToggled(index));
+}
+
+const hideDropdown = () => (dispatch, getState) => {
+  const index = getState().calendar.dropdowns.findIndex(d => d);
+  if (index === -1) return;
+  dispatch(toggleDropdown(index));
+}
+
 const tripAdded = (filter) => ({ type: TRIP_ADDED, filter });
 
 const addTrip = () => (dispatch, getState) => {
@@ -110,5 +125,7 @@ module.exports = {
   destinationAdded,
   updateDestinationInfo,
   fetchTripsIfNeeded,
+  toggleDropdown,
+  hideDropdown,
   addTrip
 }
