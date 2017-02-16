@@ -1,8 +1,9 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { CALENDAR, CREATE_TRIP } = require('../constants/views.js');
+const { CALENDAR, CREATE_TRIP, MODIFY_TRIP } = require('../constants/views.js');
 const Calendar = require('./calendar.js');
 const CreateTrip = require('./create-trip.js');
+const ModifyTrip = require('./modify-trip.js');
 
 const App = ({ view }) => {
   return (
@@ -10,6 +11,7 @@ const App = ({ view }) => {
       <h1>MyTrips</h1>
       { (view === CALENDAR) && <Calendar/> }
       { (view === CREATE_TRIP) && <CreateTrip/> }
+      { (view === MODIFY_TRIP) && <ModifyTrip/> }
     </div>
   );
 }

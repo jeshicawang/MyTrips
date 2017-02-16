@@ -1,5 +1,5 @@
 const DEFAULTS = require('../constants/defaults.js');
-const { CREATE_TRIP, UPCOMING } = require('../constants/views.js')
+const { CREATE_TRIP, MODIFY_TRIP, UPCOMING } = require('../constants/views.js')
 const {
   VIEW_CHANGED,
   TRIP_FORM_LOADED,
@@ -59,6 +59,21 @@ const loadCreateTripFormInfo = (autocomplete) => (dispatch) => {
   dispatch(tripFormLoaded(CREATE_TRIP, tripInfo));
 }
 
+const modifyTrip = (id) => (dispatch) => {
+  fetch('/trips/' + id)
+    .then(result => result.json())
+    .then(results => {
+      const [{ title, description, notes }] = results;
+      const destinations = results.map(({ address, location, place_id, photo_url, start_date, end_date }) =>
+        ({ address, location, place_id, photo_url, start_date, end_date })
+      );
+      const tripInfo = { title, description, notes, destinations };
+      dispatch(viewChanged(MODIFY_TRIP));
+      dispatch(tripFormLoaded(MODIFY_TRIP, tripInfo))
+    })
+    .catch(error => console.error(error));
+}
+
 const destinationInputUpdated = (view, index, value) => ({ type: DESTINATION_INPUT_UPDATED, view, index, value });
 
 const updateDestinationInfo = (index, autocomplete) => (dispatch, getState) => {
@@ -75,11 +90,12 @@ const updateDestinationInfo = (index, autocomplete) => (dispatch, getState) => {
 const inputUpdated = (view, key, value) => ({ type: INPUT_UPDATED, view, key, value });
 
 const updateFormInput = (key, val) => (dispatch, getState) => {
-  if (getState().currentView === CREATE_TRIP  && key === 'destinations') {
+  const view = getState().currentView;
+  if (key === 'destinations') {
     const { index, key , value } = val;
-    dispatch(destinationInputUpdated(getState().currentView, index, { [key]: value }));
+    dispatch(destinationInputUpdated(view, index, { [key]: value }));
   } else
-    dispatch(inputUpdated(getState().currentView, key, val))
+    dispatch(inputUpdated(view, key, val))
 }
 
 const filterChanged = (filter) => ({ type: FILTER_CHANGED, filter });
@@ -133,8 +149,8 @@ const addTrip = () => (dispatch, getState) => {
   });
 }
 
-const modifyTrip = (id) => (dispatch, getState) => {
-  console.log(id);
+const submitModifyTrip = () => (dispatch, getState) => {
+
 }
 
 const deleteTrip = (id) => (dispatch, getState) => {
@@ -160,6 +176,7 @@ module.exports = {
   toggleDropdown,
   hideDropdown,
   addTrip,
+  submitModifyTrip,
   modifyTrip,
   deleteTrip
 }

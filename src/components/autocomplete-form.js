@@ -18,6 +18,7 @@ const AutocompleteForm = ({ index, value, autocomplete, handlePlaceChange, saveA
 }
 
 AutocompleteForm.propTypes = {
+  index: React.PropTypes.number.isRequired,
   value: React.PropTypes.string,
   autocomplete: React.PropTypes.object,
   handlePlaceChange: React.PropTypes.func.isRequired,
