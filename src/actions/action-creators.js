@@ -18,7 +18,15 @@ const {
 } = require('../constants/action-types.js');
 const moment = require('moment');
 
-const viewChanged = (view) => ({ type: VIEW_CHANGED, view });
+const viewChanged = (view) => ({ type: VIEW_CHANGED, view })
+
+const changeView = (view) => (dispatch) => {
+  // remove google generated .pac-container elements if necessary
+  Array
+    .from(document.getElementsByClassName('pac-container'))
+    .forEach(container => container.parentElement.removeChild(container));
+  dispatch(viewChanged(view));
+};
 
 const autocompleteCreated = (view, autocomplete) => ({ type: AUTOCOMPLETE_CREATED, view, autocomplete })
 
@@ -57,7 +65,7 @@ const loadCreateTrip = (autocomplete) => (dispatch) => {
     end_date: null
   };
   const tripInfo = { title, destination };
-  dispatch(viewChanged(CREATE_TRIP));
+  dispatch(changeView(CREATE_TRIP));
   dispatch(tripFormLoaded(CREATE_TRIP, tripInfo));
 }
 
@@ -70,7 +78,7 @@ const loadModifyTrip = (id) => (dispatch) => {
         ({ address, location, place_id, photo_url, start_date, end_date })
       );
       const tripInfo = { id, title, description, notes, destinations };
-      dispatch(viewChanged(MODIFY_TRIP));
+      dispatch(changeView(MODIFY_TRIP));
       dispatch(tripFormLoaded(MODIFY_TRIP, tripInfo))
     })
 }
@@ -176,7 +184,7 @@ const deleteTrip = (id) => (dispatch, getState) => {
 }
 
 module.exports = {
-  viewChanged,
+  changeView,
   autocompleteCreated,
   mainAutocompleteUpdated,
   loadCreateTrip,
