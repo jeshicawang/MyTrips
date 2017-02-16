@@ -2,9 +2,10 @@
 
 const { assign, updateItemInArray, newEmptyDestination } = require('./utilities.js')
 const { MODIFY_TRIP } = require('../constants/views.js');
-const { VIEW_CHANGED, TRIP_ADDED, TRIP_FORM_LOADED, AUTOCOMPLETE_CREATED, INPUT_UPDATED, DESTINATION_INPUT_UPDATED, DESTINATION_ADDED, DESTINATION_REMOVED, REMOVE_BUTTON_TOGGLED } = require('../constants/action-types.js');
+const { VIEW_CHANGED, TRIP_MODIFIED, TRIP_FORM_LOADED, AUTOCOMPLETE_CREATED, INPUT_UPDATED, DESTINATION_INPUT_UPDATED, DESTINATION_ADDED, DESTINATION_REMOVED, REMOVE_BUTTON_TOGGLED } = require('../constants/action-types.js');
 
 const initialState = {
+  id: null,
   title: null,
   description: null,
   removeButtons: [],
@@ -17,11 +18,12 @@ const modifyTrip = (state = initialState, action) => {
   if (action.view && action.view !== MODIFY_TRIP) return state;
   switch (action.type) {
     case VIEW_CHANGED:
-    case TRIP_ADDED:
+    case TRIP_MODIFIED:
       return assign(state, initialState);
     case TRIP_FORM_LOADED:
-      const { title, description, notes, destinations } = action.tripInfo;
+      const { id, title, description, notes, destinations } = action.tripInfo;
       return assign(state, {
+        id,
         title,
         description,
         removeButtons: Array(destinations.length).fill(false),

@@ -1,6 +1,6 @@
 const { assign } = require('./utilities.js')
 const { CALENDAR } = require('../constants/views.js');
-const { VIEW_CHANGED, TRIP_ADDED, AUTOCOMPLETE_CREATED, FILTER_CHANGED, DROPDOWN_TOGGLED, TRIPS_FETCHED, MAIN_AUTOCOMPLETE_UPDATED } = require('../constants/action-types.js');
+const { VIEW_CHANGED, TRIP_ADDED, TRIP_MODIFIED, AUTOCOMPLETE_CREATED, FILTER_CHANGED, DROPDOWN_TOGGLED, TRIPS_FETCHED, MAIN_AUTOCOMPLETE_UPDATED } = require('../constants/action-types.js');
 const { updateItemInArray } = require('./utilities.js')
 
 const initialState = {
@@ -20,6 +20,7 @@ const calendar = (state = initialState, action) => {
         autocomplete: null
       })
     case TRIP_ADDED:
+    case TRIP_MODIFIED:
       return assign(state, {
         filter: action.filter,
         input: '',

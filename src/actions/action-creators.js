@@ -13,7 +13,8 @@ const {
   FILTER_CHANGED,
   TRIPS_FETCHED,
   DROPDOWN_TOGGLED,
-  TRIP_ADDED
+  TRIP_ADDED,
+  TRIP_MODIFIED
 } = require('../constants/action-types.js');
 const moment = require('moment');
 
@@ -67,7 +68,7 @@ const modifyTrip = (id) => (dispatch) => {
       const destinations = results.map(({ address, location, place_id, photo_url, start_date, end_date }) =>
         ({ address, location, place_id, photo_url, start_date, end_date })
       );
-      const tripInfo = { title, description, notes, destinations };
+      const tripInfo = { id, title, description, notes, destinations };
       dispatch(viewChanged(MODIFY_TRIP));
       dispatch(tripFormLoaded(MODIFY_TRIP, tripInfo))
     })
@@ -135,8 +136,7 @@ const addTrip = () => (dispatch, getState) => {
   const { currentUser, createTrip } = getState();
   const { title, description, destinations, notes } = createTrip;
   const dates = destinations.reduce((dates, destination) => {
-    dates.push(destination.start_date);
-    dates.push(destination.end_date);
+    dates.push(destination.start_date, destination.end_date);
     return dates;
   }, []).sort();
   const start_date = dates[0];
@@ -149,8 +149,23 @@ const addTrip = () => (dispatch, getState) => {
   });
 }
 
-const submitModifyTrip = () => (dispatch, getState) => {
+const tripModified = (filter) => ({ type: TRIP_MODIFIED, filter });
 
+const submitModifyTrip = () => (dispatch, getState) => {
+  const { modifyTrip } = getState();
+  const { id, title, description, destinations, notes } = modifyTrip;
+  const dates = destinations.reduce((dates, destination) => {
+    dates.push(destination.start_date, destination.end_date);
+    return dates;
+  }, []).sort();
+  const start_date = dates[0];
+  const end_date = dates[dates.length-1];
+  const body = { title, description, start_date, end_date, destinations, notes };
+  const options = { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
+  fetch('/trips/' + id, options).then(() => {
+    const filter = moment().isSameOrBefore(moment(end_date).add(1, 'd')) ? 'UPCOMING' : 'PAST';
+    dispatch(tripModified(filter));
+  });
 }
 
 const deleteTrip = (id) => (dispatch, getState) => {
