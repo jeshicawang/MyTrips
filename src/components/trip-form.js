@@ -8,7 +8,7 @@ const TripForm = ({ handleSubmit, info, handleClick }) => {
   const { title, description, destinations, notes } = info;
   return (
     <form onSubmit={handleSubmit}>
-      <TextInput value={title} placeholder='Title' stateKey='title'/>
+      <TextInput value={title} placeholder='Title' stateKey='title' required={true}/>
       <TextInput value={description} placeholder='Description' stateKey='description'/>
       { destinations.map((destination, index) => <DestinationInput key={index} id={index} info={destination}/>) }
       <a href='#' onClick={handleClick}>+ add another destination</a>
