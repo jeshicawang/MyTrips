@@ -4,7 +4,7 @@ const ViewContainer = require('./view-container.js')
 const Header = require('./header.js');
 const Content = require('./content.js');
 const TripForm = require('./trip-form.js');
-const { viewChanged, addTrip } = require('../actions/action-creators.js');
+const { viewChanged, submitCreateTrip } = require('../actions/action-creators.js');
 const { CALENDAR, CREATE_TRIP } = require('../constants/views.js');
 
 const CreateTrip = ({ handleClick, handleSubmit, existingInfo }) => {
@@ -32,7 +32,7 @@ const mapDispatchToProps = (dispatch) => ({
   handleClick: () => dispatch(viewChanged(CALENDAR)),
   handleSubmit: (event) => {
     event.preventDefault();
-    dispatch(addTrip())
+    dispatch(submitCreateTrip())
   }
 })
 

@@ -44,7 +44,7 @@ const removeDestination = (index) => (dispatch, getState) => {
 
 const tripFormLoaded = (view, tripInfo) => ({ type: TRIP_FORM_LOADED, view, tripInfo });
 
-const loadCreateTripFormInfo = (autocomplete) => (dispatch) => {
+const loadCreateTrip = (autocomplete) => (dispatch) => {
   const { name, formatted_address, place_id, photos } = autocomplete.getPlace();
   if (!place_id) return;
   const title = name + ' Trip';
@@ -61,7 +61,7 @@ const loadCreateTripFormInfo = (autocomplete) => (dispatch) => {
   dispatch(tripFormLoaded(CREATE_TRIP, tripInfo));
 }
 
-const modifyTrip = (id) => (dispatch) => {
+const loadModifyTrip = (id) => (dispatch) => {
   fetch('/trips/' + id)
     .then(result => result.json())
     .then(results => {
@@ -132,7 +132,7 @@ const hideDropdown = () => (dispatch, getState) => {
 
 const tripAdded = (filter) => ({ type: TRIP_ADDED, filter });
 
-const addTrip = () => (dispatch, getState) => {
+const submitCreateTrip = () => (dispatch, getState) => {
   const { currentUser, createTrip } = getState();
   const { title, description, destinations, notes } = createTrip;
   const dates = destinations.reduce((dates, destination) => {
@@ -179,7 +179,7 @@ module.exports = {
   viewChanged,
   autocompleteCreated,
   mainAutocompleteUpdated,
-  loadCreateTripFormInfo,
+  loadCreateTrip,
   tripFormLoaded,
   updateFormInput,
   destinationAdded,
@@ -190,8 +190,8 @@ module.exports = {
   fetchTripsIfNeeded,
   toggleDropdown,
   hideDropdown,
-  addTrip,
+  submitCreateTrip,
   submitModifyTrip,
-  modifyTrip,
+  loadModifyTrip,
   deleteTrip
 }

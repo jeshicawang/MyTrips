@@ -1,7 +1,7 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const Autocomplete = require('./autocomplete.js');
-const { loadCreateTripFormInfo, autocompleteCreated, mainAutocompleteUpdated } = require('../actions/action-creators.js');
+const { loadCreateTrip, autocompleteCreated, mainAutocompleteUpdated } = require('../actions/action-creators.js');
 const { CALENDAR } = require('../constants/views.js');
 
 const AutocompleteMain = ({ input, autocomplete, handlePlaceChange, saveAutocomplete, handleChange }) => {
@@ -31,7 +31,7 @@ const mapStateToProps = ({calendar}) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  handlePlaceChange: (autocomplete) => dispatch(loadCreateTripFormInfo(autocomplete)),
+  handlePlaceChange: (autocomplete) => dispatch(loadCreateTrip(autocomplete)),
   saveAutocomplete: (autocomplete) => dispatch(autocompleteCreated(CALENDAR, autocomplete)),
   handleChange: (event) => dispatch(mainAutocompleteUpdated(event.target.value))
 })

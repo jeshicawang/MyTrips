@@ -1,6 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { modifyTrip, deleteTrip } = require('../actions/action-creators.js')
+const { loadModifyTrip, deleteTrip } = require('../actions/action-creators.js')
 
 const Dropdown = ({ handleModifyClick, handleDeleteClick }) => {
   return (
@@ -17,7 +17,7 @@ Dropdown.propTypes = {
 }
 
 const mapDispatchToProps = (dispatch, { id }) => ({
-  handleModifyClick: () => dispatch(modifyTrip(id)),
+  handleModifyClick: () => dispatch(loadModifyTrip(id)),
   handleDeleteClick: () => dispatch(deleteTrip(id))
 })
 
