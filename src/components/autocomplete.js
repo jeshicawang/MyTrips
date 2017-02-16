@@ -10,8 +10,7 @@ const Autocomplete = ({ index, value, placeholder, autocomplete, handlePlaceChan
     // Removing google generated .pac-container if necessary
     const containerIndex = index ? index : 0
     const container = document.getElementsByClassName('pac-container')[containerIndex];
-    if (container)
-      container.parentElement.removeChild(container);
+    if (container) container.parentElement.removeChild(container);
 
     // Creating a new google autocomplete object
     const newAutocomplete = new google.maps.places.Autocomplete(
