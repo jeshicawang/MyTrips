@@ -46,12 +46,13 @@ const tripFormLoaded = (view, tripInfo) => ({ type: TRIP_FORM_LOADED, view, trip
 
 const loadCreateTripFormInfo = (autocomplete) => (dispatch) => {
   const { name, formatted_address, place_id, photos } = autocomplete.getPlace();
+  if (!place_id) return;
   const title = name + ' Trip';
   const destination = {
     address: formatted_address,
     location: name,
     place_id,
-    photo_url: photos[0].getUrl({'maxWidth': 1600}),
+    photo_url: photos && photos[0].getUrl({'maxWidth': 1600}),
     start_date: null,
     end_date: null
   };
@@ -72,7 +73,6 @@ const modifyTrip = (id) => (dispatch) => {
       dispatch(viewChanged(MODIFY_TRIP));
       dispatch(tripFormLoaded(MODIFY_TRIP, tripInfo))
     })
-    .catch(error => console.error(error));
 }
 
 const destinationInputUpdated = (view, index, value) => ({ type: DESTINATION_INPUT_UPDATED, view, index, value });
