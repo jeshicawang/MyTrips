@@ -8,6 +8,8 @@ const {
   DESTINATION_INPUT_UPDATED,
   INPUT_UPDATED,
   DESTINATION_ADDED,
+  DESTINATION_REMOVED,
+  REMOVE_BUTTON_TOGGLED,
   FILTER_CHANGED,
   TRIPS_FETCHED,
   DROPDOWN_TOGGLED,
@@ -22,6 +24,22 @@ const autocompleteCreated = (view, autocomplete) => ({ type: AUTOCOMPLETE_CREATE
 const mainAutocompleteUpdated = (value) => ({ type: MAIN_AUTOCOMPLETE_UPDATED, value });
 
 const destinationAdded = (view) => ({ type: DESTINATION_ADDED, view });
+
+const removeButtonToggled = (view, index, bool) => ({ type: REMOVE_BUTTON_TOGGLED, view, index, bool })
+
+const showRemoveButton = (index) => (dispatch, getState) => {
+  dispatch(removeButtonToggled(getState().currentView, index, true))
+}
+
+const hideRemoveButton = (index) => (dispatch, getState) => {
+  dispatch(removeButtonToggled(getState().currentView, index, false))
+}
+
+const destinationRemoved = (view, index) => ({ type: DESTINATION_REMOVED, view, index })
+
+const removeDestination = (index) => (dispatch, getState) => {
+  dispatch(destinationRemoved(getState().currentView, index));
+}
 
 const tripFormLoaded = (view, tripInfo) => ({ type: TRIP_FORM_LOADED, view, tripInfo });
 
@@ -123,6 +141,9 @@ module.exports = {
   tripFormLoaded,
   updateFormInput,
   destinationAdded,
+  removeDestination,
+  showRemoveButton,
+  hideRemoveButton,
   updateDestinationInfo,
   fetchTripsIfNeeded,
   toggleDropdown,

@@ -52,6 +52,22 @@ input {
   font-weight: 300;
 }
 
+form .destination {
+  position: relative;
+}
+
+form .destination .remove {
+  right: 0;
+  color: #f3dcdd;
+  position: absolute;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+form .destination .remove:hover {
+  color: #e2a9ab;
+}
+
 form input {
   margin-bottom: 10px;
   font-size: 16px;

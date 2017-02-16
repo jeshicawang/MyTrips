@@ -3,9 +3,10 @@ const { connect } = require('react-redux');
 const Autocomplete = require('./autocomplete.js');
 const { updateDestinationInfo, autocompleteCreated, updateFormInput } = require('../actions/action-creators.js');
 
-const AutocompleteForm = ({ value, autocomplete, handlePlaceChange, saveAutocomplete, handleChange }) => {
+const AutocompleteForm = ({ index, value, autocomplete, handlePlaceChange, saveAutocomplete, handleChange }) => {
   return (
     <Autocomplete
+      index={index}
       value={value}
       placeholder='Destination'
       autocomplete={autocomplete}
