@@ -5,6 +5,7 @@ const { VIEW_CHANGED, TRIP_ADDED, AUTOCOMPLETE_CREATED, FILTER_CHANGED, TRIPS_FE
 const initialState = {
   filter: null,
   trips: [],
+  dropdowns: [],
   input: '',
   autocomplete: null
 };
@@ -33,7 +34,8 @@ const calendar = (state = initialState, action) => {
       })
     case TRIPS_FETCHED:
       return assign(state, {
-        trips: [...action.trips]
+        trips: [...action.trips],
+        dropdowns: [...action.trips].fill(false)
       })
     case MAIN_AUTOCOMPLETE_UPDATED:
       return assign(state, {

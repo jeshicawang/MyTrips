@@ -177,6 +177,7 @@ h2 {
 }
 
 #calendar .trip {
+  position: relative;
   margin-top: 20px;
   opacity: .8;
   height: 200px;
@@ -194,4 +195,41 @@ h2 {
   padding: 10px;
   height: 70%;
   background: linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,0));
+}
+
+.trip span.dropdown {
+  position: absolute;
+  right: 10px;
+  opacity: .7;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.trip span.dropdown:hover {
+  opacity: 1;
+}
+
+.trip div.dropdown {
+  position: absolute;
+  top: 33px;
+  right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: #fff;
+}
+
+.trip .dropdown a {
+  display: block;
+  padding-left: 15px;
+  padding-right: 15px;
+  color: #993337;
+  font-size: 14px;
+  letter-spacing: 1px;
+  font-weight: 300;
+  cursor: pointer;
+}
+
+.trip .dropdown a:hover {
+  background-color: #f4eaeb;
 }
