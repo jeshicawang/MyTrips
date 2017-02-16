@@ -1,5 +1,5 @@
 # MyTrips
 
-![](http://g.recordit.co/0wZI7IRCTR.gif)
+![](http://g.recordit.co/HyN5J9PEZQ.gif)
 
 A website for travelers to organize their trip details.
