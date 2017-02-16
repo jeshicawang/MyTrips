@@ -12,6 +12,7 @@ const {
   TRIPS_FETCHED,
   TRIP_ADDED
 } = require('../constants/action-types.js');
+const moment = require('moment');
 
 const viewChanged = (view) => ({ type: VIEW_CHANGED, view });
 
@@ -79,7 +80,7 @@ const fetchTripsIfNeeded = (filter, focus) => (dispatch, getState) => {
   dispatch(fetchTrips(filter ? filter : getState().calendar.filter ? getState().calendar.filter : DEFAULTS.FILTER));
 }
 
-const tripAdded = () => ({ type: TRIP_ADDED });
+const tripAdded = (filter) => ({ type: TRIP_ADDED, filter });
 
 const addTrip = () => (dispatch, getState) => {
   const { currentUser, createTrip } = getState();
@@ -89,19 +90,13 @@ const addTrip = () => (dispatch, getState) => {
     dates.push(destination.end_date);
     return dates;
   }, []).sort();
-  const body = {
-    title,
-    description,
-    start_date: dates[0],
-    end_date: dates[dates.length-1],
-    destinations,
-    notes
-  }
-  // use moment to compare current date to end_date to determine filter
+  const start_date = dates[0];
+  const end_date = dates[dates.length-1];
+  const body = { title, description, start_date, end_date, destinations, notes };
   const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
   fetch('/trips?userId=' + currentUser, options).then(() => {
-
-    dispatch(tripAdded());
+    const filter = moment().isSameOrBefore(moment(end_date).add(1, 'd')) ? 'UPCOMING' : 'PAST';
+    dispatch(tripAdded(filter));
   });
 }
 

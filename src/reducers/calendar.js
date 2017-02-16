@@ -13,8 +13,13 @@ const calendar = (state = initialState, action) => {
   if (action.view && action.view !== CALENDAR) return state;
   switch (action.type) {
     case VIEW_CHANGED:
+      return assign(state, {
+        input: '',
+        autocomplete: null
+      })
     case TRIP_ADDED:
       return assign(state, {
+        filter: action.filter,
         input: '',
         autocomplete: null
       })
