@@ -13,6 +13,7 @@ const TripList = ({ trips, handleClick }) => {
   const tripElements = trips.map(({ id, title, description, start_date, end_date, photo_url }, index) => (
     <Trip
       key={id}
+      id={id}
       index={index}
       title={title}
       description={description}

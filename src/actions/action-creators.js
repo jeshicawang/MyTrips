@@ -133,6 +133,17 @@ const addTrip = () => (dispatch, getState) => {
   });
 }
 
+const modifyTrip = (id) => (dispatch, getState) => {
+  console.log(id);
+}
+
+const deleteTrip = (id) => (dispatch, getState) => {
+  const options = { method: 'DELETE' };
+  fetch('/trips/' + id, options).then(() => {
+    dispatch(fetchTrips(getState().calendar.filter));
+  });
+}
+
 module.exports = {
   viewChanged,
   autocompleteCreated,
@@ -148,5 +159,7 @@ module.exports = {
   fetchTripsIfNeeded,
   toggleDropdown,
   hideDropdown,
-  addTrip
+  addTrip,
+  modifyTrip,
+  deleteTrip
 }
