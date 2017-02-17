@@ -1,16 +1,13 @@
 const { Router } = require('express');
-const knex = require('knex')
-const knexfile = require('../knexfile.js');
-const db = knex(knexfile['development']);
 
-const createUser = (req, res) => {
+const createUser = (db) => (req, res) => {
   const newUser = req.body;
   db('users').insert(newUser).returning('id')
     .then(([userId]) => res.json(userId))
     .catch(() => res.json(0));
 }
 
-const getIdByUsername = (req, res) => {
+const getIdByUsername = (db) => (req, res) => {
   const username = req.params.username;
   db('users')
     .select('id')
@@ -18,9 +15,9 @@ const getIdByUsername = (req, res) => {
     .then(([userId]) => res.json(userId));
 }
 
-module.exports = function usersRoutes() {
+module.exports = function usersRoutes(db) {
   const router = new Router();
-  router.post('/', createUser)
-  router.get('/:username', getIdByUsername)
+  router.post('/', createUser(db))
+  router.get('/:username', getIdByUsername(db))
   return router;
 }

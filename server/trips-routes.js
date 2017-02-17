@@ -1,9 +1,6 @@
 const { Router } = require('express');
-const knex = require('knex')
-const knexfile = require('../knexfile.js');
-const db = knex(knexfile['development']);
 
-const getTrips = (req, res) => {
+const getTrips = (db) => (req, res) => {
   const upcoming = (req.query.upcoming === 'true');
   const userId = req.query.userId;
   const conditional = upcoming ? '>=' : '<';
@@ -21,7 +18,7 @@ const getTrips = (req, res) => {
     .then(trips => res.json(trips));
 }
 
-const createTrip = (req, res) => {
+const createTrip = (db) => (req, res) => {
   const userId = req.query.userId;
   const {title, description, start_date, end_date, destinations, notes} = req.body;
   const trip = {
@@ -39,7 +36,7 @@ const createTrip = (req, res) => {
     .then(() => res.sendStatus(200));
 }
 
-const getTripById = (req, res) => {
+const getTripById = (db) => (req, res) => {
   const tripId = req.params.tripId;
   const rawStartDate = db.raw('to_char(destinations.start_date, \'YYYY-MM-DD\') as start_date');
   const rawEndDate = db.raw('to_char(destinations.end_date, \'YYYY-MM-DD\') as end_date');
@@ -51,7 +48,7 @@ const getTripById = (req, res) => {
     .then(trip => res.json(trip));
 }
 
-const updateTripById = (req, res) => {
+const updateTripById = (db) => (req, res) => {
   const tripId = req.params.tripId;
   const {title, description, start_date, end_date, destinations, notes} = req.body;
   destinations.forEach(destination => destination.trip_id = tripId);
@@ -68,18 +65,18 @@ const updateTripById = (req, res) => {
     .then(() => res.sendStatus(200));
 }
 
-const deleteTripById = (req,res) => {
+const deleteTripById = (db) => (req,res) => {
   const tripId = req.params.tripId;
   db('trips').where('id', tripId).del()
     .then(() => res.sendStatus(204));
 }
 
-module.exports = function tripsRoutes() {
+module.exports = function tripsRoutes(db) {
   const router = new Router();
-  router.get('/', getTrips);
-  router.post('/', createTrip);
-  router.get('/:tripId', getTripById);
-  router.put('/:tripId', updateTripById);
-  router.delete('/:tripId', deleteTripById);
+  router.get('/', getTrips(db));
+  router.post('/', createTrip(db));
+  router.get('/:tripId', getTripById(db));
+  router.put('/:tripId', updateTripById(db));
+  router.delete('/:tripId', deleteTripById(db));
   return router;
 }
