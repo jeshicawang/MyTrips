@@ -1,8 +1,6 @@
 const express = require('express');
 const app = express();
-
 const bodyParser = require('body-parser')
-
 const knex = require('knex')({
   client: 'postgresql',
   connection: {
@@ -101,4 +99,4 @@ app.delete('/trips/:tripId', (req,res) => {
     .then(() => res.sendStatus(204));
 });
 
-app.listen(process.env.PORT || 3000, () => console.log('listening on port 3000'));
+module.exports = app;
