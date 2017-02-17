@@ -1,36 +1,31 @@
 const { Router } = require('express');
 
 const getTrips = (trips) => ({ query }, res, next) => {
-  trips
-    .getTrips(query.userId, (query.upcoming === 'true'))
+  trips.getTrips(query.userId, (query.upcoming === 'true'))
     .then(trips => res.json(trips))
     .catch(next);
 }
 
 const createTrip = (trips) => ({ body, query }, res, next) => {
-  trips
-    .createTrip(query.userId, body)
+  trips.createTrip(query.userId, body)
     .then(ok => res.sendStatus(ok ? 200 : 500))
     .catch(next);
 }
 
 const getTripById = (trips) => ({ params }, res, next) => {
-  trips
-    .getTripById(params.tripId)
+  trips.getTripById(params.tripId)
     .then(trip => res.json(trip))
     .catch(next);
 }
 
 const updateTripById = (trips) => ({ params, body }, res, next) => {
-  trips
-    .updateTripById(params.tripId, body)
+  trips.updateTripById(params.tripId, body)
     .then(ok => res.sendStatus(ok ? 200 : 500))
     .catch(next);
 }
 
 const deleteTripById = (trips) => ({ params }, res, next) => {
-  trips
-    .deleteTripById(params.tripId)
+  trips.deleteTripById(params.tripId)
     .then(ok => res.sendStatus(ok ? 204 : 500))
     .catch(next);
 }
