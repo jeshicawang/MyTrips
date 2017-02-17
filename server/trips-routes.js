@@ -1,10 +1,9 @@
 const { Router } = require('express');
-const router = new Router();
 const knex = require('knex')
 const knexfile = require('../knexfile.js');
 const db = knex(knexfile['development']);
 
-router.get('/', (req, res) => {
+const getTrips = (req, res) => {
   const upcoming = (req.query.upcoming === 'true');
   const userId = req.query.userId;
   const conditional = upcoming ? '>=' : '<';
@@ -20,9 +19,9 @@ router.get('/', (req, res) => {
     .orderByRaw(dateType + ' ' + order + ', destinations.start_date asc')
     .select()
     .then(trips => res.json(trips));
-});
+}
 
-router.get('/:tripId', (req, res) => {
+const getTripById = (req, res) => {
   const tripId = req.params.tripId;
   const rawStartDate = db.raw('to_char(destinations.start_date, \'YYYY-MM-DD\') as start_date');
   const rawEndDate = db.raw('to_char(destinations.end_date, \'YYYY-MM-DD\') as end_date');
@@ -32,9 +31,9 @@ router.get('/:tripId', (req, res) => {
     .orderBy('destinations.start_date', 'asc')
     .select('title', 'description', 'notes', rawStartDate, rawEndDate, 'destinations.id', 'destinations.address', 'location', 'place_id', 'photo_url')
     .then(trip => res.json(trip));
-});
+}
 
-router.post('/', (req, res) => {
+const createTrip = (req, res) => {
   const userId = req.query.userId;
   const {title, description, start_date, end_date, destinations, notes} = req.body;
   const trip = {
@@ -50,9 +49,9 @@ router.post('/', (req, res) => {
       destinations.forEach(destination => destination.trip_id = tripId);
       return db('destinations').insert(destinations)})
     .then(() => res.sendStatus(200));
-});
+}
 
-router.put('/:tripId', (req, res) => {
+const updateTripById = (req, res) => {
   const tripId = req.params.tripId;
   const {title, description, start_date, end_date, destinations, notes} = req.body;
   destinations.forEach(destination => destination.trip_id = tripId);
@@ -64,15 +63,23 @@ router.put('/:tripId', (req, res) => {
     notes: notes
   };
   db('trips').update(trip).where('id', tripId)
-    .then(() => knex('destinations').where('trip_id', tripId).del())
-    .then(() => knex('destinations').insert(destinations))
+    .then(() => db('destinations').where('trip_id', tripId).del())
+    .then(() => db('destinations').insert(destinations))
     .then(() => res.sendStatus(200));
-});
+}
 
-router.delete('/:tripId', (req,res) => {
+const deleteTripById = (req,res) => {
   const tripId = req.params.tripId;
   db('trips').where('id', tripId).del()
     .then(() => res.sendStatus(204));
-});
+}
 
-module.exports = router;
+module.exports = function tripsRoutes() {
+  const router = new Router();
+  router.get('/', getTrips);
+  router.get('/:tripId', getTripById);
+  router.post('/', createTrip);
+  router.put('/:tripId', updateTripById);
+  router.delete('/:tripId', deleteTripById);
+  return router;
+}
