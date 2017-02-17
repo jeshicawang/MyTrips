@@ -21,18 +21,6 @@ const getTrips = (req, res) => {
     .then(trips => res.json(trips));
 }
 
-const getTripById = (req, res) => {
-  const tripId = req.params.tripId;
-  const rawStartDate = db.raw('to_char(destinations.start_date, \'YYYY-MM-DD\') as start_date');
-  const rawEndDate = db.raw('to_char(destinations.end_date, \'YYYY-MM-DD\') as end_date');
-  db('trips')
-    .join('destinations', 'trips.id', '=', 'destinations.trip_id')
-    .where('trips.id', tripId)
-    .orderBy('destinations.start_date', 'asc')
-    .select('title', 'description', 'notes', rawStartDate, rawEndDate, 'destinations.id', 'destinations.address', 'location', 'place_id', 'photo_url')
-    .then(trip => res.json(trip));
-}
-
 const createTrip = (req, res) => {
   const userId = req.query.userId;
   const {title, description, start_date, end_date, destinations, notes} = req.body;
@@ -49,6 +37,18 @@ const createTrip = (req, res) => {
       destinations.forEach(destination => destination.trip_id = tripId);
       return db('destinations').insert(destinations)})
     .then(() => res.sendStatus(200));
+}
+
+const getTripById = (req, res) => {
+  const tripId = req.params.tripId;
+  const rawStartDate = db.raw('to_char(destinations.start_date, \'YYYY-MM-DD\') as start_date');
+  const rawEndDate = db.raw('to_char(destinations.end_date, \'YYYY-MM-DD\') as end_date');
+  db('trips')
+    .join('destinations', 'trips.id', '=', 'destinations.trip_id')
+    .where('trips.id', tripId)
+    .orderBy('destinations.start_date', 'asc')
+    .select('title', 'description', 'notes', rawStartDate, rawEndDate, 'destinations.id', 'destinations.address', 'location', 'place_id', 'photo_url')
+    .then(trip => res.json(trip));
 }
 
 const updateTripById = (req, res) => {
@@ -77,8 +77,8 @@ const deleteTripById = (req,res) => {
 module.exports = function tripsRoutes() {
   const router = new Router();
   router.get('/', getTrips);
-  router.get('/:tripId', getTripById);
   router.post('/', createTrip);
+  router.get('/:tripId', getTripById);
   router.put('/:tripId', updateTripById);
   router.delete('/:tripId', deleteTripById);
   return router;
