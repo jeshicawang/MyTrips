@@ -1,13 +1,9 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser')
-const knex = require('knex')({
-  client: 'postgresql',
-  connection: {
-    user: 'mytrips',
-    database: 'mytrips'
-  }
-});
+const knex = require('knex')
+const knexfile = require('../knexfile.js');
+const db = require('knex')(knexfile['development']);
 
 app.use(bodyParser.json());
 
@@ -15,7 +11,7 @@ app.use(express.static('public'));
 
 app.get('/users/:username', (req, res) => {
   const username = req.params.username;
-  knex('users')
+  db('users')
     .select('id')
     .where('username', username)
     .then(([userId]) => res.json(userId));
@@ -23,7 +19,7 @@ app.get('/users/:username', (req, res) => {
 
 app.post('/users', (req, res) => {
   const newUser = req.body;
-  knex('users').insert(newUser).returning('id')
+  db('users').insert(newUser).returning('id')
     .then(([userId]) => res.json(userId))
     .catch(() => res.json(0));
 })
@@ -34,11 +30,11 @@ app.get('/trips', (req, res) => {
   const conditional = upcoming ? '>=' : '<';
   const dateType = upcoming ? 'trips.start_date' : 'trips.end_date';
   const order = upcoming ? 'asc' : 'desc';
-  const now = knex.raw('current_date');
+  const now = db.raw('current_date');
   const dateFormat = 'Dy, Month DD, YYYY';
-  knex('trips')
+  db('trips')
     .join('destinations', 'trips.id', '=', 'destinations.trip_id')
-    .distinct(knex.raw('on (' + dateType + ') trips.id, title, description, to_char(trips.start_date, \'' + dateFormat + '\') as start_date, to_char(trips.end_date, \'' + dateFormat + '\') as end_date, notes, photo_url'))
+    .distinct(db.raw('on (' + dateType + ') trips.id, title, description, to_char(trips.start_date, \'' + dateFormat + '\') as start_date, to_char(trips.end_date, \'' + dateFormat + '\') as end_date, notes, photo_url'))
     .where('user_id', userId)
     .andWhere('trips.end_date', conditional, now)
     .orderByRaw(dateType + ' ' + order + ', destinations.start_date asc')
@@ -48,9 +44,9 @@ app.get('/trips', (req, res) => {
 
 app.get('/trips/:tripId', (req, res) => {
   const tripId = req.params.tripId;
-  const rawStartDate = knex.raw('to_char(destinations.start_date, \'YYYY-MM-DD\') as start_date');
-  const rawEndDate = knex.raw('to_char(destinations.end_date, \'YYYY-MM-DD\') as end_date');
-  knex('trips')
+  const rawStartDate = db.raw('to_char(destinations.start_date, \'YYYY-MM-DD\') as start_date');
+  const rawEndDate = db.raw('to_char(destinations.end_date, \'YYYY-MM-DD\') as end_date');
+  db('trips')
     .join('destinations', 'trips.id', '=', 'destinations.trip_id')
     .where('trips.id', tripId)
     .orderBy('destinations.start_date', 'asc')
@@ -69,10 +65,10 @@ app.post('/trips', (req, res) => {
     end_date,
     notes
   };
-  knex('trips').insert(trip).returning('id')
+  db('trips').insert(trip).returning('id')
     .then(([tripId]) => {
       destinations.forEach(destination => destination.trip_id = tripId);
-      return knex('destinations').insert(destinations)})
+      return db('destinations').insert(destinations)})
     .then(() => res.sendStatus(200));
 });
 
@@ -87,7 +83,7 @@ app.put('/trips/:tripId', (req, res) => {
     end_date: end_date,
     notes: notes
   };
-  knex('trips').update(trip).where('id', tripId)
+  db('trips').update(trip).where('id', tripId)
     .then(() => knex('destinations').where('trip_id', tripId).del())
     .then(() => knex('destinations').insert(destinations))
     .then(() => res.sendStatus(200));
@@ -95,7 +91,7 @@ app.put('/trips/:tripId', (req, res) => {
 
 app.delete('/trips/:tripId', (req,res) => {
   const tripId = req.params.tripId;
-  knex('trips').where('id', tripId).del()
+  db('trips').where('id', tripId).del()
     .then(() => res.sendStatus(204));
 });
 
