@@ -5,4 +5,4 @@ A website for travelers to organize their trip details.
 ![](http://g.recordit.co/r9MvqiVOHq.gif)
 
 ## Add, Modify, and Delete trips
-![](http://recordit.co/jG4gfMgpj9)
+![](http://g.recordit.co/jG4gfMgpj9.gif)
