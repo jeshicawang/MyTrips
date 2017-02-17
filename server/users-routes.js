@@ -1,23 +1,22 @@
 const { Router } = require('express');
 
-const createUser = (db) => (req, res) => {
-  const newUser = req.body;
-  db('users').insert(newUser).returning('id')
-    .then(([userId]) => res.json(userId))
-    .catch(() => res.json(0));
+const createUser = (users) => ({ body }, res, next) => {
+  return users
+    .createUser(body)
+    .then(userId => res.json(userId))
+    .catch(next)
 }
 
-const getIdByUsername = (db) => (req, res) => {
-  const username = req.params.username;
-  db('users')
-    .select('id')
-    .where('username', username)
-    .then(([userId]) => res.json(userId));
+const getIdByUsername = (users) => ({ params }, res, next) => {
+  return users
+    .getIdByUsername(params.username)
+    .then(userId => res.json(userId))
+    .catch(next)
 }
 
-module.exports = function usersRoutes(db) {
+module.exports = function usersRoutes(users) {
   const router = new Router();
-  router.post('/', createUser(db))
-  router.get('/:username', getIdByUsername(db))
+  router.post('/', createUser(users))
+  router.get('/:username', getIdByUsername(users))
   return router;
 }

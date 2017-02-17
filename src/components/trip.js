@@ -27,7 +27,7 @@ Trip.propTypes = {
   dropdown: React.PropTypes.bool.isRequired,
   id: React.PropTypes.number.isRequired,
   title: React.PropTypes.string.isRequired,
-  description: React.PropTypes.string.isRequired,
+  description: React.PropTypes.string,
   start_date: React.PropTypes.string.isRequired,
   end_date: React.PropTypes.string.isRequired,
   photo_url: React.PropTypes.string.isRequired
