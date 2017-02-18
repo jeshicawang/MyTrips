@@ -18,20 +18,28 @@ describe('userData', () => {
     expect(users).to.be.an('object');
   })
 
-  /* describe('create', () => {
+  describe('createUser', () => {
 
-    it('create a user', () => {
+    it('creates a new user returning the userId', () => {
       const user = { username: 'tim' }
-
-      return users.create(user)
-        .then(created => {
-          expect(created).to.be.an('object');
-          expect(created)
-            .to.have.property('id')
-            .that.is.a('number')
-        })
+      return users.createUser(user).then(userId => {
+        expect(userId).to.be.a('number');
+        expect(userId).to.equal(2);
+      })
     });
 
-  }) */
+  })
+
+  describe('getIdByUsername', () => {
+
+    it('returns the userId associated with the given username', () => {
+      users.getIdByUsername('jessica').then(user => {
+        expect(user).to.be.an('object');
+        expect(user).to.have.property('id').that.is.a('number');
+        expect(user.id).to.equal(1);
+      })
+    })
+
+  })
 
 })
