@@ -33,7 +33,7 @@ describe('userData', () => {
   describe('getIdByUsername', () => {
 
     it('returns the userId associated with the given username', () => {
-      users.getIdByUsername('jessica').then(user => {
+      return users.getIdByUsername('jessica').then(user => {
         expect(user).to.be.an('object');
         expect(user).to.have.property('id').that.is.a('number');
         expect(user.id).to.equal(1);
