@@ -13,7 +13,7 @@ h1 {
 }
 
 h3 {
-  font-weight: 400;
+  font-weight: 600;
   letter-spacing: 1px;
 }
 
@@ -213,12 +213,17 @@ h2 {
   background: linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,0));
 }
 
+.trip p {
+  font-weight: 400;
+}
+
 .trip span.dropdown {
   position: absolute;
   right: 10px;
   opacity: .7;
   color: #fff;
   font-size: 20px;
+  font-weight: 600;
   cursor: pointer;
 }
 
