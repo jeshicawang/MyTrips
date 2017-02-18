@@ -8,7 +8,7 @@ const getTrips = (trips) => ({ query }, res, next) => {
 
 const createTrip = (trips) => ({ body, query }, res, next) => {
   trips.createTrip(query.userId, body)
-    .then(ok => res.sendStatus(ok ? 200 : 500))
+    .then(() => res.sendStatus(200))
     .catch(next);
 }
 
@@ -20,13 +20,13 @@ const getTripById = (trips) => ({ params }, res, next) => {
 
 const updateTripById = (trips) => ({ params, body }, res, next) => {
   trips.updateTripById(params.tripId, body)
-    .then(ok => res.sendStatus(ok ? 200 : 500))
+    .then(() => res.sendStatus(200))
     .catch(next);
 }
 
 const deleteTripById = (trips) => ({ params }, res, next) => {
   trips.deleteTripById(params.tripId)
-    .then(ok => res.sendStatus(ok ? 204 : 500))
+    .then(() => res.sendStatus(204))
     .catch(next);
 }
 

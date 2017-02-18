@@ -4,17 +4,22 @@ module.exports = function tripsData(knex) {
 
   function getTrips(userId, upcoming) {
     const conditional = upcoming ? '>=' : '<';
-    const dateType = upcoming ? 'trips.start_date' : 'trips.end_date';
+    const dateType = upcoming ? 'alias.start_date' : 'alias.end_date';
+    const secondaryDateType = !upcoming ? 'alias.start_date' : 'alias.end_date';
     const order = upcoming ? 'asc' : 'desc';
-    const now = knex.raw('current_date');
-    const dateFormat = 'Dy, Month DD, YYYY';
-    return knex('trips')
-      .join('destinations', 'trips.id', '=', 'destinations.trip_id')
-      .distinct(knex.raw('on (' + dateType + ') trips.id, title, description, to_char(trips.start_date, \'' + dateFormat + '\') as start_date, to_char(trips.end_date, \'' + dateFormat + '\') as end_date, notes, photo_url'))
-      .where('user_id', userId)
-      .andWhere('trips.end_date', conditional, now)
-      .orderByRaw(dateType + ' ' + order + ', destinations.start_date asc')
-      .select()
+    const FORMAT = 'Dy, Month DD, YYYY';
+    return knex.with('alias', db => {
+      db.select()
+        .from('trips')
+        .join('destinations', 'trips.id', '=', 'destinations.trip_id')
+        .distinct(knex.raw('on (trips.id) trips.id, title, description, trips.start_date, trips.end_date, notes, photo_url'))
+        .where('user_id', userId)
+        .andWhere('trips.end_date', conditional, knex.raw('current_date'))
+        .orderByRaw('trips.id asc, destinations.start_date asc')
+      })
+      .from('alias')
+      .select('id', 'title', 'description', knex.raw(`to_char(start_date, \'${FORMAT}\') as start_date`), knex.raw(`to_char(end_date, \'${FORMAT}\') as end_date`), 'notes', 'photo_url')
+      .orderByRaw(`${dateType} ${order}, ${secondaryDateType} ${order}`);
   }
 
   function createTrip(user_id, tripInfo) {
@@ -26,12 +31,12 @@ module.exports = function tripsData(knex) {
       .then(([tripId]) => {
         destinations.forEach(destination => destination.trip_id = tripId);
         return knex('destinations').insert(destinations)})
-      .then(() => true);
   }
 
   function getTripById(tripId) {
-    const rawStartDate = knex.raw('to_char(destinations.start_date, \'YYYY-MM-DD\') as start_date');
-    const rawEndDate = knex.raw('to_char(destinations.end_date, \'YYYY-MM-DD\') as end_date');
+    const FORMAT = 'YYYY-MM-DD';
+    const rawStartDate = knex.raw(`to_char(destinations.start_date, \'${FORMAT}\') as start_date`);
+    const rawEndDate = knex.raw(`to_char(destinations.end_date, \'${FORMAT}\') as end_date`);
     return knex('trips')
       .join('destinations', 'trips.id', '=', 'destinations.trip_id')
       .where('trips.id', tripId)
@@ -46,12 +51,10 @@ module.exports = function tripsData(knex) {
     return knex('trips').update(trip).where('id', tripId)
       .then(() => knex('destinations').where('trip_id', tripId).del())
       .then(() => knex('destinations').insert(destinations))
-      .then(() => true);
   }
 
   function deleteTripById(tripId) {
     return knex('trips').where('id', tripId).del()
-      .then(() => true);
   }
 
 }
