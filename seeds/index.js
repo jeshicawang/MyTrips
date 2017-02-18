@@ -140,7 +140,7 @@ const addDestinations = (knex) => () => knex('destinations').insert([
     address: 'San Francisco, CA, USA',
     start_date: '2017-01-04',
     end_date: '2016-01-07',
-    photo_url: 'https://images.unsplash.com/photo-1471896335371-82fdaca100f2'
+    photo_url: 'https://images.unsplash.com/photo-1422226256160-9b266e308ea6'
   },
   { // destination#9
     trip_id: 8,
@@ -149,7 +149,7 @@ const addDestinations = (knex) => () => knex('destinations').insert([
     address: 'Las Vegas, NV, USA',
     start_date: '2016-12-16',
     end_date: '2016-12-18',
-    photo_url: 'https://images.unsplash.com/photo-1483406354872-3e1be6d48c20'
+    photo_url: 'https://cdn.pixabay.com/photo/2014/01/12/10/00/vegas-242668_1280.jpg'
   }
 ])
 
