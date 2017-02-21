@@ -11,7 +11,7 @@ const tripsRoutes = require('./trips-routes.js');
 const errorHandler = require('./error-handler');
 
 app.use(bodyParser.json());
-app.use(express.static('public'));
+app.use(express.static(`${__dirname}/../public`));
 app.use('/users', usersRoutes(usersData(db)));
 app.use('/trips', tripsRoutes(tripsData(db)));
 app.use(errorHandler);
