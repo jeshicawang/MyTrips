@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha",
     "tdd": "mocha --watch -R nyan",
-    "start": "npm run bundle && node .",
+    "start": "npm run node .",
     "watch": "npm run bundle:watch & nodemon .",
     "migrate:make": "knex migrate:make",
     "migrate": "knex migrate:latest",
