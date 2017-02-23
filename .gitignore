@@ -3,3 +3,5 @@ npm-debug.log
 .DS_Store
 /*.env
 Procfile
+/public/bundle.js
+envision.html
