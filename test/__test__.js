@@ -1,10 +1,9 @@
 /* global before, after */
 
 const knex = require('knex');
-const { development } = require('../knexfile');
+const knexfile = require('../knexfile');
+const db = knex(knexfile[process.env.NODE_ENV || 'development']);
 const { expect } = require('chai');
-
-const db = knex(development);
 
 before(() => db.seed.run());
 

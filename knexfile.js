@@ -1,4 +1,11 @@
 module.exports = {
+  test: {
+    client: 'postgresql',
+    connection: {
+      user: 'postgres',
+      database: 'travis_ci_test'
+    }
+  },
   development: {
     client: 'postgresql',
     connection: {
