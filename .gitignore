@@ -5,3 +5,4 @@ npm-debug.log
 Procfile
 /public/bundle.js
 envision.html
+/coverage
