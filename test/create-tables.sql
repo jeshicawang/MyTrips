@@ -1,14 +1,14 @@
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
-  id serial,
+  id serial UNIQUE NOT NULL,
   username varchar UNIQUE NOT NULL
 );
 
 DROP TABLE IF EXISTS trips;
 
 CREATE TABLE trips (
-  id serial,
+  id serial UNIQUE NOT NULL,
   user_id int NOT NULL REFERENCES users (id) ON DELETE CASCADE,
   title varchar NOT NULL,
   description varchar,
@@ -20,7 +20,7 @@ CREATE TABLE trips (
 DROP TABLE IF EXISTS destinations;
 
 CREATE TABLE destinations (
-  id serial,
+  id serial UNIQUE NOT NULL,
   trip_id int NOT NULL REFERENCES trips (id) ON DELETE CASCADE,
   location varchar NOT NULL,
   address varchar NOT NULL,
