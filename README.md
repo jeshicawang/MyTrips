@@ -1,4 +1,4 @@
-![](https://travis-ci.org/jeshicawang/mytrips.svg?branch=master)
+![](https://travis-ci.org/jeshicawang/mytrips.svg?branch=master) [![Coverage Status](https://coveralls.io/repos/github/jeshicawang/mytrips/badge.svg?branch=issue-24)](https://coveralls.io/github/jeshicawang/mytrips?branch=issue-24)
 
 # MyTrips
 A website for travelers to organize their trip details.
