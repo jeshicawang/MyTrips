@@ -1,3 +1,5 @@
+https://travis-ci.org/jeshicawang/mytrips.svg?branch=issue-24
+
 # MyTrips
 A website for travelers to organize their trip details.
 
