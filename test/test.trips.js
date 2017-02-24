@@ -66,8 +66,11 @@ describe('tripsData', () => {
         }]
       }
       return trips.createTrip(1, sampleInfo).then(res => {
-        expect(res).to.be.ok;
-        expect(res.command).to.equal('INSERT');
+        expect(res).to.be.an('array');
+        expect(res.length).to.equal(sampleInfo.destinations.length);
+        res.forEach(destinationId => {
+          expect(destinationId).to.be.a('number');
+        })
       })
     })
 
@@ -104,8 +107,11 @@ describe('tripsData', () => {
         }]
       }
       return trips.updateTripById(1, sampleInfo).then(res => {
-        expect(res).to.be.ok;
-        expect(res.command).to.equal('INSERT');
+        expect(res).to.be.an('array');
+        expect(res.length).to.equal(sampleInfo.destinations.length);
+        res.forEach(tripId => {
+          expect(tripId).to.equal(1);
+        })
       })
     })
 
