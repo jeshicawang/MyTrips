@@ -4,7 +4,7 @@
   "description": "A website for travelers to organize their trip details.",
   "main": "server/index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha",
     "tdd": "mocha --watch -R nyan",
     "start": "node .",
     "watch": "npm run bundle:watch & nodemon .",
@@ -15,8 +15,7 @@
     "bundle:watch": "watchify -t babelify src/ -o public/bundle.js",
     "envision": "envision src/index.js",
     "postinstall": "npm run bundle",
-    "coverage": "node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha",
-    "coveralls": "cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js"
+    "coverage": "cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js"
   },
   "repository": {
     "type": "git",
