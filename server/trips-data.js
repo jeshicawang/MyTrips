@@ -30,7 +30,10 @@ module.exports = function tripsData(knex) {
       .returning('id')
       .then(([tripId]) => {
         destinations.forEach(destination => destination.trip_id = tripId);
-        return knex('destinations').insert(destinations)})
+        return knex('destinations')
+          .insert(destinations)
+          .returning('id')
+      })
   }
 
   function getTripById(tripId) {
@@ -50,7 +53,7 @@ module.exports = function tripsData(knex) {
     const trip = { title, description, start_date, end_date, notes };
     return knex('trips').update(trip).where('id', tripId)
       .then(() => knex('destinations').where('trip_id', tripId).del())
-      .then(() => knex('destinations').insert(destinations))
+      .then(() => knex('destinations').insert(destinations).returning('trip_id'))
   }
 
   function deleteTripById(tripId) {
